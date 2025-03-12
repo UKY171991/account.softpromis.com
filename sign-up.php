@@ -43,7 +43,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
           <div class="container-fluid ps-2 pe-0">
-            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="dashboard.html">
+            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="dashboard.php">
               Material Dashboard 3
             </a>
             <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link me-2" href="profile.html">
+                  <a class="nav-link me-2" href="profile.php">
                     <i class="fa fa-user opacity-6 text-dark me-1"></i>
                     Profile
                   </a>
@@ -138,7 +138,7 @@
                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                   <p class="mb-2 text-sm mx-auto">
                     Already have an account?
-                    <a href="sign-in.html" class="text-primary text-gradient font-weight-bold">Sign in</a>
+                    <a href="sign-in.php" class="text-primary text-gradient font-weight-bold">Sign in</a>
                   </p>
                 </div>
               </div>
