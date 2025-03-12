@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $actual_amount = floatval($_POST['actual_amount']);
     $received_amount = floatval($_POST['received_amount']);
     $balance_amount = $actual_amount - $received_amount;
-    $entry_date = $_POST['entry_date'];
+    $entry_date = $_POST['date_of_entry'];
 
     if (!empty($name) && !empty($category_id) && !empty($subcategory_id) && !empty($actual_amount) && !empty($entry_date)) {
         $query = "INSERT INTO income (name, description, category_id, subcategory_id, actual_amount, received_amount, balance_amount, entry_date)
