@@ -6,8 +6,8 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = trim($_POST['name']);
     $description = trim($_POST['description']);
-    $category_id = intval($_POST['category']);
-    $subcategory_id = intval($_POST['subcategory']);
+    $category_id = intval($_POST['category_id']);
+    $subcategory_id = intval($_POST['subcategory_id']);
     $actual_amount = floatval($_POST['actual_amount']);
     $received_amount = floatval($_POST['received_amount']);
     $balance_amount = $actual_amount - $received_amount;
