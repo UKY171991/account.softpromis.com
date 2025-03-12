@@ -84,6 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		                <label class="form-label">Category Name</label>
 		                <input type="text" class="form-control" name="category_name" value="<?= $category['category_name'] ?>" required>
 		            </div>
+		            <div class="input-group input-group-outline mb-4">
+			          <label class="form-label">Category Name</label>
+			          <input type="text" class="form-control" name="category_name" value="<?= $category['category_name'] ?>" required>
+			        </div>
 		            <button type="submit" class="btn bg-gradient-dark">Update Category</button>
 		            <a href="income-category.php" class="btn btn-secondary">Cancel</a>
 		        </form>
