@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'inc/auth.php';
 include 'inc/config.php';
 ?>
 
@@ -10,11 +10,11 @@ include 'inc/config.php';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>View Income</title>
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-  	<link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-  	<link href="assets/css/nucleo-svg.css" rel="stylesheet" />
-  	<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-  	<link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -42,22 +42,41 @@ include 'inc/config.php';
                                 <th>Name</th>
                                 <th>Category</th>
                                 <th>Sub-Category</th>
-                                <th>Amount</th>
+                                <th>Actual Amount</th>
+                                <th>Received Amount</th>
+                                <th>Balance Amount</th>
+                                <th>Date</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $query = "SELECT * FROM income ORDER BY id DESC";
+                            $query = "SELECT 
+                                        i.id, 
+                                        i.name, 
+                                        i.description, 
+                                        c.category_name, 
+                                        s.subcategory_name, 
+                                        i.actual_amount, 
+                                        i.received_amount, 
+                                        i.balance_amount, 
+                                        i.entry_date 
+                                      FROM income i
+                                      INNER JOIN income_categories c ON i.category_id = c.id
+                                      INNER JOIN income_subcategories s ON i.subcategory_id = s.id
+                                      ORDER BY i.id DESC";
                             $result = mysqli_query($conn, $query);
                             $count = 1;
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr>
                                         <td>{$count}</td>
                                         <td>{$row['name']}</td>
-                                        <td>{$row['category_id']}</td>
-                                        <td>{$row['subcategory_id']}</td>
+                                        <td>{$row['category_name']}</td>
+                                        <td>{$row['subcategory_name']}</td>
                                         <td>\${$row['actual_amount']}</td>
+                                        <td>\${$row['received_amount']}</td>
+                                        <td>\${$row['balance_amount']}</td>
+                                        <td>{$row['entry_date']}</td>
                                         <td class='text-center'>
                                             <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
                                             <a href='delete-income.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
@@ -73,10 +92,10 @@ include 'inc/config.php';
         </div>
     </main>
 
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-  <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+    <script src="assets/js/core/popper.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
 </body>
 </html>
