@@ -92,7 +92,7 @@
 				                    <td class='text-xs'>{$count}</td>
 				                    <td class='text-xs'>{$row['category_name']}</td>
 				                    <td class='text-center'>
-				                        <a href='edit-category.php?id={$row['id']}' class='text-info mx-2'><i class='fa fa-edit'></i>Edit</a>
+				                        <a href='edit-category.php?id={$row['id']}' class='badge badge-sm bg-gradient-success'><i class='fa fa-edit'></i>Edit</a>
 				                        <a href='delete-category.php?id={$row['id']}' class='text-danger mx-2' onclick='return confirm(\"Are you sure you want to delete this category?\")'><i class='fa fa-trash'></i>Delete</a>
 				                    </td>
 				                  </tr>";
