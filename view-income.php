@@ -32,7 +32,7 @@ include 'inc/config.php';
 
             <div class="card mt-4">
                 <div class="card-header bg-gradient-dark text-white">
-                    <h6 class="mb-0">All Income Entries</h6>
+                    <h6 class="mb-0 text-white">All Income Entries</h6>
                 </div>
                 <div class="card-body px-3">
                     <table class="table align-items-center mb-0">
