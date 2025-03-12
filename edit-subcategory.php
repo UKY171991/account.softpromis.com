@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="card shadow-lg">
             <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
               <i class="material-symbols-rounded me-2">edit</i>
-              <h6 class="mb-0">Update Sub-Category</h6>
+              <h6 class="mb-0 text-white">Update Sub-Category</h6>
             </div>
             <div class="card-body">
               <?php

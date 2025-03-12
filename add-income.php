@@ -57,7 +57,7 @@ include 'inc/config.php';
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
                             <i class="material-symbols-rounded me-2">attach_money</i>
-                            <h6 class="mb-0">Add New Income</h6>
+                            <h6 class="mb-0 text-white">Add New Income</h6>
                         </div>
                         <div class="card-body">
                             <form action="process-income.php" method="POST">
