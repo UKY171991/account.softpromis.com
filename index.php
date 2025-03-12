@@ -1,6 +1,6 @@
 <?php
 // Login Page
-include 'config.php';
+include 'inc/config.php';
 $message ='';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

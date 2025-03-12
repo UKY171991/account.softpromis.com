@@ -1,3 +1,9 @@
+<?php
+// Include configuration and other necessary files
+include 'inc/auth.php';
+include 'inc/config.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
