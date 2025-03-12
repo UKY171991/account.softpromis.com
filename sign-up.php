@@ -68,25 +68,25 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link me-2" href="sign-up.html">
+                  <a class="nav-link me-2" href="sign-up.php">
                     <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                     Sign Up
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link me-2" href="sign-in.html">
+                  <a class="nav-link me-2" href="index.php">
                     <i class="fas fa-key opacity-6 text-dark me-1"></i>
                     Sign In
                   </a>
                 </li>
               </ul>
-              <ul class="navbar-nav d-lg-flex d-none">
+              <!-- <ul class="navbar-nav d-lg-flex d-none">
                 <li class="nav-item d-flex align-items-center">
                   <a class="btn btn-outline-primary btn-sm mb-0 me-2" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online Builder</a>
                 </li>
                 <li class="nav-item">
                   <a href="https://www.creative-tim.com/product/material-dashboard" class="btn btn-sm mb-0 me-1 bg-gradient-dark">Free download</a>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
