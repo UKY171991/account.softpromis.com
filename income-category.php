@@ -33,7 +33,7 @@
       <!-- Form to Add Income Category -->
       <div class="row mt-4">
         <div class="col-md-6">
-        	<div class="col-md-6 mx-auto">
+        
 			  <div class="card shadow-lg">
 			    <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
 			      <i class="material-symbols-rounded me-2">category</i>
@@ -53,7 +53,7 @@
 			      </form>
 			    </div>
 			  </div>
-			</div>
+			
 
           <div class="card">
             <div class="card-header bg-gradient-dark text-white">
