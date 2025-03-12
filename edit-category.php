@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-gradient-dark text-white">
-              <h6 class="mb-0">Edit Income Category</h6>
+              <h6 class="mb-0 text-white">Edit Income Category</h6>
             </div>
             <div class="card-body">
               <form action="edit-category.php" method="POST">
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-gradient-dark text-white">
-              <h6 class="mb-0">Income Categories</h6>
+              <h6 class="mb-0 text-white">Income Categories</h6>
             </div>
             <div class="card-body px-3">
               <table class="table align-items-center mb-0">
