@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['user_id'] = mysqli_fetch_assoc($result)['id'];
     header('Location: dashboard.php');
   } else {
-    $message "<p class='text-center text-danger'>Invalid credentials!</p>";
+    $message = "<p class='text-center text-danger'>Invalid credentials!</p>";
   }
 }
 ?>
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
               </div>
               <div class="card-body">
-                <?=$message;?>
+                <?=$message; ?>
                 <form action="" class="text-start" method="post">
                   <div class="input-group input-group-outline my-3">
                     <label class="form-label">User</label>
