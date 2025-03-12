@@ -34,56 +34,36 @@
       <div class="row mt-4">
         <div class="col-md-6">
         
-			  <div class="card shadow-lg">
-			    <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
-			      <i class="material-symbols-rounded me-2">category</i>
-			      <h6 class="mb-0">Add New Income Category</h6>
-			    </div>
-			    <div class="card-body">
-			      <form action="process-income-category.php" method="POST">
-			        <div class="input-group input-group-outline mb-4">
-			          <label class="form-label">Category Name</label>
-			          <input type="text" class="form-control" name="category_name" required>
-			        </div>
-			        <div class="text-end">
-			          <button type="submit" class="btn bg-gradient-dark">
-			            <i class="material-symbols-rounded me-1">add</i> Add Category
-			          </button>
-			        </div>
-			      </form>
-			    </div>
-			  </div>
-			
-
-          <div class="card">
-            <div class="card-header bg-gradient-dark text-white">
-              <h6 class="mb-0">Add New Category</h6>
-            </div>
-            <div class="card-body">
-
-            	<?php
-					session_start();
-					if (isset($_SESSION['success_msg'])) {
-					    echo "<div class='alert alert-success'>{$_SESSION['success_msg']}</div>";
-					    unset($_SESSION['success_msg']);
-					}
-					if (isset($_SESSION['error_msg'])) {
-					    echo "<div class='alert alert-danger'>{$_SESSION['error_msg']}</div>";
-					    unset($_SESSION['error_msg']);
-					}
-					?>
-
-              <form action="process-income-category.php" method="POST">
-                <div class="mb-3">
-                  <label class="form-label">Category Name</label>
-                  <input type="text" class="form-control" name="category_name" required>
-                </div>
-                <div class="text-end">
-                  <button type="submit" class="btn bg-gradient-dark">Add Category</button>
-                </div>
-              </form>
-            </div>
-          </div>
+		  <div class="card shadow-lg">
+		    <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
+		      <i class="material-symbols-rounded me-2">category</i>
+		      <h6 class="mb-0">Add New Income Category</h6>
+		    </div>
+		    <div class="card-body">
+		    	<?php
+				session_start();
+				if (isset($_SESSION['success_msg'])) {
+				    echo "<div class='alert alert-success'>{$_SESSION['success_msg']}</div>";
+				    unset($_SESSION['success_msg']);
+				}
+				if (isset($_SESSION['error_msg'])) {
+				    echo "<div class='alert alert-danger'>{$_SESSION['error_msg']}</div>";
+				    unset($_SESSION['error_msg']);
+				}
+				?>
+		      <form action="process-income-category.php" method="POST">
+		        <div class="input-group input-group-outline mb-4">
+		          <label class="form-label">Category Name</label>
+		          <input type="text" class="form-control" name="category_name" required>
+		        </div>
+		        <div class="text-end">
+		          <button type="submit" class="btn bg-gradient-dark">
+		            <i class="material-symbols-rounded me-1">add</i> Add Category
+		          </button>
+		        </div>
+		      </form>
+		    </div>
+		  </div>
         </div>
 
         <!-- Table to Display Categories -->
