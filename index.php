@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
               </div>
               <div class="card-body">
+                <p class="text-center">Message</p>
                 <form action="" class="text-start" method="post">
                   <div class="input-group input-group-outline my-3">
                     <label class="form-label">User</label>
