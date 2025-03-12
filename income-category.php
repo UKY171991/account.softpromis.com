@@ -20,7 +20,7 @@
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
 
   	<?php include 'inc/topbar.php'; ?>
-  	
+
     <div class="container-fluid py-4">
       
       <!-- Page Title -->
@@ -38,6 +38,19 @@
               <h6 class="mb-0">Add New Category</h6>
             </div>
             <div class="card-body">
+
+            	<?php
+					session_start();
+					if (isset($_SESSION['success_msg'])) {
+					    echo "<div class='alert alert-success'>{$_SESSION['success_msg']}</div>";
+					    unset($_SESSION['success_msg']);
+					}
+					if (isset($_SESSION['error_msg'])) {
+					    echo "<div class='alert alert-danger'>{$_SESSION['error_msg']}</div>";
+					    unset($_SESSION['error_msg']);
+					}
+					?>
+
               <form action="process-income-category.php" method="POST">
                 <div class="mb-3">
                   <label class="form-label">Category Name</label>
@@ -59,33 +72,34 @@
             </div>
             <div class="card-body px-3">
               <table class="table align-items-center mb-0">
-                <thead>
-                  <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder">#</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Category Name</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  include 'inc/config.php';
-                  $query = "SELECT * FROM income_categories";
-                  $result = mysqli_query($conn, $query);
-                  $count = 1;
-                  while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>
-                            <td class='text-xs'>{$count}</td>
-                            <td class='text-xs'>{$row['category_name']}</td>
-                            <td class='text-center'>
-                              <a href='edit-category.php?id={$row['id']}' class='text-info mx-2'><i class='fa fa-edit'></i></a>
-                              <a href='delete-category.php?id={$row['id']}' class='text-danger mx-2'><i class='fa fa-trash'></i></a>
-                            </td>
-                          </tr>";
-                    $count++;
-                  }
-                  ?>
-                </tbody>
-              </table>
+				    <thead>
+				        <tr>
+				            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">#</th>
+				            <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Category Name</th>
+				            <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Action</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <?php
+				        include 'inc/config.php';
+				        $query = "SELECT * FROM income_categories ORDER BY id DESC";
+				        $result = mysqli_query($conn, $query);
+				        $count = 1;
+				        while ($row = mysqli_fetch_assoc($result)) {
+				            echo "<tr>
+				                    <td class='text-xs'>{$count}</td>
+				                    <td class='text-xs'>{$row['category_name']}</td>
+				                    <td class='text-center'>
+				                        <a href='edit-category.php?id={$row['id']}' class='text-info mx-2'><i class='fa fa-edit'></i></a>
+				                        <a href='delete-category.php?id={$row['id']}' class='text-danger mx-2' onclick='return confirm(\"Are you sure you want to delete this category?\")'><i class='fa fa-trash'></i></a>
+				                    </td>
+				                  </tr>";
+				            $count++;
+				        }
+				        ?>
+				    </tbody>
+				</table>
+
             </div>
           </div>
         </div>
