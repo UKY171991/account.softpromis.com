@@ -33,6 +33,28 @@
       <!-- Form to Add Income Category -->
       <div class="row mt-4">
         <div class="col-md-6">
+        	<div class="col-md-6 mx-auto">
+			  <div class="card shadow-lg">
+			    <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
+			      <i class="material-symbols-rounded me-2">category</i>
+			      <h6 class="mb-0">Add New Income Category</h6>
+			    </div>
+			    <div class="card-body">
+			      <form action="process-income-category.php" method="POST">
+			        <div class="input-group input-group-outline mb-4">
+			          <label class="form-label">Category Name</label>
+			          <input type="text" class="form-control" name="category_name" required>
+			        </div>
+			        <div class="text-end">
+			          <button type="submit" class="btn bg-gradient-dark">
+			            <i class="material-symbols-rounded me-1">add</i> Add Category
+			          </button>
+			        </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
+
           <div class="card">
             <div class="card-header bg-gradient-dark text-white">
               <h6 class="mb-0">Add New Category</h6>
