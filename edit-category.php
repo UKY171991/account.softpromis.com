@@ -80,10 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
               <form action="edit-category.php" method="POST">
 		            <input type="hidden" name="id" value="<?= $category['id'] ?>">
-		            <div class="mb-3">
-		                <label class="form-label">Category Name</label>
-		                <input type="text" class="form-control" name="category_name" value="<?= $category['category_name'] ?>" required>
-		            </div>
 		            <div class="input-group input-group-outline mb-4">
 			          <label class="form-label">Category Name</label>
 			          <input type="text" class="form-control" name="category_name" value="<?= $category['category_name'] ?>" required>
