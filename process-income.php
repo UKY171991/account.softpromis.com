@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $balance_amount = $actual_amount - $received_amount;
     $entry_date = trim($_POST['date_of_entry']);
 
+    // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
+    $entry_date = date("Y-m-d", strtotime($entry_date));
+
     // Ensure required fields are not empty
     if (!empty($name) && !empty($phone) && !empty($category_id) && !empty($subcategory_id) && !empty($actual_amount) && !empty($entry_date)) {
         
