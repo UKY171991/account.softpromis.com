@@ -11,6 +11,8 @@ if (!$conn) {
 }
 SHOW TABLES;
 die;
+
+/*
 ?>
 
 <!DOCTYPE html>
