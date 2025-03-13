@@ -133,7 +133,7 @@ include 'inc/config.php';
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Description</label>
                                             <textarea class="form-control border" name="description" required></textarea>
