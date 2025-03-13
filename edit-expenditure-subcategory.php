@@ -7,7 +7,7 @@ include 'inc/config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['subcategory_id']) || empty($_POST['subcategory_id'])) {
         $_SESSION['error_msg'] = "Invalid request.";
-        header("Location: expenditure-subcategories.php");
+        header("Location: expenditure-subcategory.php");
         exit();
     }
 
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Handle Edit Form Display
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error_msg'] = "Invalid request.";
-    header("Location: expenditure-subcategories.php");
+    header("Location: expenditure-subcategory.php");
     exit();
 }
 
@@ -58,7 +58,7 @@ $subcategory = $result->fetch_assoc();
 
 if (!$subcategory) {
     $_SESSION['error_msg'] = "Subcategory not found.";
-    header("Location: expenditure-subcategories.php");
+    header("Location: expenditure-subcategory.php");
     exit();
 }
 
