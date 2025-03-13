@@ -136,7 +136,7 @@ include 'inc/config.php';
                                 
                                 <div class="text-end">
                                     <button type="submit" class="btn bg-gradient-dark">
-                                        <i class="material-symbols-rounded me-1">add</i> Submit
+                                         Submit
                                     </button>
                                 </div>
                             </form>
