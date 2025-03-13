@@ -109,8 +109,14 @@ include 'inc/config.php';
                                             <td>{$row['actual_amount']}</td>
                                             <td>{$row['received_amount']}</td>
                                             <td>{$row['balance_amount']}</td>
+
+                                            <?php
+                                            $date=date_create($row['entry_date']);
+                                            echo date_format($date,"Y/m/d H:i:s");
+                                            ?>
+
                                             <td>{$row['entry_date']}</td>
-                    
+
                                             <td class='text-center'>
                                                 <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
                                                 <a href='delete-income.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
