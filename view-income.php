@@ -112,11 +112,13 @@ include 'inc/config.php';
                                             <td>{$row['entry_date']} <?php echo date("d-m-Y", strtotime($row['entry_date'])); ?></td>
                                             <td>
                                                 <?php 
-                                                    // if (!empty($row['entry_date']) && $row['entry_date'] != "0000-00-00") {
-                                                    //     echo date("d-m-Y", strtotime($row['entry_date']));
-                                                    // } else {
-                                                    //     echo "N/A"; // Fallback if the date is missing
-                                                    // }
+                                                /*
+                                                    if (!empty($row['entry_date']) && $row['entry_date'] != "0000-00-00") {
+                                                        echo date("d-m-Y", strtotime($row['entry_date']));
+                                                    } else {
+                                                        echo "N/A"; // Fallback if the date is missing
+                                                    }
+                                                    */
                                                 ?>
                                             </td>
                                             <td class='text-center'>
