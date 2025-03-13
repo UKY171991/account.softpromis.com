@@ -65,7 +65,7 @@ include 'inc/config.php';
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control border" name="name" required>
+                                            <input type="text" class="form-control border" name="name" id="name" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -189,6 +189,18 @@ include 'inc/config.php';
             } else {
                 phoneError.style.display = "block";
             }
+        });
+    </script>
+
+    <script>
+        document.getElementById("name").addEventListener("input", function () {
+            let words = this.value.split(" ");
+            for (let i = 0; i < words.length; i++) {
+                if (words[i].length > 0) {
+                    words[i] = words[i][0].toUpperCase() + words[i].substr(1).toLowerCase();
+                }
+            }
+            this.value = words.join(" "); // Update input with capitalized first letters
         });
     </script>
 
