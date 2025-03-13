@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error_msg'] = "Category name cannot be empty.";
     }
 
-    header("Location: income-category.php");
+    header("Location: expenditure-category.php");
     exit();
 }
 ?>
