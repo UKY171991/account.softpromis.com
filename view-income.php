@@ -36,6 +36,27 @@ include 'inc/config.php';
                 </div>
             </div>
 
+             <!-- Display Messages -->
+            <div class="row">
+                <div class="col-md-12 mx-auto">
+                    <?php if (isset($_SESSION['success_msg'])): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= $_SESSION['success_msg']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <?php unset($_SESSION['success_msg']); ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['error_msg'])): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= $_SESSION['error_msg']; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <?php unset($_SESSION['error_msg']); ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
 
             <div class="card mt-4">
                 <div class="card-header bg-gradient-dark text-white">
