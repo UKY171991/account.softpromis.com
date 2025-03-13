@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			          <input type="text" class="form-control" name="category_name" value="<?= $category['category_name'] ?>" required>
 			        </div>
 		            <button type="submit" class="btn bg-gradient-dark">Update Category</button>
-		            <a href="income-category.php" class="btn btn-secondary">Cancel</a>
+		            <a href="expenditure-category.php" class="btn btn-secondary">Cancel</a>
 		        </form>
 
             </div>
