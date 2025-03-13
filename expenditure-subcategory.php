@@ -61,7 +61,7 @@ include 'inc/config.php';
                     <option value="">-- Select Category --</option>
                     <?php
                     include 'inc/config.php';
-                    $query = "SELECT * FROM income_categories ORDER BY category_name ASC";
+                    $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
                     $result = mysqli_query($conn, $query);
                     while ($row = mysqli_fetch_assoc($result)) {
                       echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
