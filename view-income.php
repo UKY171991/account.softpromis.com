@@ -110,10 +110,7 @@ include 'inc/config.php';
                                             <td>{$row['received_amount']}</td>
                                             <td>{$row['balance_amount']}</td>
 
-                                            <?php
-                                            $date=date_create($row['entry_date']);
-                                            echo date_format($date,"Y/m/d H:i:s");
-                                            ?>
+                                        
 
                                             <td>{$row['entry_date']}</td>
 
