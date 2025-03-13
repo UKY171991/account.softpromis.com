@@ -6,7 +6,7 @@ if (!$conn) {
     die("Database connection failed: " . mysqli_connect_error());
 }
 SHOW TABLES;
-
+die;
 ?>
 
 <!DOCTYPE html>
