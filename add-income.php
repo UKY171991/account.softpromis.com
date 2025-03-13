@@ -52,7 +52,7 @@ include 'inc/config.php';
             </div>
 
             <!-- Add Income Form -->
-            <div class="row mt-4">
+            <div class="row mt-4 d-flex justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
