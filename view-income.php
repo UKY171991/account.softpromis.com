@@ -31,7 +31,7 @@ include 'inc/config.php';
                     <h4 class="text-dark">Income Records</h4>
                 </div>
                 <div class="col-6 text-end">
-                    <a href="add-income.php" class="btn btn-primary">
+                    <a href="add-income.php" class="btn btn-dark">
                         <i class="fa fa-plus"></i> Add Income
                     </a>
                 </div>
