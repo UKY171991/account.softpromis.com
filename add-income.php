@@ -58,7 +58,7 @@ include 'inc/config.php';
                 <div class="col-md-12">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
-                            <i class="material-symbols-rounded me-2">attach_money</i>
+                            <!-- <i class="material-symbols-rounded me-2">attach_money</i> -->
                             <h6 class="mb-0 text-white">Add New Income</h6>
                         </div>
                         <div class="card-body">
