@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'inc/auth.php';
 include 'inc/config.php';
 ?>
 
