@@ -89,10 +89,9 @@ include 'inc/config.php';
 			    <tbody>
 			        <?php
 			        $query = "SELECT * FROM expenditure_categories ORDER BY id DESC";
-			        //$result = mysqli_query($conn, $query);
 			        $result = $conn->query($query);
 			        $count = 1;
-			        while ($row = mysqli_fetch_assoc($result)) {
+			        while ($row = $result->fetch_assoc()) {
 			            echo "<tr>
 			                    <td class='text-xs'>{$count}</td>
 			                    <td class='text-xs'>{$row['category_name']}</td>
