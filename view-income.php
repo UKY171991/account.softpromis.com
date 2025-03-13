@@ -24,12 +24,7 @@ include 'inc/config.php';
         <?php include 'inc/topbar.php'; ?>
 
         <div class="container-fluid py-4">
-            <div class="row">
-                <div class="col-12">
-                    <h4 class="text-dark">Income Records</h4>
-                </div>
-            </div>
-
+            
             <div class="row">
                 <div class="col-6">
                     <h4 class="text-dark">Income Records</h4>
