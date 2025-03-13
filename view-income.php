@@ -109,7 +109,7 @@ include 'inc/config.php';
                                             <td>{$row['actual_amount']}</td>
                                             <td>{$row['received_amount']}</td>
                                             <td>{$row['balance_amount']}</td>
-                                            <td>{$row['entry_date']} <?php echo date("d-m-Y", strtotime($row['entry_date'])); ?></td>
+                                            <td>{$row['entry_date']}</td>
                                             <td>
                                                 <?php 
                                                 /*
