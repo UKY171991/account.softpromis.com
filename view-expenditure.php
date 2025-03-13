@@ -1,13 +1,6 @@
 <?php
-
-echo "Hello";
-die;
-
-
 include 'inc/auth.php';
 include 'inc/config.php';
-
-
 ?>
 
 <!DOCTYPE html>
