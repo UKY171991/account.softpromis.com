@@ -10,7 +10,7 @@ include 'inc/config.php';
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Add Income Category</title>
+  <title>Add Expenditure Category</title>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
   <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -32,18 +32,18 @@ include 'inc/config.php';
       <!-- Page Title -->
       <div class="row">
         <div class="col-12">
-          <h4 class="text-dark">Add Income Category</h4>
+          <h4 class="text-dark">Add Expenditure Category</h4>
         </div>
       </div>
 
-      <!-- Form to Add Income Category -->
+      <!-- Form to Add Expenditure Category -->
       <div class="row mt-4">
         <div class="col-md-6">
         
 		  <div class="card shadow-lg">
 		    <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
 		      <i class="material-symbols-rounded me-2">category</i>
-		      <h6 class="mb-0 text-white">Add New Income Category</h6>
+		      <h6 class="mb-0 text-white">Add New Expenditure Category</h6>
 		    </div>
 		    <div class="card-body">
 		    	<?php
@@ -57,7 +57,7 @@ include 'inc/config.php';
 				    unset($_SESSION['error_msg']);
 				}
 				?>
-		      <form action="process-income-category.php" method="POST">
+		      <form action="process-Expenditure-category.php" method="POST">
 		        <div class="input-group input-group-outline mb-4">
 		          <label class="form-label">Category Name</label>
 		          <input type="text" class="form-control" name="category_name" required>
@@ -76,7 +76,7 @@ include 'inc/config.php';
         <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-gradient-dark text-white">
-              <h6 class="mb-0 text-white">Income Categories</h6>
+              <h6 class="mb-0 text-white">Expenditure Categories</h6>
             </div>
             <div class="card-body px-3">
               <table class="table align-items-center mb-0">
@@ -90,7 +90,7 @@ include 'inc/config.php';
 				    <tbody>
 				        <?php
 				        include 'inc/config.php';
-				        $query = "SELECT * FROM income_categories ORDER BY id DESC";
+				        $query = "SELECT * FROM expenditure_categories ORDER BY id DESC";
 				        $result = mysqli_query($conn, $query);
 				        $count = 1;
 				        while ($row = mysqli_fetch_assoc($result)) {
