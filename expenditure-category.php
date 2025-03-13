@@ -57,7 +57,7 @@ include 'inc/config.php';
 				    unset($_SESSION['error_msg']);
 				}
 				?>
-		      <form action="process-Expenditure-category.php" method="POST">
+		      <form action="process-expenditure-category.php" method="POST">
 		        <div class="input-group input-group-outline mb-4">
 		          <label class="form-label">Category Name</label>
 		          <input type="text" class="form-control" name="category_name" required>
