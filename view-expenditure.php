@@ -8,8 +8,6 @@ include 'inc/auth.php';
 include 'inc/config.php';
 
 
-
-
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +68,7 @@ include 'inc/config.php';
                             </thead>
                             <tbody>
                                 <?php
+                                /*
                                 $query = "SELECT 
                                             e.id, 
                                             e.name, 
