@@ -9,7 +9,7 @@ include 'inc/config.php';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>View Income</title>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
     <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@ include 'inc/config.php';
                 </div>
             </div>
 
-             <!-- Display Messages -->
+            <!-- Display Messages -->
             <div class="row">
                 <div class="col-md-12 mx-auto">
                     <?php if (isset($_SESSION['success_msg'])): ?>
@@ -58,77 +58,76 @@ include 'inc/config.php';
                 </div>
             </div>
 
-
             <div class="card mt-4">
                 <div class="card-header bg-gradient-dark text-white">
                     <h6 class="mb-0 text-white">All Income Entries</h6>
                 </div>
 
-
-
                 <div class="card-body px-3">
                     <div class="table-responsive">
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Sub-Category</th>
-                                <th>Actual Amount</th>
-                                <th>Received Amount</th>
-                                <th>Balance Amount</th>
-                                <th>Date</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $query = "SELECT 
-                                        i.id, 
-                                        i.name, 
-                                        i.description, 
-                                        c.category_name, 
-                                        s.subcategory_name, 
-                                        i.actual_amount, 
-                                        i.received_amount, 
-                                        i.balance_amount, 
-                                        i.entry_date 
-                                      FROM income i
-                                      INNER JOIN income_categories c ON i.category_id = c.id
-                                      INNER JOIN income_subcategories s ON i.subcategory_id = s.id
-                                      ORDER BY i.id DESC";
-                            $result = mysqli_query($conn, $query);
-                            $count = 1;
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>
-                                        <td>{$count}</td>
-                                        <td>{$row['name']}</td>
-                                        <td>{$row['category_name']}</td>
-                                        <td>{$row['subcategory_name']}</td>
-                                        <td>{$row['actual_amount']}</td>
-                                        <td>{$row['received_amount']}</td>
-                                        <td>{$row['balance_amount']}</td>
-                                        <td>{$row['entry_date']}</td>
-                                        <td class='text-center'>
-                                            <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
-                                            <a href='delete-income.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
-                                        </td>
-                                    </tr>";
-                                $count++;
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Phone</th> <!-- Added Phone Column -->
+                                    <th>Category</th>
+                                    <th>Sub-Category</th>
+                                    <th>Actual Amount</th>
+                                    <th>Received Amount</th>
+                                    <th>Balance Amount</th>
+                                    <th>Date</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $query = "SELECT 
+                                            i.id, 
+                                            i.name, 
+                                            i.phone,  /* Added phone in query */
+                                            i.description, 
+                                            c.category_name, 
+                                            s.subcategory_name, 
+                                            i.actual_amount, 
+                                            i.received_amount, 
+                                            i.balance_amount, 
+                                            i.entry_date 
+                                          FROM income i
+                                          INNER JOIN income_categories c ON i.category_id = c.id
+                                          INNER JOIN income_subcategories s ON i.subcategory_id = s.id
+                                          ORDER BY i.id DESC";
+                                $result = mysqli_query($conn, $query);
+                                $count = 1;
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>
+                                            <td>{$count}</td>
+                                            <td>{$row['name']}</td>
+                                            <td>{$row['phone']}</td> <!-- Added Phone Data -->
+                                            <td>{$row['category_name']}</td>
+                                            <td>{$row['subcategory_name']}</td>
+                                            <td>{$row['actual_amount']}</td>
+                                            <td>{$row['received_amount']}</td>
+                                            <td>{$row['balance_amount']}</td>
+                                            <td>{$row['entry_date']}</td>
+                                            <td class='text-center'>
+                                                <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
+                                                <a href='delete-income.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
+                                            </td>
+                                        </tr>";
+                                    $count++;
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div> <!-- End of .table-responsive -->
+                </div> <!-- End of .card-body -->
+            </div> <!-- End of .card -->
+        </div> <!-- End of .container-fluid -->
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
     <script src="assets/js/core/popper.min.js"></script>
     <script src="assets/js/core/bootstrap.min.js"></script>
     <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
