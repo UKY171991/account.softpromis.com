@@ -70,10 +70,12 @@ include 'inc/config.php';
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <textarea class="form-control border" name="description" required></textarea>
+                                            <label class="form-label">Phone</label>
+                                            <input type="text" class="form-control border" name="phone" id="phone" pattern="[0-9]{10}" maxlength="10" required>
+                                            <small class="text-danger" id="phoneError" style="display: none;">Phone number must be exactly 10 digits.</small>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Category</label>
@@ -121,11 +123,14 @@ include 'inc/config.php';
                                             <input type="date" class="form-control border" name="date_of_entry" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control border" name="description" required></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-
-                                
+                            
                                 
                                 <div class="text-end">
                                     <button type="submit" class="btn bg-gradient-dark">
@@ -165,6 +170,29 @@ include 'inc/config.php';
             document.getElementById("balanceAmount").value = actualAmount - receivedAmount;
         });
     </script>
+
+    <script>
+        document.getElementById("phone").addEventListener("input", function () {
+            let phoneField = this;
+            let phoneError = document.getElementById("phoneError");
+            let phoneValue = phoneField.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+            if (phoneValue.length > 10) {
+                phoneValue = phoneValue.substring(0, 10); // Restrict input to 10 digits
+            }
+
+            phoneField.value = phoneValue; // Update field with numeric-only value
+
+            // Show error if the length is not exactly 10
+            if (phoneValue.length === 10) {
+                phoneError.style.display = "none";
+            } else {
+                phoneError.style.display = "block";
+            }
+        });
+    </script>
+
+
 
 </body>
 </html>
