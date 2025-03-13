@@ -24,7 +24,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-dark" href="view-income.php">
+          <a class="nav-link text-dark" href="view-expenditure.php">
             <i class="material-symbols-rounded opacity-5">attach_money</i>
             <span class="nav-link-text ms-1">Expenditure</span>
           </a>
