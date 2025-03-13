@@ -58,7 +58,7 @@ include 'inc/config.php';
               <form action="process-income-subcategory.php" method="POST">
                 <div class="mb-4">
                   <label class="form-label">Select Category</label>
-                  <select class="form-control" name="category_id" required>
+                  <select class="form-control border" name="category_id" required>
                     <option value="">-- Select Category --</option>
                     <?php
                     include 'inc/config.php';
