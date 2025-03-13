@@ -72,7 +72,7 @@ include 'inc/config.php';
                 </div>
                 <div class="input-group input-group-outline mb-4">
                   <label class="form-label">Sub-Category Name</label>
-                  <input type="text" class="form-control" name="subcategory_name" required>
+                  <input type="text" class="form-control border" name="subcategory_name" required>
                 </div>
                 <div class="text-end">
                   <button type="submit" class="btn bg-gradient-dark">
