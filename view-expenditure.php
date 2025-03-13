@@ -61,7 +61,7 @@ include 'inc/config.php';
                             </thead>
                             <tbody>
                                 <?php
-                                /*
+                                
                                 $query = "SELECT 
                                             e.id, 
                                             e.name, 
