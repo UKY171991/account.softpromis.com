@@ -34,38 +34,75 @@
      <li class="nav-item">
 		  <a class="nav-link text-dark" data-bs-toggle="collapse" href="#incomeSubmenu" role="button" aria-expanded="false" aria-controls="incomeSubmenu">
 		    <i class="material-symbols-rounded opacity-5">attach_money</i>
-		    <span class="nav-link-text ms-1">Income</span>
+		    <span class="nav-link-text ms-1">Expenditure</span>
 		    <i class="fa fa-angle-down ms-auto"></i>
 		  </a>
 		  <div class="collapse" id="incomeSubmenu">
 		    <ul class="nav flex-column ms-3">
 		      <li class="nav-item">
-		        <a class="nav-link text-dark" href="income-category.php">
+		        <a class="nav-link text-dark" href="expenditure-category.php">
 		          <i class="material-symbols-rounded opacity-5">category</i>
-		          <span class="nav-link-text ms-1">Income Category</span>
+		          <span class="nav-link-text ms-1">Expenditure Category</span>
 		        </a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link text-dark" href="income-subcategory.php">
+		        <a class="nav-link text-dark" href="expenditure-subcategory.php">
 		          <i class="material-symbols-rounded opacity-5">subdirectory_arrow_right</i>
-		          <span class="nav-link-text ms-1">Income Sub-category</span>
+		          <span class="nav-link-text ms-1">Expenditure Sub-category</span>
 		        </a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link text-dark" href="add-income.php">
+		        <a class="nav-link text-dark" href="add-expenditure.php">
 		          <i class="material-symbols-rounded opacity-5">add_circle</i>
-		          <span class="nav-link-text ms-1">Add Income</span>
+		          <span class="nav-link-text ms-1">Add Expenditure</span>
 		        </a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link text-dark" href="view-income.php">
+		        <a class="nav-link text-dark" href="view-expenditure.php">
 		          <i class="material-symbols-rounded opacity-5">visibility</i>
-		          <span class="nav-link-text ms-1">View Income</span>
+		          <span class="nav-link-text ms-1">View Expenditure</span>
 		        </a>
 		      </li>
 		    </ul>
 		  </div>
 		</li>
+
+
+    <li class="nav-item">
+      <a class="nav-link text-dark" data-bs-toggle="collapse" href="#incomeSubmenu" role="button" aria-expanded="false" aria-controls="incomeSubmenu">
+        <i class="material-symbols-rounded opacity-5">attach_money</i>
+        <span class="nav-link-text ms-1">Income</span>
+        <i class="fa fa-angle-down ms-auto"></i>
+      </a>
+      <div class="collapse" id="incomeSubmenu">
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="income-category.php">
+              <i class="material-symbols-rounded opacity-5">category</i>
+              <span class="nav-link-text ms-1">Income Category</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="income-subcategory.php">
+              <i class="material-symbols-rounded opacity-5">subdirectory_arrow_right</i>
+              <span class="nav-link-text ms-1">Income Sub-category</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="add-income.php">
+              <i class="material-symbols-rounded opacity-5">add_circle</i>
+              <span class="nav-link-text ms-1">Add Income</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="view-income.php">
+              <i class="material-symbols-rounded opacity-5">visibility</i>
+              <span class="nav-link-text ms-1">View Income</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
 
 
 
