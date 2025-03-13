@@ -61,51 +61,49 @@ include 'inc/config.php';
                             </thead>
                             <tbody>
                                 <?php
-                                
+                                // Fetch records from database
                                 $query = "SELECT 
-								            e.id, 
-								            e.name, 
-								            e.phone,  
-								            e.description, 
-								            c.category_name, 
-								            s.subcategory_name, 
-								            e.actual_amount, 
-								            e.paid_amount, 
-								            e.balance_amount, 
-								            e.entry_date 
-								          FROM expenditure e
-								          INNER JOIN expenditure_categories c ON e.category_id = c.id
-								          INNER JOIN expenditure_subcategories s ON e.subcategory_id = s.id
-								          ORDER BY e.id DESC";
+                                            e.id, 
+                                            e.name, 
+                                            e.phone,  
+                                            e.description, 
+                                            c.category_name, 
+                                            s.subcategory_name, 
+                                            e.actual_amount, 
+                                            e.paid_amount, 
+                                            (e.actual_amount - e.paid_amount) AS balance_amount,
+                                            e.entry_date 
+                                          FROM expenditure e
+                                          INNER JOIN expenditure_categories c ON e.category_id = c.id
+                                          INNER JOIN expenditure_subcategories s ON e.subcategory_id = s.id
+                                          ORDER BY e.id DESC";
 
-								$result = mysqli_query($conn, $query);
+                                $result = $conn->query($query);
 
-								// Debugging: Check if query fails
-								if (!$result) {
-								    die("Query failed: " . mysqli_error($conn));
-								}
-
-                                $count = 1;
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $formatted_date = date("d-m-Y", strtotime($row['entry_date']));
-
-                                    echo "<tr>
-                                            <td>{$count}</td>
-                                            <td>{$row['name']}</td>
-                                            <td>{$row['phone']}</td>
-                                            <td>{$row['description']}</td>
-                                            <td>{$row['category_name']}</td>
-                                            <td>{$row['subcategory_name']}</td>
-                                            <td>{$row['actual_amount']}</td>
-                                            <td>{$row['paid_amount']}</td>
-                                            <td>{$row['balance_amount']}</td>
-                                            <td>{$formatted_date}</td>
-                                            <td class='text-center'>
-                                                <a href='edit-expenditure.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
-                                                <a href='delete-expenditure.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm("Are you sure?")'><i class='fa fa-trash'></i> Delete</a>
-                                            </td>
-                                        </tr>";
-                                    $count++;
+                                if ($result->num_rows > 0) {
+                                    $count = 1;
+                                    while ($row = $result->fetch_assoc()) {
+                                        $formatted_date = date("d-m-Y", strtotime($row['entry_date']));
+                                        echo "<tr>
+                                                <td>{$count}</td>
+                                                <td>{$row['name']}</td>
+                                                <td>{$row['phone']}</td>
+                                                <td>{$row['description']}</td>
+                                                <td>{$row['category_name']}</td>
+                                                <td>{$row['subcategory_name']}</td>
+                                                <td>{$row['actual_amount']}</td>
+                                                <td>{$row['paid_amount']}</td>
+                                                <td>{$row['balance_amount']}</td>
+                                                <td>{$formatted_date}</td>
+                                                <td class='text-center'>
+                                                    <a href='edit-expenditure.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
+                                                    <a href='delete-expenditure.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
+                                                </td>
+                                            </tr>";
+                                        $count++;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='11' class='text-center text-muted'>No records found.</td></tr>";
                                 }
                                 ?>
                             </tbody>
