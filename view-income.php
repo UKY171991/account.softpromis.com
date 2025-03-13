@@ -109,7 +109,7 @@ include 'inc/config.php';
                                             <td>{$row['actual_amount']}</td>
                                             <td>{$row['received_amount']}</td>
                                             <td>{$row['balance_amount']}</td>
-                                            <td><?php echo date("d-m-Y", strtotime($row['entry_date'])); ?></td>
+                                            <td>{$row['entry_date']}</td>
                     
                                             <td class='text-center'>
                                                 <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
