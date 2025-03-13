@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category_name = trim($_POST['category_name']);
 
     if (!empty($category_name)) {
-        $update_query = "UPDATE income_categories SET category_name = ? WHERE id = ?";
+        $update_query = "UPDATE expenditure_categories SET category_name = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $update_query);
         mysqli_stmt_bind_param($stmt, "si", $category_name, $id);
 
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               <h6 class="mb-0 text-white">Edit Income Category</h6>
             </div>
             <div class="card-body">
-              <form action="edit-category.php" method="POST">
+              <form action="edit-expenditure-category.php" method="POST">
 		            <input type="hidden" name="id" value="<?= $category['id'] ?>">
 		            <div class="input-group input-group-outline mb-4">
 			          <label class="form-label">Category Name</label>
