@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_stmt_bind_param($stmt, "si", $category_name, $id);
 
         if (mysqli_stmt_execute($stmt)) {
-            $_SESSION['success_msg'] = "Income category updated successfully!";
+            $_SESSION['success_msg'] = "Expenditure category updated successfully!";
         } else {
             $_SESSION['error_msg'] = "Error updating category.";
         }
         mysqli_stmt_close($stmt);
     } else {
-        $_SESSION['error_msg'] = "Category name cannot be empty.";
+        $_SESSION['error_msg'] = "Expenditure name cannot be empty.";
     }
 
     header("Location: expenditure-category.php");
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
   <meta charset="utf-8" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Add Income Category</title>
+  <title>Add Expenditure Category</title>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
   <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <!-- Page Title -->
       <div class="row">
         <div class="col-12">
-          <h4 class="text-dark">Edit Income Category</h4>
+          <h4 class="text-dark">Edit Expenditure Category</h4>
         </div>
       </div>
 
@@ -118,8 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <td class='text-xs'>{$count}</td>
                             <td class='text-xs'>{$row['category_name']}</td>
                             <td class='text-center'>
-                              <a href='edit-category.php?id={$row['id']}' class='text-info mx-2'><i class='fa fa-edit'></i></a>
-                              <a href='delete-category.php?id={$row['id']}' class='text-danger mx-2'><i class='fa fa-trash'></i></a>
+                              <a href='edit-expenditure-category.php?id={$row['id']}' class='text-info mx-2'><i class='fa fa-edit'></i></a>
+                              <a href='delete-expenditure-category.php?id={$row['id']}' class='text-danger mx-2'><i class='fa fa-trash'></i></a>
                             </td>
                           </tr>";
                     $count++;
