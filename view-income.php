@@ -30,21 +30,23 @@ include 'inc/config.php';
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-6">
+                    <h4 class="text-dark">Income Records</h4>
+                </div>
+                <div class="col-6 text-end">
+                    <a href="add-income.php" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> Add Income
+                    </a>
+                </div>
+            </div>
+
+
             <div class="card mt-4">
                 <div class="card-header bg-gradient-dark text-white">
                     <h6 class="mb-0 text-white">All Income Entries</h6>
                 </div>
-                
-                <div class="row">
-    <div class="col-6">
-        <h4 class="text-dark">Income Records</h4>
-    </div>
-    <div class="col-6 text-end">
-        <a href="add-income.php" class="btn btn-primary">
-            <i class="fa fa-plus"></i> Add Income
-        </a>
-    </div>
-</div>
+
 
 
                 <div class="card-body px-3">
