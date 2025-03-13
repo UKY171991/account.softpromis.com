@@ -21,7 +21,7 @@ $subcategory = $result->fetch_assoc();
 
 if (!$subcategory) {
     $_SESSION['error_msg'] = "Subcategory not found.";
-    header("Location: expenditure-subcategories.php");
+    header("Location: expenditure-subcategory.php");
     exit();
 }
 
