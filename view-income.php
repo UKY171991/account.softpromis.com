@@ -67,6 +67,7 @@ include 'inc/config.php';
 
 
                 <div class="card-body px-3">
+                    <div class="table-responsive">
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
@@ -119,6 +120,7 @@ include 'inc/config.php';
                             ?>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
