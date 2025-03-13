@@ -1,9 +1,10 @@
 <?php
+session_start(); // Must be at the top before any output
 include 'inc/auth.php';
 include 'inc/config.php';
-session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Trim and sanitize inputs
     $name = trim($_POST['name']);
     $phone = trim($_POST['phone']);
     $description = trim($_POST['description']);
@@ -12,26 +13,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $actual_amount = floatval($_POST['actual_amount']);
     $received_amount = floatval($_POST['received_amount']);
     $balance_amount = $actual_amount - $received_amount;
-    $entry_date = $_POST['date_of_entry'];
+    $entry_date = trim($_POST['date_of_entry']);
 
-    if (!empty($name) && !empty($category_id) && !empty($subcategory_id) && !empty($actual_amount) && !empty($entry_date)) {
-        $query = "INSERT INTO income (name,phone description, category_id, subcategory_id, actual_amount, received_amount, balance_amount, entry_date)
+    // Ensure required fields are not empty
+    if (!empty($name) && !empty($phone) && !empty($category_id) && !empty($subcategory_id) && !empty($actual_amount) && !empty($entry_date)) {
+        
+        // Corrected SQL query (Fixed missing comma)
+        $query = "INSERT INTO income (name, phone, description, category_id, subcategory_id, actual_amount, received_amount, balance_amount, entry_date)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "sssiidids", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $received_amount, $balance_amount, $entry_date);
 
+        $stmt = mysqli_prepare($conn, $query);
+        
+        // Corrected Data Types in Bind Param
+        mysqli_stmt_bind_param($stmt, "ssiiddds", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $received_amount, $balance_amount, $entry_date);
+
+        // Execute and check for success
         if (mysqli_stmt_execute($stmt)) {
             $_SESSION['success_msg'] = "Income entry added successfully!";
         } else {
             $_SESSION['error_msg'] = "Error adding income entry!";
         }
+
         mysqli_stmt_close($stmt);
     } else {
         $_SESSION['error_msg'] = "All fields are required!";
     }
 
+    // Redirect to view-income.php
     header("Location: view-income.php");
-    //header("Location: add-income.php");
     exit();
 }
 ?>
