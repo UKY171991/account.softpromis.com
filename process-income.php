@@ -29,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error_msg'] = "All fields are required!";
     }
 
-    header("Location: add-income.php");
+    header("Location: view-income.php");
+    //header("Location: add-income.php");
     exit();
 }
 ?>
