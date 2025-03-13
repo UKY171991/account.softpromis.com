@@ -7,8 +7,8 @@ die;
 include 'inc/auth.php';
 include 'inc/config.php';
 
-die;
-/*
+
+
 
 ?>
 
