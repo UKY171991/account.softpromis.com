@@ -129,7 +129,7 @@ include 'inc/config.php';
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Revenue</label>
-                                            <input type="number" class="form-control border no-spinner" name="revenue" id="revenue">
+                                            <input type="number" class="form-control border no-spinner" name="revenue" id="revenue" required>
                                         </div>
                                     </div>
 
