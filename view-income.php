@@ -128,5 +128,14 @@ include 'inc/config.php';
     <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Remove alert after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                $(".alert").fadeOut("slow");
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
