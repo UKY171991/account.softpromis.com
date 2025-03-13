@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Bind parameters and execute
             mysqli_stmt_bind_param($stmt, "s", $category_name);
             if (mysqli_stmt_execute($stmt)) {
-                $_SESSION['success_msg'] = "Income category added successfully!";
+                $_SESSION['success_msg'] = "Expenditure category added successfully!";
             } else {
                 $_SESSION['error_msg'] = "Error: Could not add category.";
             }
