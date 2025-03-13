@@ -5,7 +5,7 @@ include 'inc/config.php';
 // Get subcategory ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error_msg'] = "Invalid request.";
-    header("Location: expenditure-subcategories.php");
+    header("Location: expenditure-subcategory.php");
     exit();
 }
 
