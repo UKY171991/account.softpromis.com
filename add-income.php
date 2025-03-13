@@ -15,6 +15,7 @@ include 'inc/config.php';
   	<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   	<link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link  href="assets/css/style.css" rel="stylesheet" />
 </head>
 
@@ -121,7 +122,7 @@ include 'inc/config.php';
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Date of Entry</label>
-                                            <input type="date" class="form-control border" name="date_of_entry" required>
+                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" required autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -145,6 +146,10 @@ include 'inc/config.php';
             </div>
         </div>
     </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
     <script src="assets/js/core/popper.min.js"></script>
   	<script src="assets/js/core/bootstrap.min.js"></script>
@@ -202,6 +207,17 @@ include 'inc/config.php';
                 }
             }
             this.value = words.join(" "); // Update input with capitalized first letters
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#datepicker").datepicker({
+                dateFormat: "dd-mm-yy", // Set format to dd-mm-yyyy
+                changeMonth: true,  // Allows month selection
+                changeYear: true,   // Allows year selection
+                yearRange: "1900:+10" // Allows selection from 1900 to 10 years ahead
+            });
         });
     </script>
 
