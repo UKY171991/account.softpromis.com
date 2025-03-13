@@ -2,7 +2,7 @@
 
 echo "Hello";
 die;
-/*
+
 
 include 'inc/auth.php';
 include 'inc/config.php';
@@ -12,7 +12,7 @@ if (!$conn) {
 }
 SHOW TABLES;
 die;
-
+/*
 
 ?>
 
