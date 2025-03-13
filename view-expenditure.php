@@ -7,9 +7,6 @@ die;
 include 'inc/auth.php';
 include 'inc/config.php';
 
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
 SHOW TABLES;
 die;
 /*
