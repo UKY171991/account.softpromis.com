@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if ($stmt->execute()) {
         $_SESSION['success_msg'] = "Subcategory updated successfully.";
-        header("Location: expenditure-subcategories.php");
+        header("Location: expenditure-subcategory.php");
     } else {
         $_SESSION['error_msg'] = "Update failed: " . $conn->error;
         header("Location: edit-expenditure-subcategory.php?id=" . $subcategory_id);
