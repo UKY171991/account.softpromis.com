@@ -5,6 +5,8 @@ include 'inc/config.php';
 if (!$conn) {
     die("Database connection failed: " . mysqli_connect_error());
 }
+SHOW TABLES;
+
 ?>
 
 <!DOCTYPE html>
