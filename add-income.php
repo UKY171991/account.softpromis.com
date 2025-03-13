@@ -32,7 +32,7 @@ include 'inc/config.php';
 
             <!-- Display Messages -->
             <div class="row">
-                <div class="col-md-6 mx-auto">
+                <div class="col-md-12 mx-auto">
                     <?php if (isset($_SESSION['success_msg'])): ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <?= $_SESSION['success_msg']; ?>
