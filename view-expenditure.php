@@ -1,5 +1,5 @@
 <?php
-include 'inc/auth.php';
+//include 'inc/auth.php';
 include 'inc/config.php';
 
 if (!$conn) {
