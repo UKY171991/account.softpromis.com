@@ -67,7 +67,7 @@ $categories = $conn->query($category_query);
                             <h6 class="mb-0 text-white">Update Subcategory</h6>
                         </div>
                         <div class="card-body">
-                            <form action="update-expenditure-subcategory.php" method="POST">
+                            <form action="edit-expenditure-subcategory.php" method="POST">
                                 <input type="hidden" name="subcategory_id" value="<?= $subcategory['id']; ?>">
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
