@@ -111,8 +111,8 @@ include 'inc/config.php';
                             <td>{$row['category_name']}</td>
                             <td>{$row['subcategory_name']}</td>
                             <td class='text-center'>
-                              <a href='edit-subcategory.php?id={$row['id']}' class='badge badge-sm bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
-                              <a href='delete-subcategory.php?id={$row['id']}' class='badge badge-sm bg-gradient-danger' onclick='return confirm(\"Are you sure you want to delete this sub-category?\")'><i class='fa fa-trash'></i> Delete</a>
+                              <a href='edit-expenditure-subcategory.php?id={$row['id']}' class='badge badge-sm bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
+                              <a href='delete-expenditure-subcategory.php?id={$row['id']}' class='badge badge-sm bg-gradient-danger' onclick='return confirm(\"Are you sure you want to delete this sub-category?\")'><i class='fa fa-trash'></i> Delete</a>
                             </td>
                           </tr>";
                     $count++;
