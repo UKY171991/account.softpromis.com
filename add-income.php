@@ -103,13 +103,13 @@ include 'inc/config.php';
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Actual Amount</label>
-                                            <input type="number" class="form-control border" name="actual_amount" id="actualAmount" required>
+                                            <input type="number" class="form-control border no-spinner" name="actual_amount" id="actualAmount" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Received Amount</label>
-                                            <input type="number" class="form-control border" name="received_amount" id="receivedAmount" required>
+                                            <input type="number" class="form-control border no-spinner" name="received_amount" id="receivedAmount" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
