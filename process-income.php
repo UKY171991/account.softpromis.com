@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = mysqli_prepare($conn, $query);
         
         // Corrected Data Types in Bind Param
-        mysqli_stmt_bind_param($stmt, "ssiiddds", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $received_amount, $balance_amount, $entry_date);
+        mysqli_stmt_bind_param($stmt, "sssiiddds", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $received_amount, $balance_amount, $entry_date);
 
         // Execute and check for success
         if (mysqli_stmt_execute($stmt)) {
