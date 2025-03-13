@@ -70,12 +70,13 @@ include 'inc/config.php';
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Phone</th> <!-- Added Phone Column -->
+                                    <th>Phone</th> 
                                     <th>Category</th>
                                     <th>Sub-Category</th>
                                     <th>Actual Amount</th>
                                     <th>Received Amount</th>
                                     <th>Balance Amount</th>
+                                    <th>Revenue</th> <!-- Added Revenue Column -->
                                     <th>Date</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -85,13 +86,14 @@ include 'inc/config.php';
                                 $query = "SELECT 
                                             i.id, 
                                             i.name, 
-                                            i.phone,  /* Added phone in query */
+                                            i.phone,  
                                             i.description, 
                                             c.category_name, 
                                             s.subcategory_name, 
                                             i.actual_amount, 
                                             i.received_amount, 
                                             i.balance_amount, 
+                                            i.revenue, 
                                             i.entry_date 
                                           FROM income i
                                           INNER JOIN income_categories c ON i.category_id = c.id
@@ -100,20 +102,20 @@ include 'inc/config.php';
                                 $result = mysqli_query($conn, $query);
                                 $count = 1;
                                 while ($row = mysqli_fetch_assoc($result)) {
+                                    // Format date from YYYY-MM-DD to DD-MM-YYYY
+                                    $formatted_date = date("d-m-Y", strtotime($row['entry_date']));
+
                                     echo "<tr>
                                             <td>{$count}</td>
                                             <td>{$row['name']}</td>
-                                            <td>{$row['phone']}</td> <!-- Added Phone Data -->
+                                            <td>{$row['phone']}</td> 
                                             <td>{$row['category_name']}</td>
                                             <td>{$row['subcategory_name']}</td>
                                             <td>{$row['actual_amount']}</td>
                                             <td>{$row['received_amount']}</td>
                                             <td>{$row['balance_amount']}</td>
-
-                                        
-
-                                            <td>{$row['entry_date']}</td>
-
+                                            <td>{$row['revenue']}</td> <!-- Added Revenue Data -->
+                                            <td>{$formatted_date}</td> <!-- Fixed Date Format -->
                                             <td class='text-center'>
                                                 <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
                                                 <a href='delete-income.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
