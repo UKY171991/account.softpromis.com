@@ -9,12 +9,11 @@ include 'inc/config.php';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Add Income</title>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-  	<link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-  	<link href="assets/css/nucleo-svg.css" rel="stylesheet" />
-  	<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-  	<link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900">
+    <link href="assets/css/nucleo-icons.css" rel="stylesheet">
+    <link href="assets/css/nucleo-svg.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet">
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -25,16 +24,19 @@ include 'inc/config.php';
 
         <div class="container-fluid py-4">
             <div class="row">
-                <div class="col-12">
+                <div class="col-md-6">
                     <h4 class="text-dark">Add Income</h4>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="view-income.php" class="btn btn-primary"><i class="fa fa-list"></i> View All Income</a>
                 </div>
             </div>
 
             <!-- Display Messages -->
             <div class="row">
-                <div class="col-md-12 mx-auto">
+                <div class="col-md-6 mx-auto">
                     <?php if (isset($_SESSION['success_msg'])): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert alert-success alert-dismissible fade show">
                             <?= $_SESSION['success_msg']; ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
@@ -42,7 +44,7 @@ include 'inc/config.php';
                     <?php endif; ?>
 
                     <?php if (isset($_SESSION['error_msg'])): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-danger alert-dismissible fade show">
                             <?= $_SESSION['error_msg']; ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
@@ -51,8 +53,8 @@ include 'inc/config.php';
                 </div>
             </div>
 
-            <!-- Add Income Form -->
             <div class="row mt-4">
+                <!-- Income Form -->
                 <div class="col-md-6">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
@@ -63,15 +65,15 @@ include 'inc/config.php';
                             <form action="process-income.php" method="POST">
                                 <div class="mb-3">
                                     <label class="form-label">Name</label>
-                                    <input type="text" class="form-control border" name="name" required>
+                                    <input type="text" class="form-control" name="name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
-                                    <textarea class="form-control border" name="description" required></textarea>
+                                    <textarea class="form-control" name="description" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
-                                    <select class="form-control border" name="category_id" id="category" required>
+                                    <select class="form-control" name="category_id" id="category" required>
                                         <option value="">-- Select Category --</option>
                                         <?php
                                         $query = "SELECT * FROM income_categories ORDER BY category_name ASC";
@@ -84,25 +86,25 @@ include 'inc/config.php';
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Sub-Category</label>
-                                    <select class="form-control border" name="subcategory_id" id="subcategory" required>
+                                    <select class="form-control" name="subcategory_id" id="subcategory" required>
                                         <option value="">-- Select Sub-Category --</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Actual Amount</label>
-                                    <input type="number" class="form-control border" name="actual_amount" id="actualAmount" required>
+                                    <input type="number" class="form-control" name="actual_amount" id="actualAmount" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Received Amount</label>
-                                    <input type="number" class="form-control border" name="received_amount" id="receivedAmount" required>
+                                    <input type="number" class="form-control" name="received_amount" id="receivedAmount" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Balance Amount</label>
-                                    <input type="text" class="form-control border" id="balanceAmount" readonly>
+                                    <input type="text" class="form-control" id="balanceAmount" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Date of Entry</label>
-                                    <input type="date" class="form-control border" name="date_of_entry" required>
+                                    <input type="date" class="form-control" name="date_of_entry" required>
                                 </div>
                                 <div class="text-end">
                                     <button type="submit" class="btn bg-gradient-dark">
@@ -113,15 +115,27 @@ include 'inc/config.php';
                         </div>
                     </div>
                 </div>
+
+                <!-- Right Column (Placeholder) -->
+                <div class="col-md-6">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-gradient-dark text-white">
+                            <h6 class="mb-0 text-white">Income Summary</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>This space can be used for income statistics, recent entries, or additional functionality.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
     <script src="assets/js/core/popper.min.js"></script>
-  	<script src="assets/js/core/bootstrap.min.js"></script>
-  	<script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-  	<script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-  	<script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
 
     <script>
         document.getElementById("category").addEventListener("change", function () {
