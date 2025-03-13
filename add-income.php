@@ -125,7 +125,7 @@ include 'inc/config.php';
                                             <input type="text" class="form-control border" name="date_of_entry" id="datepicker" required autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Description</label>
                                             <textarea class="form-control border" name="description" required></textarea>
