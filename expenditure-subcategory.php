@@ -87,7 +87,7 @@ include 'inc/config.php';
         <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-gradient-dark text-white">
-              <h6 class="mb-0 text-white">Income Sub-Categories</h6>
+              <h6 class="mb-0 text-white">Expenditure Sub-Categories</h6>
             </div>
             <div class="card-body px-3">
               <table class="table align-items-center mb-0">
