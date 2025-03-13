@@ -1,11 +1,48 @@
 <?php
+session_start();
 include 'inc/auth.php';
 include 'inc/config.php';
 
-// Get subcategory ID
+// Handle Update Logic
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!isset($_POST['subcategory_id']) || empty($_POST['subcategory_id'])) {
+        $_SESSION['error_msg'] = "Invalid request.";
+        header("Location: expenditure-subcategories.php");
+        exit();
+    }
+
+    $subcategory_id = intval($_POST['subcategory_id']);
+    $category_id = intval($_POST['category_id']);
+    $subcategory_name = trim($_POST['subcategory_name']);
+
+    // Check if subcategory name is empty
+    if (empty($subcategory_name)) {
+        $_SESSION['error_msg'] = "Subcategory name cannot be empty.";
+        header("Location: edit-expenditure-subcategory.php?id=" . $subcategory_id);
+        exit();
+    }
+
+    // Update subcategory
+    $update_query = "UPDATE expenditure_subcategories SET category_id = ?, subcategory_name = ? WHERE id = ?";
+    $stmt = $conn->prepare($update_query);
+    $stmt->bind_param("isi", $category_id, $subcategory_name, $subcategory_id);
+    
+    if ($stmt->execute()) {
+        $_SESSION['success_msg'] = "Subcategory updated successfully.";
+        header("Location: expenditure-subcategories.php");
+    } else {
+        $_SESSION['error_msg'] = "Update failed: " . $conn->error;
+        header("Location: edit-expenditure-subcategory.php?id=" . $subcategory_id);
+    }
+    
+    $stmt->close();
+    exit();
+}
+
+// Handle Edit Form Display
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error_msg'] = "Invalid request.";
-    header("Location: expenditure-subcategory.php");
+    header("Location: expenditure-subcategories.php");
     exit();
 }
 
@@ -21,7 +58,7 @@ $subcategory = $result->fetch_assoc();
 
 if (!$subcategory) {
     $_SESSION['error_msg'] = "Subcategory not found.";
-    header("Location: expenditure-subcategory.php");
+    header("Location: expenditure-subcategories.php");
     exit();
 }
 
@@ -44,7 +81,7 @@ $categories = $conn->query($category_query);
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
-    <link  href="assets/css/style.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
