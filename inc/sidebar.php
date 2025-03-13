@@ -23,8 +23,15 @@
           </a>
         </li>
 
-
         <li class="nav-item">
+          <a class="nav-link text-dark" href="view-income.php">
+            <i class="material-symbols-rounded opacity-5">attach_money</i>
+            <span class="nav-link-text ms-1">Expenditure</span>
+          </a>
+        </li>
+
+
+     <li class="nav-item">
 		  <a class="nav-link text-dark" data-bs-toggle="collapse" href="#incomeSubmenu" role="button" aria-expanded="false" aria-controls="incomeSubmenu">
 		    <i class="material-symbols-rounded opacity-5">attach_money</i>
 		    <span class="nav-link-text ms-1">Income</span>

@@ -32,7 +32,7 @@ include 'inc/config.php';
 
             <!-- Display Messages -->
             <div class="row">
-                <div class="col-md-6 mx-auto">
+                <div class="col-md-12 mx-auto">
                     <?php if (isset($_SESSION['success_msg'])): ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <?= $_SESSION['success_msg']; ?>
@@ -53,7 +53,7 @@ include 'inc/config.php';
 
             <!-- Add Income Form -->
             <div class="row mt-4 d-flex justify-content-center">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
                             <i class="material-symbols-rounded me-2">attach_money</i>
@@ -61,49 +61,72 @@ include 'inc/config.php';
                         </div>
                         <div class="card-body">
                             <form action="process-income.php" method="POST">
-                                <div class="mb-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control border" name="name" required>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input type="text" class="form-control border" name="name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control border" name="description" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-control border" name="category_id" id="category" required>
+                                                <option value="">-- Select Category --</option>
+                                                <?php
+                                                $query = "SELECT * FROM income_categories ORDER BY category_name ASC";
+                                                $result = mysqli_query($conn, $query);
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Sub-Category</label>
+                                            <select class="form-control border" name="subcategory_id" id="subcategory" required>
+                                                <option value="">-- Select Sub-Category --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Actual Amount</label>
+                                            <input type="number" class="form-control border" name="actual_amount" id="actualAmount" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Received Amount</label>
+                                            <input type="number" class="form-control border" name="received_amount" id="receivedAmount" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Balance Amount</label>
+                                            <input type="text" class="form-control border" id="balanceAmount" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Date of Entry</label>
+                                            <input type="date" class="form-control border" name="date_of_entry" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"></div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-control border" name="description" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Category</label>
-                                    <select class="form-control border" name="category_id" id="category" required>
-                                        <option value="">-- Select Category --</option>
-                                        <?php
-                                        $query = "SELECT * FROM income_categories ORDER BY category_name ASC";
-                                        $result = mysqli_query($conn, $query);
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Sub-Category</label>
-                                    <select class="form-control border" name="subcategory_id" id="subcategory" required>
-                                        <option value="">-- Select Sub-Category --</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Actual Amount</label>
-                                    <input type="number" class="form-control border" name="actual_amount" id="actualAmount" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Received Amount</label>
-                                    <input type="number" class="form-control border" name="received_amount" id="receivedAmount" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Balance Amount</label>
-                                    <input type="text" class="form-control border" id="balanceAmount" readonly>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Date of Entry</label>
-                                    <input type="date" class="form-control border" name="date_of_entry" required>
-                                </div>
+                                
+
+                                
+                                
                                 <div class="text-end">
                                     <button type="submit" class="btn bg-gradient-dark">
                                         <i class="material-symbols-rounded me-1">add</i> Add Income
