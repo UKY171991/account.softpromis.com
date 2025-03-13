@@ -105,9 +105,9 @@ include 'inc/config.php';
                                         <td>{$row['name']}</td>
                                         <td>{$row['category_name']}</td>
                                         <td>{$row['subcategory_name']}</td>
-                                        <td>\${$row['actual_amount']}</td>
-                                        <td>\${$row['received_amount']}</td>
-                                        <td>\${$row['balance_amount']}</td>
+                                        <td>{$row['actual_amount']}</td>
+                                        <td>{$row['received_amount']}</td>
+                                        <td>{$row['balance_amount']}</td>
                                         <td>{$row['entry_date']}</td>
                                         <td class='text-center'>
                                             <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
