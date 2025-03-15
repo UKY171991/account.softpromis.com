@@ -121,6 +121,21 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                     </div>
                 </div>
             </div>
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                  <div class="card shadow-lg">
+                      <div class="card-header bg-gradient-dark text-white">
+                          <h6 class="mb-0">Income Trends</h6>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="incomeChart"></canvas>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
         </div>
     </main>
 
@@ -157,6 +172,41 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
               });
       });
 
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("fetch-income-dashboard.php")
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById("incomeChart").getContext("2d");
+                new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: "Total Income",
+                                backgroundColor: "green",
+                                data: data.income
+                            },
+                            {
+                                label: "Received Amount",
+                                backgroundColor: "blue",
+                                data: data.received
+                            },
+                            {
+                                label: "Balance Amount",
+                                backgroundColor: "orange",
+                                data: data.balance
+                            }
+                        ]
+                    }
+                });
+            });
+    });
+
     </script>
+
 </body>
 </html>
