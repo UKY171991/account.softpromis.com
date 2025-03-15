@@ -120,21 +120,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href="income-subcategory.php">
+            <a class="nav-link text-dark" href="list-users.php">
               <i class="material-symbols-rounded opacity-5">subdirectory_arrow_right</i>
-              <span class="nav-link-text ms-1">Income Sub-category</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="add-income.php">
-              <i class="material-symbols-rounded opacity-5">add_circle</i>
-              <span class="nav-link-text ms-1">Add Income</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="view-income.php">
-              <i class="material-symbols-rounded opacity-5">visibility</i>
-              <span class="nav-link-text ms-1">View Income</span>
+              <span class="nav-link-text ms-1">User List</span>
             </a>
           </li>
         </ul>
