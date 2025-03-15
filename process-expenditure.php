@@ -46,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subcategoryCheck->execute();
     $subcategoryCheckResult = $subcategoryCheck->get_result();
 
-   //print_r($_POST);  die;
 
     if ($categoryCheckResult->num_rows == 0 || $subcategoryCheckResult->num_rows == 0) {
         $_SESSION['error_msg'] = "Invalid Category or Sub-Category.";
@@ -54,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-       print_r($_POST);  die;
+   //    print_r($_POST);  die;
 
     // Insert data into the database
     $stmt = $conn->prepare("INSERT INTO expenditures (name, phone, category_id, subcategory_id, total_amount, paid_amount, balance_amount, entry_date) 
