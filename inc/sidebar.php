@@ -116,7 +116,7 @@
           <li class="nav-item">
             <a class="nav-link text-dark" href="income-category.php">
               <i class="material-symbols-rounded opacity-5">category</i>
-              <span class="nav-link-text ms-1">Income Category</span>
+              <span class="nav-link-text ms-1">User type</span>
             </a>
           </li>
           <li class="nav-item">
