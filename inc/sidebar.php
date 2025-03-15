@@ -38,7 +38,7 @@
         </li>
 
 
-     <li class="nav-item">
+     <!-- <li class="nav-item">
 		  <a class="nav-link text-dark" data-bs-toggle="collapse" href="#ExpenditureSubmenu" role="button" aria-expanded="false" aria-controls="ExpenditureSubmenu">
 		    <i class="material-symbols-rounded opacity-5">attach_money</i>
 		    <span class="nav-link-text ms-1">Expenditure</span>
@@ -73,10 +73,10 @@
           
 		    </ul>
 		  </div>
-		</li>
+		</li> -->
 
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link text-dark" data-bs-toggle="collapse" href="#incomeSubmenu" role="button" aria-expanded="false" aria-controls="incomeSubmenu">
         <i class="material-symbols-rounded opacity-5">attach_money</i>
         <span class="nav-link-text ms-1">Income</span>
@@ -110,7 +110,7 @@
           </li>
         </ul>
       </div>
-    </li>
+    </li> -->
 
 
     <li class="nav-item">
