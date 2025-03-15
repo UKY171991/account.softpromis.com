@@ -11,7 +11,7 @@ $year = isset($_POST['year']) ? intval($_POST['year']) : '';
 $pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
 
 // Construct query
-$query = "SELECT * FROM transactions WHERE 1=1";
+$query = "SELECT * FROM expenditure WHERE 1=1";
 
 if (!empty($person_name)) {
     $query .= " AND person_name LIKE '%$person_name%'";
