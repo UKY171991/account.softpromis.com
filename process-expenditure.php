@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+print_r($_POST);  die;
     // Validate phone number (10 digits)
     if (!preg_match("/^[0-9]{10}$/", $phone)) {
         $_SESSION['error_msg'] = "Invalid phone number. Must be 10 digits.";
