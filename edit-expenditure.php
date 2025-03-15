@@ -122,7 +122,8 @@ if (isset($_POST['category_id'])) {
                                             $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
                                             $result = $conn->query($query);
                                             while ($row = $result->fetch_assoc()) {
-                                                echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
+                                                $selected = ($row['id'] == $expenditure['category_id']) ? 'selected' : '';
+                        						echo "<option value='{$row['id']}' $selected>{$row['category_name']}</option>";
                                             }
                                             ?>
                                         </select>
