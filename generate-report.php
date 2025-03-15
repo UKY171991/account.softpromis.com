@@ -29,7 +29,7 @@ if (!empty($year)) {
     $query .= " AND YEAR(entry_date) = $year";
 }
 if ($pending !== '') {
- //   $query .= " AND balance_amount " . ($pending == 1 ? "> 0" : "= 0");
+    $query .= " AND balance_amount " . ($pending == 1 ? "> 0" : "= 0");
 }
 
 $query .= " ORDER BY entry_date DESC";
