@@ -4,21 +4,20 @@ include 'inc/auth.php';
 include 'inc/config.php';
 
 // Fetch real-time data
-echo $todayDate = date('Y-m-d');
-die;
+$todayDate = date('Y-m-d');
 
 // Total Income
-$incomeQuery = "SELECT SUM(total_amount) AS total_income FROM transactions WHERE type = 'income'";
+$incomeQuery = "SELECT SUM(total_amount) AS total_income FROM expenditure WHERE type = 'income'";
 $incomeResult = $conn->query($incomeQuery);
 $income = $incomeResult->fetch_assoc()['total_income'] ?? 0;
 
 // Total Expenditure
-$expenseQuery = "SELECT SUM(total_amount) AS total_expense FROM transactions WHERE type = 'expenditure'";
+$expenseQuery = "SELECT SUM(total_amount) AS total_expense FROM expenditure WHERE type = 'expenditure'";
 $expenseResult = $conn->query($expenseQuery);
 $expense = $expenseResult->fetch_assoc()['total_expense'] ?? 0;
 
 // Pending Payments
-$pendingQuery = "SELECT SUM(pending_amount) AS total_pending FROM transactions WHERE pending_amount > 0";
+$pendingQuery = "SELECT SUM(pending_amount) AS total_pending FROM expenditure WHERE pending_amount > 0";
 $pendingResult = $conn->query($pendingQuery);
 $pending = $pendingResult->fetch_assoc()['total_pending'] ?? 0;
 
