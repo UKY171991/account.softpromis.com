@@ -5,7 +5,6 @@ include 'inc/config.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	//print_r($_POST);  die;
     // Retrieve form data and sanitize inputs
     $name = strtoupper(trim($_POST['name']));
     $phone = trim($_POST['phone']);
@@ -27,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-//print_r($_POST);  die;
     // Validate phone number (10 digits)
     if (!preg_match("/^[0-9]{10}$/", $phone)) {
         $_SESSION['error_msg'] = "Invalid phone number. Must be 10 digits.";
