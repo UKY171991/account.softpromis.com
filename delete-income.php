@@ -1,4 +1,5 @@
 <?php
+include 'auth.php'; // Database connection
 include 'config.php'; // Database connection
 
 if (isset($_GET['id'])) {
@@ -18,14 +19,19 @@ if (isset($_GET['id'])) {
         $stmtDelete->bind_param("i", $id);
         
         if ($stmtDelete->execute()) {
-            echo "<script>alert('Income record deleted successfully!'); window.location.href='income.php';</script>";
+        	$_SESSION['success_msg'] = "Income record deleted successfully!";
+            header("Location: view-income.php");
         } else {
-            echo "<script>alert('Error deleting record.'); window.location.href='income.php';</script>";
+        	$_SESSION['error_msg'] = "Error deleting record: " . mysqli_error($conn);
+           header("Location: view-income.php");
         }
     } else {
-        echo "<script>alert('Record not found.'); window.location.href='income.php';</script>";
+        $_SESSION['error_msg'] = "Record not found.";
+        header("Location: view-income.php");
     }
 } else {
     echo "<script>alert('Invalid request.'); window.location.href='income.php';</script>";
+    $_SESSION['error_msg'] = "Invalid request.";
+    header("Location: view-income.php");
 }
 ?>
