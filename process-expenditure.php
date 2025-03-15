@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // Validate required fields
-    if (empty($name) || empty($phone) || empty($description) || empty($category_id) || empty($subcategory_id) || empty($actual_amount) || empty($paid_amount) || empty($date_of_entry)) {
+    if (empty($name) || empty($phone) || empty($description) || empty($category_id) || empty($subcategory_id) || empty($actual_amount) || empty($paid_amount) || empty($entry_date)) {
         $_SESSION['error_msg'] = "All fields are required.";
         header("Location: add-expenditure.php");
         exit();
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert data into the database
     $stmt = $conn->prepare("INSERT INTO expenditure (name, phone, description, category_id, subcategory_id, actual_amount, paid_amount, balance_amount, entry_date) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssiiidds", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $paid_amount, $balance_amount, $date_of_entry);
+    $stmt->bind_param("sssiiidds", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $paid_amount, $balance_amount, $entry_date);
 
     if ($stmt->execute()) {
         $_SESSION['success_msg'] = "Expenditure added successfully!";
