@@ -128,6 +128,12 @@ $income = mysqli_fetch_assoc($result);
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label class="form-label">Revenue</label>
+                                            <input type="number" class="form-control border no-spinner" name="revenue" id="revenue" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label class="form-label">Description</label>
                                             <textarea class="form-control border" name="description" required><?= $income['description']; ?></textarea>
                                         </div>
