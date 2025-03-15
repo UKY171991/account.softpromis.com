@@ -14,20 +14,20 @@
             </div>
           </div>
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
-            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+            <!-- <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">
                   <i class="sidenav-toggler-line"></i>
                   <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>hh
+                  <i class="sidenav-toggler-line"></i>
                 </div>
               </a>
-            </li>
-            <li class="nav-item px-3 d-flex align-items-center">
+            </li> -->
+            <!-- <li class="nav-item px-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0">
                 <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item dropdown pe-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="material-symbols-rounded">notifications</i>
