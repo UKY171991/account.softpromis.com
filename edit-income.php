@@ -122,6 +122,7 @@ $income = mysqli_fetch_assoc($result);
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                        	<?= $income['date_of_entry']; ?>
                                             <label class="form-label">Date of Entry</label>
                                             <input type="text" class="form-control border" name="date_of_entry" id="datepicker" value="<?= $income['date_of_entry']; ?>" required>
                                         </div>
