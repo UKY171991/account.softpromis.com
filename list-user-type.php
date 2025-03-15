@@ -25,12 +25,25 @@ include 'inc/config.php';
         <?php include 'inc/topbar.php'; ?>
 
         <div class="container-fluid py-4">
+
+        	<div class="row">
+                <div class="col-6">
+                    <h4 class="text-dark">Income Records</h4>
+                </div>
+                <div class="col-6 text-end">
+                    <a href="add-income.php" class="btn btn-dark">
+                        <i class="fa fa-plus"></i> Add Income
+                    </a>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-8 mx-auto">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
                             <h6 class="mb-0 text-white">User Type List</h6>
                         </div>
+
                         <div class="card-body">
                             <?php if (isset($_SESSION['success_msg'])): ?>
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
