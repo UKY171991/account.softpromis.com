@@ -139,7 +139,7 @@ if (isset($_POST['category_id'])) {
                                                 $subcategory_result = mysqli_query($conn, $subcategory_query);
                                                 while ($row = mysqli_fetch_assoc($subcategory_result)) {
                                                     $selected = ($row['id'] == $income['subcategory_id']) ? 'selected' : '';
-                                                    echo "<option value='{$row['id']}' $selected>{$row['subcategory_name']}</option>";
+                                                    echo "<option value='{$row['id']}' $selected>{$row['name']}</option>";
                                                 }
                                                 ?>
                                         </select>
