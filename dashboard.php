@@ -16,12 +16,6 @@ $expenseQuery = "SELECT SUM(paid_amount) AS paid_amount FROM expenditure";
 $expenseResult = $conn->query($expenseQuery);
 $paid_amount = $expenseResult->fetch_assoc()['paid_amount'] ?? 0;
 
-echo "Hello"; die;
-
-// Pending Payments
-$pendingQuery = "SELECT SUM(pending_amount) AS total_pending FROM expenditure WHERE pending_amount > 0";
-$pendingResult = $conn->query($pendingQuery);
-$pending = $pendingResult->fetch_assoc()['total_pending'] ?? 0;
 
 // Total Users
 $userQuery = "SELECT COUNT(id) AS total_users FROM users";
@@ -90,7 +84,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                     <div class="card">
                         <div class="card-header p-2 ps-3">
                             <p class="text-sm mb-0 text-capitalize">Pending Payments</p>
-                            <h4 class="mb-0">$<?= number_format($pending, 2) ?></h4>
+                            <h4 class="mb-0">$<?= number_format($income + $paid_amount, 2) ?></h4>
                         </div>
                         <hr class="dark horizontal my-0">
                         <div class="card-footer p-2 ps-3">
