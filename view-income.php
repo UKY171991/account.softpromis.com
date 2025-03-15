@@ -111,10 +111,10 @@ include 'inc/config.php';
                                             <td>{$row['phone']}</td> 
                                             <td>{$row['category_name']}</td>
                                             <td>{$row['subcategory_name']}</td>
-                                            <td>{$row['actual_amount']}</td>
-                                            <td>{$row['received_amount']}</td>
-                                            <td>{$row['balance_amount']}</td>
-                                            <td>{$row['revenue']}</td> <!-- Added Revenue Data -->
+                                            <td style='text-align: end;'>{$row['actual_amount']}</td>
+                                            <td style='text-align: end;'>{$row['received_amount']}</td>
+                                            <td style='text-align: end;'>{$row['balance_amount']}</td>
+                                            <td style='text-align: end;'>{$row['revenue']}</td> <!-- Added Revenue Data -->
                                             <td>{$formatted_date}</td> <!-- Fixed Date Format -->
                                             <td class='text-center'>
                                                 <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>

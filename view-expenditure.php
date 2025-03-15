@@ -112,9 +112,9 @@ include 'inc/config.php';
                                                 <td>{$row['description']}</td>
                                                 <td>{$row['category_name']}</td>
                                                 <td>{$row['subcategory_name']}</td>
-                                                <td style="text-align: end;">{$row['actual_amount']}</td>
-                                                <td style="text-align: end;">{$row['paid_amount']}</td>
-                                                <td style="text-align: end;">{$row['balance_amount']}</td>
+                                                <td style='text-align: end;'>{$row['actual_amount']}</td>
+                                                <td style='text-align: end;'>{$row['paid_amount']}</td>
+                                                <td style='text-align: end;'>{$row['balance_amount']}</td>
                                                 <td>{$formatted_date}</td>
                                                 <td class='text-center'>
                                                     <a href='edit-expenditure.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
