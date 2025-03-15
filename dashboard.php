@@ -108,33 +108,41 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                 </div>
             </div>
 
-            <!-- Income vs Expenditure Chart -->
-            <div class="row mt-4">
-              <div class="col-md-12">
-                  <div class="card shadow-lg">
-                      <div class="card-header bg-gradient-dark text-white">
-                          <h6 class="mb-0">Expenditure Trends</h6>
-                      </div>
-                      <div class="card-body">
-                          <canvas id="expenditureChart"></canvas>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-
-            <div class="row mt-4">
-              <div class="col-md-12">
-                  <div class="card shadow-lg">
-                      <div class="card-header bg-gradient-dark text-white">
-                          <h6 class="mb-0">Income Trends</h6>
-                      </div>
-                      <div class="card-body">
-                          <canvas id="incomeChart"></canvas>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-12">
+                      <div class="card shadow-lg">
+                          <div class="card-header bg-gradient-dark text-white">
+                              <h6 class="mb-0">Expenditure Trends</h6>
+                          </div>
+                          <div class="card-body">
+                              <canvas id="expenditureChart"></canvas>
+                          </div>
                       </div>
                   </div>
               </div>
-          </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-12">
+                      <div class="card shadow-lg">
+                          <div class="card-header bg-gradient-dark text-white">
+                              <h6 class="mb-0">Income Trends</h6>
+                          </div>
+                          <div class="card-body">
+                              <canvas id="incomeChart"></canvas>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+            </div>
+
+            
+
+
+            
 
 
         </div>
