@@ -36,6 +36,9 @@ $query .= " ORDER BY transaction_date DESC";
 $result = $conn->query($query);
 
 print_r($_POST);
+<pre>
+print_r($result);
+</pre>
 ?>
 
 <!DOCTYPE html>
