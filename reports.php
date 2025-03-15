@@ -123,31 +123,30 @@ include 'inc/config.php';
 
     <script src="assets/js/core/bootstrap.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("fetch-report-data.php")
-                .then(response => response.json())
-                .then(data => {
-                    const ctx = document.getElementById("incomeExpenditureChart").getContext("2d");
-                    new Chart(ctx, {
-                        type: "bar",
-                        data: {
-                            labels: data.labels,
-                            datasets: [
-                                {
-                                    label: "Income",
-                                    backgroundColor: "green",
-                                    data: data.income
-                                },
-                                {
-                                    label: "Expenditure",
-                                    backgroundColor: "red",
-                                    data: data.expenditure
-                                }
-                            ]
-                        }
-                    });
-                });
-        });
+        fetch("fetch-report-data.php")
+	    .then(response => response.json())
+	    .then(data => {
+	        const ctx = document.getElementById("incomeExpenditureChart").getContext("2d");
+	        new Chart(ctx, {
+	            type: "bar",
+	            data: {
+	                labels: data.labels,
+	                datasets: [
+	                    {
+	                        label: "Income",
+	                        backgroundColor: "green",
+	                        data: data.income
+	                    },
+	                    {
+	                        label: "Expenditure",
+	                        backgroundColor: "red",
+	                        data: data.expenditure
+	                    }
+	                ]
+	            }
+	        });
+	    });
+
     </script>
 
     <script>
