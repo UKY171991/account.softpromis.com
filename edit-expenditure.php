@@ -2,31 +2,11 @@
 include 'inc/auth.php';
 include 'inc/config.php';
 
-if (isset($_GET['id'])) {
-    $expenditure_id = intval($_GET['id']);
-    
-    $query = "SELECT * FROM expenditure WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $expenditure_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $expenditure = $result->fetch_assoc();
-    } else {
-        $_SESSION['error_msg'] = "Expenditure not found.";
-        header("Location: view-expenditure.php");
-        exit();
-    }
-} else {
-    header("Location: view-expenditure.php");
-    exit();
-}
 
 if (isset($_GET['id'])) {
     $expenditure_id = intval($_GET['id']);
     
-    $query = "SELECT * FROM expenditures WHERE id = ?";
+    $query = "SELECT * FROM expenditure WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $expenditure_id);
     $stmt->execute();
