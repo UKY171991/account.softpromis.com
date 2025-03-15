@@ -90,13 +90,13 @@ $result = $conn->query($query);
                                         <?php while ($row = $result->fetch_assoc()): ?>
                                             <tr>
                                                 <td><?= $row['id']; ?></td>
-                                                <td><?= $row['person_name']; ?></td>
+                                                <td><?= $row['name']; ?></td>
                                                 <td><?= getCategoryName($row['category_id'], $conn); ?></td>
                                                 <td><?= getSubcategoryName($row['subcategory_id'], $conn); ?></td>
                                                 <td><?= number_format($row['total_amount'], 2); ?></td>
                                                 <td><?= number_format($row['paid_amount'], 2); ?></td>
                                                 <td><?= number_format($row['pending_amount'], 2); ?></td>
-                                                <td><?= date("d-m-Y", strtotime($row['transaction_date'])); ?></td>
+                                                <td><?= date("d-m-Y", strtotime($row['entry_date'])); ?></td>
                                             </tr>
                                         <?php endwhile; ?>
                                     </tbody>
