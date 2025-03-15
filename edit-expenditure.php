@@ -153,7 +153,7 @@ if (isset($_POST['category_id'])) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Date of Entry</label>
-                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" value="<?= $expenditure['date_of_entry']; ?>" required>
+                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" value="<?= $expenditure['date_entry']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -215,7 +215,7 @@ if (isset($_POST['category_id'])) {
 
     <script>
         $(document).ready(function() {
-           // $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+            $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
         });
     </script>
 </body>
