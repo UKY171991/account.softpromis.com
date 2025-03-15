@@ -215,7 +215,7 @@ if (isset($_POST['category_id'])) {
 
     <script>
         $(document).ready(function() {
-            $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+           // $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
         });
     </script>
 </body>
