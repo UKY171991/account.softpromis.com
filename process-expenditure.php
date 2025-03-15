@@ -5,22 +5,29 @@ include 'inc/config.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data and sanitize inputs
+    // Retrieve and sanitize form data
     $name = strtoupper(trim($_POST['name']));
     $phone = trim($_POST['phone']);
+    $description = ucfirst(trim($_POST['description']));
     $category_id = intval($_POST['category_id']);
     $subcategory_id = intval($_POST['subcategory_id']);
-    $total_amount = floatval($_POST['total_amount']);
+    $actual_amount = floatval($_POST['total_amount']); // Changed to match 'actual_amount'
     $paid_amount = floatval($_POST['paid_amount']);
-    $balance_amount = $total_amount - $paid_amount;
-    //$date_of_entry = date("Y-m-d", strtotime($_POST['date_of_entry']));
+    $balance_amount = $actual_amount - $paid_amount;
     $entry_date = trim($_POST['date_of_entry']);
 
-    // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
-    $entry_date = date("Y-m-d", strtotime($entry_date));
+    // Convert dd-mm-yyyy to YYYY-MM-DD format for MySQL
+    $date_parts = explode("-", $entry_date);
+    if (count($date_parts) == 3) {
+        $date_of_entry = $date_parts[2] . "-" . $date_parts[1] . "-" . $date_parts[0];
+    } else {
+        $_SESSION['error_msg'] = "Invalid date format. Please use dd-mm-yyyy.";
+        header("Location: add-expenditure.php");
+        exit();
+    }
 
     // Validate required fields
-    if (empty($name) || empty($phone) || empty($category_id) || empty($subcategory_id) || empty($total_amount) || empty($paid_amount) || empty($entry_date)) {
+    if (empty($name) || empty($phone) || empty($description) || empty($category_id) || empty($subcategory_id) || empty($actual_amount) || empty($paid_amount) || empty($date_of_entry)) {
         $_SESSION['error_msg'] = "All fields are required.";
         header("Location: add-expenditure.php");
         exit();
@@ -33,19 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-
-    // Ensure the category and subcategory exist
+    // Ensure the category exists
     $categoryCheck = $conn->prepare("SELECT id FROM expenditure_categories WHERE id = ?");
     $categoryCheck->bind_param("i", $category_id);
     $categoryCheck->execute();
     $categoryCheckResult = $categoryCheck->get_result();
 
-
+    // Ensure the subcategory exists and belongs to the category
     $subcategoryCheck = $conn->prepare("SELECT id FROM expenditure_subcategories WHERE id = ? AND category_id = ?");
     $subcategoryCheck->bind_param("ii", $subcategory_id, $category_id);
     $subcategoryCheck->execute();
     $subcategoryCheckResult = $subcategoryCheck->get_result();
-
 
     if ($categoryCheckResult->num_rows == 0 || $subcategoryCheckResult->num_rows == 0) {
         $_SESSION['error_msg'] = "Invalid Category or Sub-Category.";
@@ -53,19 +58,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    // Insert data into the database
+    $stmt = $conn->prepare("INSERT INTO expenditure (name, phone, description, category_id, subcategory_id, actual_amount, paid_amount, balance_amount, entry_date) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssiiidds", $name, $phone, $description, $category_id, $subcategory_id, $actual_amount, $paid_amount, $balance_amount, $date_of_entry);
 
-  // Insert data into the database
-	$stmt = $conn->prepare("INSERT INTO expenditures (name, phone, category_id, subcategory_id, total_amount, paid_amount, balance_amount, date_of_entry) 
-	                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-	$stmt->bind_param("ssiiidds", $name, $phone, $category_id, $subcategory_id, $total_amount, $paid_amount, $balance_amount, $date_of_entry);
-
-	if ($stmt->execute()) {
-	    $_SESSION['success_msg'] = "Expenditure added successfully!";
-	} else {
-	    $_SESSION['error_msg'] = "Failed to add expenditure. Error: " . $stmt->error;
-	}
-
-
+    if ($stmt->execute()) {
+        $_SESSION['success_msg'] = "Expenditure added successfully!";
+    } else {
+        $_SESSION['error_msg'] = "Failed to add expenditure. Error: " . $stmt->error;
+    }
 
     // Redirect back to the form
     header("Location: add-expenditure.php");
