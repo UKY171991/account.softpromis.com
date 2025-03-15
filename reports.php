@@ -151,8 +151,8 @@ include 'inc/config.php';
     </script>
 
     <script>
+    	/*
     $(document).ready(function() {
-        $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
 
             // Fetch subcategories when category is selected
             $("#categorySelect").change(function() {
@@ -176,7 +176,8 @@ include 'inc/config.php';
                 }
             });
         });
+        */
     </script>
-    
+
 </body>
 </html>
