@@ -7,7 +7,7 @@ $person_name = isset($_POST['person_name']) ? trim($_POST['person_name']) : '';
 $category = isset($_POST['category']) ? intval($_POST['category']) : '';
 $subcategory = isset($_POST['subcategory']) ? intval($_POST['subcategory']) : '';
 $month = isset($_POST['month']) ? trim($_POST['month']) : '';
-echo $year = isset($_POST['year']) ? intval($_POST['year']) : '';
+$year = isset($_POST['year']) ? intval($_POST['year']) : '';
 $pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
 
 // Construct query
@@ -28,7 +28,7 @@ if (!empty($month)) {
 if (!empty($year)) {
     $query .= " AND YEAR(entry_date) = $year";
 }
-if ($pending !== '') {
+if ($pending !== '0') {
     $query .= " AND balance_amount " . ($pending == 1 ? "> 0" : "= 0");
 }
 
