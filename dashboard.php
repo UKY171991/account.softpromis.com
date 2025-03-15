@@ -6,21 +6,31 @@ include 'inc/config.php';
 // Fetch real-time data
 $todayDate = date('Y-m-d');
 
-// Total Income
-$incomeQuery = "SELECT SUM(actual_amount) AS total_income FROM expenditure";
-$incomeResult = $conn->query($incomeQuery);
-$income = $incomeResult->fetch_assoc()['total_income'] ?? 0;
-
-// Total Expenditure
-$expenseQuery = "SELECT SUM(paid_amount) AS paid_amount FROM expenditure";
-$expenseResult = $conn->query($expenseQuery);
-$paid_amount = $expenseResult->fetch_assoc()['paid_amount'] ?? 0;
-
 
 // Total Users
 $userQuery = "SELECT COUNT(id) AS total_users FROM users";
 $userResult = $conn->query($userQuery);
 $users = $userResult->fetch_assoc()['total_users'] ?? 0;
+
+// Total Expenditure
+$totalExpenditureQuery = "SELECT SUM(actual_amount) AS total_expenditure FROM expenditure";
+$totalExpenditureResult = $conn->query($totalExpenditureQuery);
+$total_expenditure = $totalExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
+
+// Total Paid Expenditure
+$paidExpenditureQuery = "SELECT SUM(paid_amount) AS total_paid FROM expenditure";
+$paidExpenditureResult = $conn->query($paidExpenditureQuery);
+$total_paid = $paidExpenditureResult->fetch_assoc()['total_paid'] ?? 0;
+
+// Balance Expenditure
+$balanceExpenditureQuery = "SELECT SUM(balance_amount) AS total_balance FROM expenditure";
+$balanceExpenditureResult = $conn->query($balanceExpenditureQuery);
+$total_balance = $balanceExpenditureResult->fetch_assoc()['total_balance'] ?? 0;
+
+// Pending Payments
+$pendingPaymentsQuery = "SELECT SUM(balance_amount) AS total_pending FROM expenditure WHERE balance_amount > 0";
+$pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
+$total_pending = $pendingPaymentsResult->fetch_assoc()['total_pending'] ?? 0;
 
 // Total Income
 $totalIncomeQuery = "SELECT SUM(actual_amount) AS total_income FROM income";
@@ -67,56 +77,68 @@ $total_revenue = $revenueResult->fetch_assoc()['total_revenue'] ?? 0;
         <?php include 'inc/topbar.php'; ?>
 
         <div class="container-fluid py-4">
-            <div class="row">
-                <div class="ms-3">
-                    <h3 class="mb-0 h4 font-weight-bolder">Dashboard</h3>
-                    <p class="mb-4">Overview of your system statistics.</p>
-                </div>
 
-                <!-- Income Card -->
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                        <div class="card-header p-2 ps-3">
-                            <p class="text-sm mb-0 text-capitalize">Total Income</p>
-                            <h4 class="mb-0">$<?= number_format($income, 2) ?></h4>
+                <div class="row">
+                    <!-- Total Expenditure Card -->
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                            <div class="card-header p-2 ps-3">
+                                <p class="text-sm mb-0 text-capitalize">Total Expenditure</p>
+                                <h4 class="mb-0">$<?= number_format($total_expenditure, 2) ?></h4>
+                            </div>
+                            <hr class="dark horizontal my-0">
+                            <div class="card-footer p-2 ps-3">
+                                <p class="mb-0 text-sm">Updated Today</p>
+                            </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-2 ps-3">
-                            <p class="mb-0 text-sm">Updated Today</p>
+                    </div>
+
+                    <!-- Paid Expenditure Card -->
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                            <div class="card-header p-2 ps-3">
+                                <p class="text-sm mb-0 text-capitalize">Paid Expenditure</p>
+                                <h4 class="mb-0">$<?= number_format($total_paid, 2) ?></h4>
+                            </div>
+                            <hr class="dark horizontal my-0">
+                            <div class="card-footer p-2 ps-3">
+                                <p class="mb-0 text-sm">Amount paid</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Balance Expenditure Card -->
+                    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                        <div class="card">
+                            <div class="card-header p-2 ps-3">
+                                <p class="text-sm mb-0 text-capitalize">Balance Expenditure</p>
+                                <h4 class="mb-0">$<?= number_format($total_balance, 2) ?></h4>
+                            </div>
+                            <hr class="dark horizontal my-0">
+                            <div class="card-footer p-2 ps-3">
+                                <p class="mb-0 text-sm">Unpaid amount</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Payments Card -->
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="card">
+                            <div class="card-header p-2 ps-3">
+                                <p class="text-sm mb-0 text-capitalize">Pending Payments</p>
+                                <h4 class="mb-0">$<?= number_format($total_pending, 2) ?></h4>
+                            </div>
+                            <hr class="dark horizontal my-0">
+                            <div class="card-footer p-2 ps-3">
+                                <p class="mb-0 text-sm">Amount yet to be cleared</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Expenditure Card -->
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                        <div class="card-header p-2 ps-3">
-                            <p class="text-sm mb-0 text-capitalize">Total Expenditure</p>
-                            <h4 class="mb-0">$<?= number_format($paid_amount, 2) ?></h4>
-                        </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-2 ps-3">
-                            <p class="mb-0 text-sm">Updated Today</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pending Payments Card -->
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                    <div class="card">
-                        <div class="card-header p-2 ps-3">
-                            <p class="text-sm mb-0 text-capitalize">Pending Payments</p>
-                            <h4 class="mb-0">$<?= number_format($income - $paid_amount, 2) ?></h4>
-                        </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-2 ps-3">
-                            <p class="mb-0 text-sm">Pending transactions</p>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Users Card -->
-                <div class="col-xl-3 col-sm-6">
+                <!-- <div class="col-xl-3 col-sm-6">
                     <div class="card">
                         <div class="card-header p-2 ps-3">
                             <p class="text-sm mb-0 text-capitalize">Total Users</p>
@@ -127,8 +149,8 @@ $total_revenue = $revenueResult->fetch_assoc()['total_revenue'] ?? 0;
                             <p class="mb-0 text-sm">Registered users</p>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div> -->
+            
 
             <div class="row mt-3">
                 <!-- Total Income Card -->
