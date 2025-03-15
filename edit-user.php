@@ -4,6 +4,13 @@ include 'inc/config.php';
 
 $id = intval($_GET['id']);
 
+// Check if ID is set and valid
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    $_SESSION['error_msg'] = "Invalid request.";
+    header("Location: list-users.php");
+    exit();
+}
+
 // Fetch existing user details
 $query = "SELECT * FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);

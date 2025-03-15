@@ -2,12 +2,7 @@
 include 'inc/auth.php';
 include 'inc/config.php';
 
-// Check if ID is set and valid
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    $_SESSION['error_msg'] = "Invalid request.";
-    header("Location: list-users.php");
-    exit();
-}
+
 
 $id = intval($_GET['id']);
 
