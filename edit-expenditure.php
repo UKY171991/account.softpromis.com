@@ -135,10 +135,10 @@ if (isset($_POST['category_id'])) {
                                         <select class="form-control border" name="subcategory_id" id="subcategorySelect" required>
                                             <option value="">-- Select Sub-Category --</option>
                                             <?php
-                                                $subcategory_query = "SELECT * FROM expenditure_subcategories WHERE category_id = {$income['category_id']} ORDER BY subcategory_name ASC";
+                                                $subcategory_query = "SELECT * FROM expenditure_subcategories WHERE category_id = {$expenditure['category_id']} ORDER BY subcategory_name ASC";
                                                 $subcategory_result = mysqli_query($conn, $subcategory_query);
                                                 while ($row = mysqli_fetch_assoc($subcategory_result)) {
-                                                    $selected = ($row['id'] == $income['subcategory_id']) ? 'selected' : '';
+                                                    $selected = ($row['id'] == $expenditure['subcategory_id']) ? 'selected' : '';
                                                     echo "<option value='{$row['id']}' $selected>{$row['name']}</option>";
                                                 }
                                                 ?>
