@@ -127,30 +127,36 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch("fetch-dashboard-data.php")
-                .then(response => response.json())
-                .then(data => {
-                    const ctx = document.getElementById("incomeExpenditureChart").getContext("2d");
-                    new Chart(ctx, {
-                        type: "bar",
-                        data: {
-                            labels: data.labels,
-                            datasets: [
-                                {
-                                    label: "Income",
-                                    backgroundColor: "green",
-                                    data: data.income
-                                },
-                                {
-                                    label: "Expenditure",
-                                    backgroundColor: "red",
-                                    data: data.expenditure
-                                }
-                            ]
-                        }
-                    });
-                });
-        });
+          fetch("fetch-dashboard-data.php")
+              .then(response => response.json())
+              .then(data => {
+                  const ctx = document.getElementById("incomeExpenditureChart").getContext("2d");
+                  new Chart(ctx, {
+                      type: "bar",
+                      data: {
+                          labels: data.labels,
+                          datasets: [
+                              {
+                                  label: "Actual Expenditure",
+                                  backgroundColor: "red",
+                                  data: data.expenditure
+                              },
+                              {
+                                  label: "Paid Amount",
+                                  backgroundColor: "green",
+                                  data: data.paid
+                              },
+                              {
+                                  label: "Balance Amount",
+                                  backgroundColor: "blue",
+                                  data: data.balance
+                              }
+                          ]
+                      }
+                  });
+              });
+      });
+
     </script>
 </body>
 </html>
