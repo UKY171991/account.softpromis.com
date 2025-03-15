@@ -5,6 +5,7 @@ include 'inc/config.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	print_r($_POST);  die;
     // Retrieve form data and sanitize inputs
     $name = strtoupper(trim($_POST['name']));
     $phone = trim($_POST['phone']);
