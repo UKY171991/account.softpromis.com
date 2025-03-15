@@ -88,13 +88,13 @@ if (!$expenditure) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Total Amount</label>
-                                            <input type="number" class="form-control border" name="total_amount" value="<?= $expenditure['total_amount']; ?>" required>
+                                            <input type="number" class="form-control border no-spinner" name="total_amount" value="<?= $expenditure['total_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Paid Amount</label>
-                                            <input type="number" class="form-control border" name="paid_amount" value="<?= $expenditure['paid_amount']; ?>" required>
+                                            <input type="number" class="form-control border no-spinner" name="paid_amount" value="<?= $expenditure['paid_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
