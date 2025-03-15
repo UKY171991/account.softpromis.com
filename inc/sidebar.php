@@ -32,12 +32,12 @@
 
 
      <li class="nav-item">
-		  <a class="nav-link text-dark" data-bs-toggle="collapse" href="#incomeSubmenu" role="button" aria-expanded="false" aria-controls="incomeSubmenu">
+		  <a class="nav-link text-dark" data-bs-toggle="collapse" href="#ExpenditureSubmenu" role="button" aria-expanded="false" aria-controls="ExpenditureSubmenu">
 		    <i class="material-symbols-rounded opacity-5">attach_money</i>
 		    <span class="nav-link-text ms-1">Expenditure</span>
 		    <i class="fa fa-angle-down ms-auto"></i>
 		  </a>
-		  <div class="collapse" id="incomeSubmenu">
+		  <div class="collapse" id="ExpenditureSubmenu">
 		    <ul class="nav flex-column ms-3">
 		      <li class="nav-item">
 		        <a class="nav-link text-dark" href="expenditure-category.php">
