@@ -5,7 +5,7 @@ include 'inc/config.php';
 // Get Income ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error_msg'] = "Invalid income entry.";
-    header("Location: income-list.php");
+    header("Location: view-income.php");
     exit();
 }
 
@@ -15,7 +15,7 @@ $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) == 0) {
     $_SESSION['error_msg'] = "Income entry not found.";
-    header("Location: income-list.php");
+    header("Location: view-income.php");
     exit();
 }
 
