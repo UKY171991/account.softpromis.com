@@ -132,6 +132,12 @@ if (isset($_POST['category_id'])) {
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control border" name="description" required></textarea>
+                                        </div>
+                                    </div>
                                 <div class="text-end">
                                     <button type="submit" class="btn bg-gradient-dark">Submit</button>
                                 </div>
