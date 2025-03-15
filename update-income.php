@@ -15,13 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //$date_of_entry = mysqli_real_escape_string($conn, $_POST['date_of_entry']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
 
-    $entry_date = trim($_POST['date_of_entry']);
-
-
+    $date_of_entry = trim($_POST['date_of_entry']);
 
     // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
-    $date_of_entry = date("Y-m-d", strtotime($entry_date));
-    print_r($date_of_entry); die;
+    $date_of_entry = date("Y-m-d", strtotime($date_of_entry));
 
     $query = "UPDATE income SET 
                 name = '$name', 
