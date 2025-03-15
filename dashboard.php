@@ -84,7 +84,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                     <div class="card">
                         <div class="card-header p-2 ps-3">
                             <p class="text-sm mb-0 text-capitalize">Pending Payments</p>
-                            <h4 class="mb-0">$<?= number_format($income + $paid_amount, 2) ?></h4>
+                            <h4 class="mb-0">$<?= number_format($income - $paid_amount, 2) ?></h4>
                         </div>
                         <hr class="dark horizontal my-0">
                         <div class="card-footer p-2 ps-3">
