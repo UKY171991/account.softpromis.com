@@ -74,28 +74,29 @@ include 'inc/config.php';
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Category</label>
-                                            <select class="form-control border" name="category_id" required>
-                                                <option value="">-- Select Category --</option>
-                                                <?php
-                                                $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
-                                                $result = $conn->query($query);
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-control border" name="category_id" id="categorySelect" required>
+                                            <option value="">-- Select Category --</option>
+                                            <?php
+                                            $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
+                                            $result = $conn->query($query);
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Sub-Category</label>
-                                            <select class="form-control border" name="subcategory_id" required>
-                                                <option value="">-- Select Sub-Category --</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Sub-Category</label>
+                                        <select class="form-control border" name="subcategory_id" id="subcategorySelect" required>
+                                            <option value="">-- Select Sub-Category --</option>
+                                        </select>
                                     </div>
+                                </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Total Amount</label>
