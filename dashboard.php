@@ -6,6 +6,8 @@ include 'inc/config.php';
 // Fetch real-time data
 $todayDate = date('Y-m-d');
 
+echo "Hello"; die;
+
 // Total Income
 $incomeQuery = "SELECT SUM(total_amount) AS total_income FROM expenditure WHERE type = 'income'";
 $incomeResult = $conn->query($incomeQuery);
