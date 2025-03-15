@@ -2,38 +2,71 @@
 include 'inc/auth.php';
 include 'inc/config.php';
 
-// Fetch filter inputs
+// Fetch filter inputs safely
 $person_name = isset($_POST['person_name']) ? trim($_POST['person_name']) : '';
-$category = isset($_POST['category']) ? intval($_POST['category']) : '';
-$subcategory = isset($_POST['subcategory']) ? intval($_POST['subcategory']) : '';
+$category = isset($_POST['category']) ? intval($_POST['category']) : 0;
+$subcategory = isset($_POST['subcategory']) ? intval($_POST['subcategory']) : 0;
 $month = isset($_POST['month']) ? trim($_POST['month']) : '';
-$year = isset($_POST['year']) ? intval($_POST['year']) : '';
+$year = isset($_POST['year']) ? intval($_POST['year']) : 0;
 $pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
 
-// Construct query
-$query = "SELECT * FROM transactions WHERE 1=1";
+// Construct query dynamically
+$query = "SELECT t.id, t.person_name, t.category_id, t.subcategory_id, t.total_amount, 
+                 t.paid_amount, t.pending_amount, t.transaction_date, 
+                 c.category_name, s.subcategory_name
+          FROM transactions t
+          LEFT JOIN expenditure_categories c ON t.category_id = c.id
+          LEFT JOIN expenditure_subcategories s ON t.subcategory_id = s.id
+          WHERE 1=1";  
 
+$params = [];
+$types = "";
+
+// Append filters dynamically
 if (!empty($person_name)) {
-    $query .= " AND person_name LIKE '%$person_name%'";
-}
-if (!empty($category)) {
-    $query .= " AND category_id = $category";
-}
-if (!empty($subcategory)) {
-    $query .= " AND subcategory_id = $subcategory";
-}
-if (!empty($month)) {
-    $query .= " AND DATE_FORMAT(transaction_date, '%Y-%m') = '$month'";
-}
-if (!empty($year)) {
-    $query .= " AND YEAR(transaction_date) = $year";
-}
-if ($pending !== '') {
-    $query .= " AND pending_amount " . ($pending == 1 ? "> 0" : "= 0");
+    $query .= " AND t.person_name LIKE ?";
+    $params[] = "%$person_name%";
+    $types .= "s";
 }
 
-$query .= " ORDER BY transaction_date DESC";
-$result = $conn->query($query);
+if (!empty($category)) {
+    $query .= " AND t.category_id = ?";
+    $params[] = $category;
+    $types .= "i";
+}
+
+if (!empty($subcategory)) {
+    $query .= " AND t.subcategory_id = ?";
+    $params[] = $subcategory;
+    $types .= "i";
+}
+
+if (!empty($month)) {
+    $query .= " AND DATE_FORMAT(t.transaction_date, '%Y-%m') = ?";
+    $params[] = $month;
+    $types .= "s";
+}
+
+if (!empty($year)) {
+    $query .= " AND YEAR(t.transaction_date) = ?";
+    $params[] = $year;
+    $types .= "i";
+}
+
+if ($pending !== '') {
+    $query .= " AND t.pending_amount " . ($pending == 1 ? "> 0" : "= 0");
+}
+
+// Order results
+$query .= " ORDER BY t.transaction_date DESC";
+
+// Prepare and execute the statement
+$stmt = $conn->prepare($query);
+if ($params) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +112,7 @@ $result = $conn->query($query);
                                             <th>Person</th>
                                             <th>Category</th>
                                             <th>Sub-category</th>
-                                            <th>Amount</th>
+                                            <th>Total Amount</th>
                                             <th>Paid</th>
                                             <th>Pending</th>
                                             <th>Date</th>
@@ -88,10 +121,10 @@ $result = $conn->query($query);
                                     <tbody>
                                         <?php while ($row = $result->fetch_assoc()): ?>
                                             <tr>
-                                                <td><?= $row['id']; ?></td>
-                                                <td><?= $row['person_name']; ?></td>
-                                                <td><?= getCategoryName($row['category_id'], $conn); ?></td>
-                                                <td><?= getSubcategoryName($row['subcategory_id'], $conn); ?></td>
+                                                <td><?= htmlspecialchars($row['id']); ?></td>
+                                                <td><?= htmlspecialchars($row['person_name']); ?></td>
+                                                <td><?= htmlspecialchars($row['category_name'] ?? 'N/A'); ?></td>
+                                                <td><?= htmlspecialchars($row['subcategory_name'] ?? 'N/A'); ?></td>
                                                 <td><?= number_format($row['total_amount'], 2); ?></td>
                                                 <td><?= number_format($row['paid_amount'], 2); ?></td>
                                                 <td><?= number_format($row['pending_amount'], 2); ?></td>
@@ -118,26 +151,3 @@ $result = $conn->query($query);
     <script src="assets/js/core/bootstrap.min.js"></script>
 </body>
 </html>
-
-<?php
-// Helper functions
-function getCategoryName($category_id, $conn) {
-    $query = "SELECT category_name FROM expenditure_categories WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $category_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    return $row['category_name'] ?? 'N/A';
-}
-
-function getSubcategoryName($subcategory_id, $conn) {
-    $query = "SELECT subcategory_name FROM expenditure_subcategories WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $subcategory_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    return $row['subcategory_name'] ?? 'N/A';
-}
-?>
