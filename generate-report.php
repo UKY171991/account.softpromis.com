@@ -35,7 +35,7 @@ if (!empty($year)) {
 $query .= " ORDER BY entry_date DESC";
 $result = $conn->query($query);
 
-print_r($query);
+//print_r($query);
 
 ?>
 
