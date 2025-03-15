@@ -95,7 +95,7 @@ print_r($query);
                                                 <td><?= $row['name']; ?></td>
                                                 <td><?= getCategoryName($row['category_id'], $conn); ?></td>
                                                 <td><?= getSubcategoryName($row['subcategory_id'], $conn); ?></td>
-                                                <td><?= number_format($row['total_amount'], 2); ?></td>
+                                                <td><?= number_format($row['actual_amount'], 2); ?></td>
                                                 <td><?= number_format($row['paid_amount'], 2); ?></td>
                                                 <td><?= number_format($row['pending_amount'], 2); ?></td>
                                                 <td><?= date("d-m-Y", strtotime($row['entry_date'])); ?></td>
