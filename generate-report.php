@@ -35,6 +35,8 @@ if ($pending !== '') {
 $query .= " ORDER BY entry_date DESC";
 $result = $conn->query($query);
 
+print_r($query);
+
 ?>
 
 <!DOCTYPE html>
