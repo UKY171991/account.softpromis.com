@@ -30,6 +30,13 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="reports.php">
+            <i class="material-symbols-rounded opacity-5">person</i>
+            <span class="nav-link-text ms-1">Reports</span>
+          </a>
+        </li>
+
 
      <li class="nav-item">
 		  <a class="nav-link text-dark" data-bs-toggle="collapse" href="#ExpenditureSubmenu" role="button" aria-expanded="false" aria-controls="ExpenditureSubmenu">
@@ -128,6 +135,7 @@
         </ul>
       </div>
     </li>
+
 
 
 
