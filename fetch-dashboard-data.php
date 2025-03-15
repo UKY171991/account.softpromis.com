@@ -4,10 +4,11 @@ include 'inc/config.php';
 
 $query = "
     SELECT 
-        DATE_FORMAT(transaction_date, '%Y-%m') AS month,
-        SUM(CASE WHEN type = 'income' THEN total_amount ELSE 0 END) AS total_income,
-        SUM(CASE WHEN type = 'expenditure' THEN total_amount ELSE 0 END) AS total_expenditure
-    FROM transactions
+        DATE_FORMAT(entry_date, '%Y-%m') AS month,
+        SUM(actual_amount) AS total_expenditure,
+        SUM(paid_amount) AS total_paid,
+        SUM(balance_amount) AS total_balance
+    FROM expenditure
     GROUP BY month
     ORDER BY month ASC
 ";
@@ -15,18 +16,22 @@ $query = "
 $result = $conn->query($query);
 
 $labels = [];
-$income_data = [];
 $expenditure_data = [];
+$paid_data = [];
+$balance_data = [];
 
 while ($row = $result->fetch_assoc()) {
     $labels[] = $row['month'];
-    $income_data[] = $row['total_income'];
     $expenditure_data[] = $row['total_expenditure'];
+    $paid_data[] = $row['total_paid'];
+    $balance_data[] = $row['total_balance'];
 }
 
+// Return JSON response for Chart.js
 echo json_encode([
     'labels' => $labels,
-    'income' => $income_data,
-    'expenditure' => $expenditure_data
+    'expenditure' => $expenditure_data,
+    'paid' => $paid_data,
+    'balance' => $balance_data
 ]);
 ?>
