@@ -11,6 +11,8 @@ $incomeQuery = "SELECT SUM(total_amount) AS total_income FROM expenditure WHERE 
 $incomeResult = $conn->query($incomeQuery);
 $income = $incomeResult->fetch_assoc()['total_income'] ?? 0;
 
+echo "Hello"; die;
+
 // Total Expenditure
 $expenseQuery = "SELECT SUM(total_amount) AS total_expense FROM expenditure WHERE type = 'expenditure'";
 $expenseResult = $conn->query($expenseQuery);
