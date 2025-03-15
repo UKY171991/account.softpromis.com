@@ -69,7 +69,7 @@ $result = $conn->query($query);
                 <div class="col-md-12">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white">
-                            <h6 class="mb-0">Report Details</h6>
+                            <h6 class="mb-0 text-white">Report Details</h6>
                         </div>
                         <div class="card-body">
                             <?php if ($result->num_rows > 0): ?>
