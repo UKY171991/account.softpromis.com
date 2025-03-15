@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['error_msg'] = "Failed to update expenditure. Error: " . $stmt->error;
     }
 
-    header("Location: manage-expenditure.php");
+    header("Location: mview-expenditure.php");
     exit();
 }
 ?>
