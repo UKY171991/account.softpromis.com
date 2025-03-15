@@ -14,7 +14,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $actual_amount = floatval($_POST['total_amount']); // Changed to match 'actual_amount'
     $paid_amount = floatval($_POST['paid_amount']);
     $balance_amount = $actual_amount - $paid_amount;
+    //$entry_date = trim($_POST['date_of_entry']);
+
     $entry_date = trim($_POST['date_of_entry']);
+
+    // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
+    $entry_date = date("Y-m-d", strtotime($entry_date));
 
     // Convert dd-mm-yyyy to YYYY-MM-DD format for MySQL
     $date_parts = explode("-", $entry_date);
