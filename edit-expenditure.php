@@ -141,7 +141,7 @@ if (isset($_POST['category_id'])) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Total Amount</label>
-                                            <input type="number" class="form-control border" name="total_amount" value="<?= $expenditure['total_amount']; ?>" required>
+                                            <input type="number" class="form-control border" name="total_amount" value="<?= $expenditure['actual_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
