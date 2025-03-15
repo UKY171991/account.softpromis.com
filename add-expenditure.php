@@ -163,7 +163,7 @@ if (isset($_POST['category_id'])) {
 
                 if (categoryId !== "") {
                     $.ajax({
-                        url: "fetch-subcategories.php",
+                        url: "fetch-expenditure-subcategories.php",
                         type: "POST",
                         data: { category_id: categoryId },
                         success: function(response) {
