@@ -7,8 +7,8 @@ $person_name = isset($_POST['person_name']) ? trim($_POST['person_name']) : '';
 $category = isset($_POST['category']) ? intval($_POST['category']) : '';
 $subcategory = isset($_POST['subcategory']) ? intval($_POST['subcategory']) : '';
 $month = isset($_POST['month']) ? trim($_POST['month']) : '';
-$year = isset($_POST['year']) ? intval($_POST['year']) : '';
-$pending = isset($_POST['pending']) ? intval($_POST['pending']) : ' ';
+echo $year = isset($_POST['year']) ? intval($_POST['year']) : '';
+$pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
 
 // Construct query
 $query = "SELECT * FROM expenditure WHERE 1=1";
