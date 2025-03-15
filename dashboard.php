@@ -7,7 +7,7 @@ include 'inc/config.php';
 $todayDate = date('Y-m-d');
 
 // Total Income
-$incomeQuery = "SELECT SUM(actual_amount) AS total_income FROM expenditure WHERE type = 'income'";
+$incomeQuery = "SELECT SUM(actual_amount) AS total_income FROM expenditure";
 $incomeResult = $conn->query($incomeQuery);
 echo $income = $incomeResult->fetch_assoc()['total_income'] ?? 0;
 
