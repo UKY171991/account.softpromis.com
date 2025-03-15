@@ -141,25 +141,25 @@ if (isset($_POST['category_id'])) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Total Amount</label>
-                                            <input type="number" class="form-control border" name="total_amount" required>
+                                            <input type="number" class="form-control border" name="total_amount" value="<?= $expenditure['total_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Paid Amount</label>
-                                            <input type="number" class="form-control border" name="paid_amount" required>
+                                            <input type="number" class="form-control border" name="paid_amount" value="<?= $expenditure['paid_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Date of Entry</label>
-                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" required>
+                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" value="<?= $expenditure['date_of_entry']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Description</label>
-                                            <textarea class="form-control border" name="description" required></textarea>
+                                            <textarea class="form-control border" name="description" required><?= $expenditure['description']; ?></textarea>
                                         </div>
                                     </div>
                                 </div>
