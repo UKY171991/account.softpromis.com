@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $entry_date = trim($_POST['date_of_entry']);
 
     // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
-    $entry_date = date("Y-m-d", strtotime($entry_date));
+    $date_of_entry = date("Y-m-d", strtotime($entry_date));
 
     // Validate required fields
     if (empty($name) || empty($phone) || empty($category_id) || empty($subcategory_id) || empty($total_amount) || empty($paid_amount) || empty($date_of_entry)) {
