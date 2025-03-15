@@ -50,7 +50,7 @@ include 'inc/config.php';
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Category</label>
-                                            <select class="form-control border" name="category">
+                                            <select class="form-control border" name="category" id="categorySelect">
                                                 <option value="">-- Select Category --</option>
                                                 <?php
                                                 $result = $conn->query("SELECT * FROM expenditure_categories ORDER BY category_name ASC");
@@ -64,7 +64,7 @@ include 'inc/config.php';
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Sub-category</label>
-                                            <select class="form-control border" name="subcategory">
+                                            <select class="form-control border" name="subcategory" id="subcategorySelect">
                                                 <option value="">-- Select Sub-category --</option>
                                             </select>
                                         </div>
@@ -128,7 +128,7 @@ include 'inc/config.php';
     <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
-    
+
     <script>
         fetch("fetch-report-data.php")
 	    .then(response => response.json())
@@ -157,7 +157,7 @@ include 'inc/config.php';
     </script>
 
     <script>
-    	/*
+    	
     $(document).ready(function() {
 
             // Fetch subcategories when category is selected
@@ -182,7 +182,7 @@ include 'inc/config.php';
                 }
             });
         });
-        */
+        
     </script>
 
 </body>
