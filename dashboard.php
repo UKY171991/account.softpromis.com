@@ -130,7 +130,7 @@ $total_revenue = $revenueResult->fetch_assoc()['total_revenue'] ?? 0;
                 </div>
             </div>
 
-            <div class="row mt-5">
+            <div class="row mt-3">
                 <!-- Total Income Card -->
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
