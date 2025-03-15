@@ -43,16 +43,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryCheck->execute();
     $categoryCheckResult = $categoryCheck->get_result();
 
+
+   print_r($_POST);  die;
+
     $subcategoryCheck = $conn->prepare("SELECT id FROM expenditure_subcategories WHERE id = ? AND category_id = ?");
     $subcategoryCheck->bind_param("ii", $subcategory_id, $category_id);
     $subcategoryCheck->execute();
     $subcategoryCheckResult = $subcategoryCheck->get_result();
+
+   print_r($_POST);  die;
 
     if ($categoryCheckResult->num_rows == 0 || $subcategoryCheckResult->num_rows == 0) {
         $_SESSION['error_msg'] = "Invalid Category or Sub-Category.";
         header("Location: add-expenditure.php");
         exit();
     }
+
+       print_r($_POST);  die;
 
     // Insert data into the database
     $stmt = $conn->prepare("INSERT INTO expenditures (name, phone, category_id, subcategory_id, total_amount, paid_amount, balance_amount, entry_date) 
@@ -64,6 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $_SESSION['error_msg'] = "Failed to add expenditure. Please try again.";
     }
+
+       print_r($_POST);  die;
 
     // Redirect back to the form
     header("Location: add-expenditure.php");
