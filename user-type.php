@@ -44,7 +44,7 @@ include 'inc/config.php'; // Include your database connection
 
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white">
-                            <h6 class="mb-0">Add New User Type</h6>
+                            <h6 class="mb-0 text-white">Add New User Type</h6>
                         </div>
                         <div class="card-body">
                             <form action="add-user-type.php" method="POST">
