@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
     $date_of_entry = date("Y-m-d", strtotime($entry_date));
-   // print_r($date_of_entry); die;
+    print_r($date_of_entry); die;
 
     $query = "UPDATE income SET 
                 name = '$name', 
