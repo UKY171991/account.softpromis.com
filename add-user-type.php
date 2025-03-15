@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['error_msg'] = "User type cannot be empty.";
     }
 
-    header("Location: user_type.php"); // Redirect to the form page
+    header("Location: user-type.php"); // Redirect to the form page
     exit();
 }
 ?>
