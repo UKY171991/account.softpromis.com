@@ -9,14 +9,14 @@ $todayDate = date('Y-m-d');
 // Total Income
 $incomeQuery = "SELECT SUM(actual_amount) AS total_income FROM expenditure";
 $incomeResult = $conn->query($incomeQuery);
-echo $income = $incomeResult->fetch_assoc()['total_income'] ?? 0;
-
-echo "Hello"; die;
+$income = $incomeResult->fetch_assoc()['total_income'] ?? 0;
 
 // Total Expenditure
-$expenseQuery = "SELECT SUM(total_amount) AS total_expense FROM expenditure WHERE type = 'expenditure'";
+$expenseQuery = "SELECT SUM(paid_amount) AS paid_amount FROM expenditure";
 $expenseResult = $conn->query($expenseQuery);
-$expense = $expenseResult->fetch_assoc()['total_expense'] ?? 0;
+$paid_amount = $expenseResult->fetch_assoc()['paid_amount'] ?? 0;
+
+echo "Hello"; die;
 
 // Pending Payments
 $pendingQuery = "SELECT SUM(pending_amount) AS total_pending FROM expenditure WHERE pending_amount > 0";
@@ -76,7 +76,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                     <div class="card">
                         <div class="card-header p-2 ps-3">
                             <p class="text-sm mb-0 text-capitalize">Total Expenditure</p>
-                            <h4 class="mb-0">$<?= number_format($expense, 2) ?></h4>
+                            <h4 class="mb-0">$<?= number_format($paid_amount, 2) ?></h4>
                         </div>
                         <hr class="dark horizontal my-0">
                         <div class="card-footer p-2 ps-3">
