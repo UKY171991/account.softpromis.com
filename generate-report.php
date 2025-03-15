@@ -97,7 +97,7 @@ print_r($query);
                                                 <td><?= getSubcategoryName($row['subcategory_id'], $conn); ?></td>
                                                 <td><?= number_format($row['actual_amount'], 2); ?></td>
                                                 <td><?= number_format($row['paid_amount'], 2); ?></td>
-                                                <td><?= number_format($row['pending_amount'], 2); ?></td>
+                                                <td><?= number_format($row['balance_amount'], 2); ?></td>
                                                 <td><?= date("d-m-Y", strtotime($row['entry_date'])); ?></td>
                                             </tr>
                                         <?php endwhile; ?>
