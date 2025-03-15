@@ -149,5 +149,34 @@ include 'inc/config.php';
                 });
         });
     </script>
+
+    <script>
+    $(document).ready(function() {
+        $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+
+            // Fetch subcategories when category is selected
+            $("#categorySelect").change(function() {
+                let categoryId = $(this).val();
+                $("#subcategorySelect").html('<option value="">Loading...</option>');
+
+                if (categoryId !== "") {
+                    $.ajax({
+                        url: "fetch-expenditure-subcategories.php",
+                        type: "POST",
+                        data: { category_id: categoryId },
+                        success: function(response) {
+                            $("#subcategorySelect").html(response);
+                        },
+                        error: function() {
+                            $("#subcategorySelect").html('<option value="">Error loading subcategories</option>');
+                        }
+                    });
+                } else {
+                    $("#subcategorySelect").html('<option value="">-- Select Sub-Category --</option>');
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>
