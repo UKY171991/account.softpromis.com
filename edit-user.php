@@ -1,6 +1,17 @@
 <?php
 include 'inc/auth.php';
 include 'inc/config.php';
+
+$id = intval($_GET['id']);
+
+// Fetch existing user details
+$query = "SELECT * FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
 ?>
 
 <!DOCTYPE html>
