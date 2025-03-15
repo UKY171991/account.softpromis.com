@@ -9,7 +9,7 @@ if (!isset($_GET['id'])) {
 }
 
 $id = intval($_GET['id']);
-$query = "SELECT * FROM expenditures WHERE id = ?";
+$query = "SELECT * FROM expenditure WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id);
 $stmt->execute();
