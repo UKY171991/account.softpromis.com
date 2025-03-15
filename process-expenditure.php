@@ -41,14 +41,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryCheckResult = $categoryCheck->get_result();
 
 
-   //print_r($_POST);  die;
-
     $subcategoryCheck = $conn->prepare("SELECT id FROM expenditure_subcategories WHERE id = ? AND category_id = ?");
     $subcategoryCheck->bind_param("ii", $subcategory_id, $category_id);
     $subcategoryCheck->execute();
     $subcategoryCheckResult = $subcategoryCheck->get_result();
 
-   print_r($_POST);  die;
+   //print_r($_POST);  die;
 
     if ($categoryCheckResult->num_rows == 0 || $subcategoryCheckResult->num_rows == 0) {
         $_SESSION['error_msg'] = "Invalid Category or Sub-Category.";
