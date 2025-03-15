@@ -114,7 +114,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                   <div class="col-md-12">
                       <div class="card shadow-lg">
                           <div class="card-header bg-gradient-dark text-white">
-                              <h6 class="mb-0">Expenditure Trends</h6>
+                              <h6 class="mb-0 text-white">Expenditure Trends</h6>
                           </div>
                           <div class="card-body">
                               <canvas id="expenditureChart"></canvas>
@@ -128,7 +128,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                   <div class="col-md-12">
                       <div class="card shadow-lg">
                           <div class="card-header bg-gradient-dark text-white">
-                              <h6 class="mb-0">Income Trends</h6>
+                              <h6 class="mb-0 text-white">Income Trends</h6>
                           </div>
                           <div class="card-body">
                               <canvas id="incomeChart"></canvas>
