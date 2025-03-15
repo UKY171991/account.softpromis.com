@@ -71,7 +71,7 @@ include 'inc/config.php';
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $result = $conn->query("SELECT * FROM use_type ORDER BY id ASC");
+                                    $result = $conn->query("SELECT * FROM use_type ORDER BY id DESC");
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
                                                 <td>{$row['id']}</td>
