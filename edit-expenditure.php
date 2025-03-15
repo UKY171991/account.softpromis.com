@@ -5,7 +5,7 @@ include 'inc/config.php';
 if (isset($_GET['id'])) {
     $expenditure_id = intval($_GET['id']);
     
-    $query = "SELECT * FROM expenditures WHERE id = ?";
+    $query = "SELECT * FROM expenditure WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $expenditure_id);
     $stmt->execute();
