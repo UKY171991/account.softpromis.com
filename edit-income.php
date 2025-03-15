@@ -61,19 +61,19 @@ $income = mysqli_fetch_assoc($result);
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control border" name="name" value="<?= $income['name']; ?>" required>
+                                            <input type="text" class="form-control border" name="name" id="name" value="<?= $income['name']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control border" name="phone" value="<?= $income['phone']; ?>" pattern="[0-9]{10}" maxlength="10" required>
+                                            <input type="text" class="form-control border" name="phone" id="phone" value="<?= $income['phone']; ?>" pattern="[0-9]{10}" maxlength="10" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Category</label>
-                                            <select class="form-control border" name="category_id" required>
+                                            <select class="form-control border" name="category_id" id="category" required>
                                                 <option value="">-- Select Category --</option>
                                                 <?php
                                                 $category_query = "SELECT * FROM income_categories ORDER BY category_name ASC";
@@ -88,26 +88,42 @@ $income = mysqli_fetch_assoc($result);
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
+                                            <label class="form-label">Sub-Category</label>
+                                            <select class="form-control border" name="subcategory_id" id="subcategory" required>
+                                                <option value="">-- Select Sub-Category --</option>
+                                                <?php
+                                                $subcategory_query = "SELECT * FROM income_subcategories WHERE category_id = {$income['category_id']} ORDER BY subcategory_name ASC";
+                                                $subcategory_result = mysqli_query($conn, $subcategory_query);
+                                                while ($row = mysqli_fetch_assoc($subcategory_result)) {
+                                                    $selected = ($row['id'] == $income['subcategory_id']) ? 'selected' : '';
+                                                    echo "<option value='{$row['id']}' $selected>{$row['subcategory_name']}</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
                                             <label class="form-label">Actual Amount</label>
-                                            <input type="number" class="form-control border no-spinner" name="actual_amount" value="<?= $income['actual_amount']; ?>" required>
+                                            <input type="number" class="form-control border no-spinner" name="actual_amount" id="actualAmount" value="<?= $income['actual_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Received Amount</label>
-                                            <input type="number" class="form-control border no-spinner" name="received_amount" value="<?= $income['received_amount']; ?>" required>
+                                            <input type="number" class="form-control border no-spinner" name="received_amount" id="receivedAmount" value="<?= $income['received_amount']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Balance Amount</label>
-                                            <input type="text" class="form-control border" name="balance_amount" value="<?= $income['actual_amount'] - $income['received_amount']; ?>" readonly>
+                                            <input type="text" class="form-control border" name="balance_amount" id="balanceAmount" value="<?= $income['actual_amount'] - $income['received_amount']; ?>" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Date of Entry</label>
-                                            <input type="text" class="form-control border" name="date_of_entry" value="<?= $income['date_of_entry']; ?>" required>
+                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" value="<?= $income['date_of_entry']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
