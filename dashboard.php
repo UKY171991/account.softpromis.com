@@ -4,7 +4,8 @@ include 'inc/auth.php';
 include 'inc/config.php';
 
 // Fetch real-time data
-$todayDate = date('Y-m-d');
+echo $todayDate = date('Y-m-d');
+die;
 
 // Total Income
 $incomeQuery = "SELECT SUM(total_amount) AS total_income FROM transactions WHERE type = 'income'";
