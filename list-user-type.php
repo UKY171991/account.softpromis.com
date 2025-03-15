@@ -31,8 +31,8 @@ include 'inc/config.php';
                     <h4 class="text-dark">User Type List</h4>
                 </div>
                 <div class="col-6 text-end">
-                    <a href="add-user-type.php" class="btn btn-dark">
-                        <i class="fa fa-plus"></i> User Type List
+                    <a href="user-type.php" class="btn btn-dark">
+                        <i class="fa fa-plus"></i>Add User Type
                     </a>
                 </div>
             </div>
