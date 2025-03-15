@@ -149,5 +149,81 @@ $income = mysqli_fetch_assoc($result);
             </div>
         </div>
     </main>
+
+
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script src="assets/js/core/popper.min.js"></script>
+  	<script src="assets/js/core/bootstrap.min.js"></script>
+  	<script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
+  	<script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
+  	<script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+
+    <script>
+        document.getElementById("category").addEventListener("change", function () {
+            let categoryId = this.value;
+            let subcategoryDropdown = document.getElementById("subcategory");
+            subcategoryDropdown.innerHTML = "<option>Loading...</option>";
+
+            fetch("fetch-subcategories.php?category_id=" + categoryId)
+                .then(response => response.text())
+                .then(data => {
+                    subcategoryDropdown.innerHTML = data;
+                });
+        });
+
+        document.getElementById("receivedAmount").addEventListener("input", function () {
+            let actualAmount = parseFloat(document.getElementById("actualAmount").value) || 0;
+            let receivedAmount = parseFloat(this.value) || 0;
+            document.getElementById("balanceAmount").value = actualAmount - receivedAmount;
+        });
+    </script>
+
+    <script>
+        document.getElementById("phone").addEventListener("input", function () {
+            let phoneField = this;
+            let phoneError = document.getElementById("phoneError");
+            let phoneValue = phoneField.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+            if (phoneValue.length > 10) {
+                phoneValue = phoneValue.substring(0, 10); // Restrict input to 10 digits
+            }
+
+            phoneField.value = phoneValue; // Update field with numeric-only value
+
+            // Show error if the length is not exactly 10
+            if (phoneValue.length === 10) {
+                phoneError.style.display = "none";
+            } else {
+                phoneError.style.display = "block";
+            }
+        });
+    </script>
+
+    <script>
+        document.getElementById("name").addEventListener("input", function () {
+            let words = this.value.split(" ");
+            for (let i = 0; i < words.length; i++) {
+                if (words[i].length > 0) {
+                    words[i] = words[i][0].toUpperCase() + words[i].substr(1).toLowerCase();
+                }
+            }
+            this.value = words.join(" "); // Update input with capitalized first letters
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#datepicker").datepicker({
+                dateFormat: "dd-mm-yy", // Set format to dd-mm-yyyy
+                changeMonth: true,  // Allows month selection
+                changeYear: true,   // Allows year selection
+                yearRange: "1900:+10" // Allows selection from 1900 to 10 years ahead
+            });
+        });
+    </script>
+    
 </body>
 </html>
