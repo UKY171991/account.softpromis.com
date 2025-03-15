@@ -32,7 +32,7 @@ include 'inc/config.php';
                 </div>
                 <div class="col-6 text-end">
                     <a href="add-user-type.php" class="btn btn-dark">
-                        <i class="fa fa-plus"></i> Add Income
+                        <i class="fa fa-plus"></i> User Type List
                     </a>
                 </div>
             </div>
