@@ -129,7 +129,7 @@ $income = mysqli_fetch_assoc($result);
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Revenue</label>
-                                            <input type="number" class="form-control border no-spinner" name="revenue" id="revenue" required>
+                                            <input type="number" class="form-control border no-spinner" name="revenue" id="revenue" value="<?= $income['revenue']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -224,6 +224,6 @@ $income = mysqli_fetch_assoc($result);
             });
         });
     </script>
-    
+
 </body>
 </html>
