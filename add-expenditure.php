@@ -131,13 +131,14 @@ if (isset($_POST['category_id'])) {
                                             <input type="text" class="form-control border" name="date_of_entry" id="datepicker" required>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Description</label>
                                             <textarea class="form-control border" name="description" required></textarea>
                                         </div>
                                     </div>
+                                </div>
+
                                 <div class="text-end">
                                     <button type="submit" class="btn bg-gradient-dark">Submit</button>
                                 </div>
