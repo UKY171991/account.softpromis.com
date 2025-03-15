@@ -14,7 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $total_amount = floatval($_POST['total_amount']);
     $paid_amount = floatval($_POST['paid_amount']);
     $balance_amount = $total_amount - $paid_amount;
-    $date_of_entry = date("Y-m-d", strtotime($_POST['date_of_entry']));
+    //$date_of_entry = date("Y-m-d", strtotime($_POST['date_of_entry']));
+    $entry_date = trim($_POST['date_of_entry']);
+
+    // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
+    $entry_date = date("Y-m-d", strtotime($entry_date));
 
     // Validate required fields
     if (empty($name) || empty($phone) || empty($category_id) || empty($subcategory_id) || empty($total_amount) || empty($paid_amount) || empty($date_of_entry)) {
