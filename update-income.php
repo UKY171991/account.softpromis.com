@@ -12,8 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $received_amount = floatval($_POST['received_amount']);
     $revenue = floatval($_POST['revenue']);
     $balance_amount = $actual_amount - $received_amount;
-    $date_of_entry = mysqli_real_escape_string($conn, $_POST['date_of_entry']);
+    //$date_of_entry = mysqli_real_escape_string($conn, $_POST['date_of_entry']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+
+    $entry_date = trim($_POST['date_of_entry']);
+
+    // Convert dd-mm-yyyy to YYYY-MM-DD for MySQL
+    $entry_date = date("Y-m-d", strtotime($entry_date));
 
     $query = "UPDATE income SET 
                 name = '$name', 
