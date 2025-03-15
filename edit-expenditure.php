@@ -24,7 +24,7 @@ if (isset($_POST['category_id'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Expenditure</title>
+    <title>Edit Expenditure</title>
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
     <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -44,7 +44,7 @@ if (isset($_POST['category_id'])) {
         <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-12">
-                    <h4 class="text-dark">Add Expenditure</h4>
+                    <h4 class="text-dark">Edit Expenditure</h4>
                 </div>
             </div>
 
@@ -72,7 +72,7 @@ if (isset($_POST['category_id'])) {
                 <div class="col-md-12">
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
-                            <h6 class="mb-0 text-white">Add New Expenditure</h6>
+                            <h6 class="mb-0 text-white">Edit Expenditure</h6>
                         </div>
                         <div class="card-body">
                             <form action="update-expenditure.php" method="POST">
