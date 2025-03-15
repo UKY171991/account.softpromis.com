@@ -21,6 +21,28 @@ $paid_amount = $expenseResult->fetch_assoc()['paid_amount'] ?? 0;
 $userQuery = "SELECT COUNT(id) AS total_users FROM users";
 $userResult = $conn->query($userQuery);
 $users = $userResult->fetch_assoc()['total_users'] ?? 0;
+
+// Total Income
+$totalIncomeQuery = "SELECT SUM(actual_amount) AS total_income FROM income";
+$totalIncomeResult = $conn->query($totalIncomeQuery);
+$total_income = $totalIncomeResult->fetch_assoc()['total_income'] ?? 0;
+
+// Total Received Income
+$receivedIncomeQuery = "SELECT SUM(received_amount) AS received_income FROM income";
+$receivedIncomeResult = $conn->query($receivedIncomeQuery);
+$received_income = $receivedIncomeResult->fetch_assoc()['received_income'] ?? 0;
+
+// Balance Income
+$balanceIncomeQuery = "SELECT SUM(balance_amount) AS balance_income FROM income";
+$balanceIncomeResult = $conn->query($balanceIncomeQuery);
+$balance_income = $balanceIncomeResult->fetch_assoc()['balance_income'] ?? 0;
+
+// Revenue (If applicable, otherwise remove)
+$revenueQuery = "SELECT SUM(revenue) AS total_revenue FROM income";
+$revenueResult = $conn->query($revenueQuery);
+$total_revenue = $revenueResult->fetch_assoc()['total_revenue'] ?? 0;
+
+
 ?>
 
 <!DOCTYPE html>
@@ -103,6 +125,64 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                         <hr class="dark horizontal my-0">
                         <div class="card-footer p-2 ps-3">
                             <p class="mb-0 text-sm">Registered users</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Total Income Card -->
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-2 ps-3">
+                            <p class="text-sm mb-0 text-capitalize">Total Income</p>
+                            <h4 class="mb-0">$<?= number_format($total_income, 2) ?></h4>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                            <p class="mb-0 text-sm">Updated Today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Received Income Card -->
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-2 ps-3">
+                            <p class="text-sm mb-0 text-capitalize">Received Income</p>
+                            <h4 class="mb-0">$<?= number_format($received_income, 2) ?></h4>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                            <p class="mb-0 text-sm">Amount collected</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Balance Income Card -->
+                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div class="card">
+                        <div class="card-header p-2 ps-3">
+                            <p class="text-sm mb-0 text-capitalize">Balance Income</p>
+                            <h4 class="mb-0">$<?= number_format($balance_income, 2) ?></h4>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                            <p class="mb-0 text-sm">Pending income</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Card (Optional) -->
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-header p-2 ps-3">
+                            <p class="text-sm mb-0 text-capitalize">Total Revenue</p>
+                            <h4 class="mb-0">$<?= number_format($total_revenue, 2) ?></h4>
+                        </div>
+                        <hr class="dark horizontal my-0">
+                        <div class="card-footer p-2 ps-3">
+                            <p class="mb-0 text-sm">Revenue from operations</p>
                         </div>
                     </div>
                 </div>
