@@ -2,6 +2,7 @@
 include 'inc/auth.php';
 include 'inc/config.php';
 
+// Fetch monthly expenditure data
 $query = "
     SELECT 
         DATE_FORMAT(entry_date, '%Y-%m') AS month,

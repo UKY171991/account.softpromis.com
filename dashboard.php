@@ -110,17 +110,18 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
 
             <!-- Income vs Expenditure Chart -->
             <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="card shadow-lg">
-                        <div class="card-header bg-gradient-dark text-white">
-                            <h6 class="mb-0">Income vs. Expenditure</h6>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="incomeExpenditureChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              <div class="col-md-12">
+                  <div class="card shadow-lg">
+                      <div class="card-header bg-gradient-dark text-white">
+                          <h6 class="mb-0">Expenditure Trends</h6>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="expenditureChart"></canvas>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
 
             <div class="row mt-4">
               <div class="col-md-12">
@@ -141,18 +142,19 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      // fetch-dashboard-data.php
         document.addEventListener("DOMContentLoaded", function () {
           fetch("fetch-dashboard-data.php")
               .then(response => response.json())
               .then(data => {
-                  const ctx = document.getElementById("incomeExpenditureChart").getContext("2d");
+                  const ctx = document.getElementById("expenditureChart").getContext("2d");
                   new Chart(ctx, {
                       type: "bar",
                       data: {
                           labels: data.labels,
                           datasets: [
                               {
-                                  label: "Actual Expenditure",
+                                  label: "Total Expenditure",
                                   backgroundColor: "red",
                                   data: data.expenditure
                               },
@@ -163,7 +165,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                               },
                               {
                                   label: "Balance Amount",
-                                  backgroundColor: "blue",
+                                  backgroundColor: "orange",
                                   data: data.balance
                               }
                           ]
@@ -171,6 +173,7 @@ $users = $userResult->fetch_assoc()['total_users'] ?? 0;
                   });
               });
       });
+
 
 
 
