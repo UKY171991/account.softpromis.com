@@ -1,4 +1,7 @@
-
+<?php
+include 'inc/auth.php'; // Include your database connection
+include 'inc/config.php'; // Include your database connection
+?>
 
 <!DOCTYPE html>
 <html lang="en">
