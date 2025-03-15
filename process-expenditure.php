@@ -54,16 +54,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    // Insert data into the database
-    $stmt = $conn->prepare("INSERT INTO expenditures (name, phone, category_id, subcategory_id, total_amount, paid_amount, balance_amount, entry_date) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssiiidds", $name, $phone, $category_id, $subcategory_id, $total_amount, $paid_amount, $balance_amount, $entry_date);
+  // Insert data into the database
+	$stmt = $conn->prepare("INSERT INTO expenditures (name, phone, category_id, subcategory_id, total_amount, paid_amount, balance_amount, date_of_entry) 
+	                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt->bind_param("ssiiidds", $name, $phone, $category_id, $subcategory_id, $total_amount, $paid_amount, $balance_amount, $date_of_entry);
 
-    if ($stmt->execute()) {
-        $_SESSION['success_msg'] = "Expenditure added successfully!";
-    } else {
-        $_SESSION['error_msg'] = "Failed to add expenditure. Please try again.";
-    }
+	if ($stmt->execute()) {
+	    $_SESSION['success_msg'] = "Expenditure added successfully!";
+	} else {
+	    $_SESSION['error_msg'] = "Failed to add expenditure. Error: " . $stmt->error;
+	}
+
 
 
     // Redirect back to the form
