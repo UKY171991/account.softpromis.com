@@ -8,7 +8,7 @@ $category = isset($_POST['category']) ? intval($_POST['category']) : '';
 $subcategory = isset($_POST['subcategory']) ? intval($_POST['subcategory']) : '';
 $month = isset($_POST['month']) ? trim($_POST['month']) : '';
 $year = isset($_POST['year']) ? intval($_POST['year']) : '';
-$pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
+//$pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
 
 // Construct query
 $query = "SELECT * FROM expenditure WHERE 1=1";
@@ -28,9 +28,9 @@ if (!empty($month)) {
 if (!empty($year)) {
     $query .= " AND YEAR(entry_date) = $year";
 }
-if ($pending !== '0') {
-    $query .= " AND balance_amount " . ($pending == 1 ? "> 0" : "<= 0");
-}
+// if ($pending !== '0') {
+//     $query .= " AND balance_amount " . ($pending == 1 ? "> 0" : "<= 0");
+// }
 
 $query .= " ORDER BY entry_date DESC";
 $result = $conn->query($query);

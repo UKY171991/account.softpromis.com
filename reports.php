@@ -81,7 +81,7 @@ include 'inc/config.php';
                                             <input type="number" class="form-control border" name="year" min="2000" max="<?= date('Y'); ?>">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Pending Payments</label>
                                             <select class="form-control border" name="pending">
@@ -90,7 +90,7 @@ include 'inc/config.php';
                                                 <option value="0">No</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="text-end">
