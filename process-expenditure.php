@@ -33,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    //print_r($_POST);  die;
 
     // Ensure the category and subcategory exist
     $categoryCheck = $conn->prepare("SELECT id FROM expenditure_categories WHERE id = ?");
@@ -42,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryCheckResult = $categoryCheck->get_result();
 
 
-   print_r($_POST);  die;
+   //print_r($_POST);  die;
 
     $subcategoryCheck = $conn->prepare("SELECT id FROM expenditure_subcategories WHERE id = ? AND category_id = ?");
     $subcategoryCheck->bind_param("ii", $subcategory_id, $category_id);
