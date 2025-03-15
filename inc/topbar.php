@@ -15,7 +15,7 @@
           </div>
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="add-income.php">Add Income</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" href="add-income.php">Add Income</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="add-expenditure.php">Add expenditure</a>
