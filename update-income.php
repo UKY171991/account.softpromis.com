@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 received_amount = '$received_amount', 
                 revenue = '$revenue', 
                 balance_amount = '$balance_amount', 
-                date_of_entry = '$date_of_entry', 
+                entry_date = '$date_of_entry', 
                 description = '$description' 
               WHERE id = $id";
 
