@@ -212,10 +212,14 @@ if (isset($_POST['category_id'])) {
         });
     </script>
 
-
     <script>
         $(document).ready(function() {
-            $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+            $("#datepicker").datepicker({
+                dateFormat: "dd-mm-yy", // Set format to dd-mm-yyyy
+                changeMonth: true,  // Allows month selection
+                changeYear: true,   // Allows year selection
+                yearRange: "1900:+10" // Allows selection from 1900 to 10 years ahead
+            });
         });
     </script>
 </body>
