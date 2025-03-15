@@ -2,6 +2,28 @@
 include 'inc/auth.php';
 include 'inc/config.php';
 
+if (isset($_GET['id'])) {
+    $expenditure_id = intval($_GET['id']);
+    
+    $query = "SELECT * FROM expenditures WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $expenditure_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $expenditure = $result->fetch_assoc();
+    } else {
+        $_SESSION['error_msg'] = "Expenditure not found.";
+        header("Location: expenditure-list.php");
+        exit();
+    }
+} else {
+    header("Location: expenditure-list.php");
+    exit();
+}
+
+
 if (isset($_POST['category_id'])) {
     $category_id = intval($_POST['category_id']);
 
@@ -76,32 +98,34 @@ if (isset($_POST['category_id'])) {
                         </div>
                         <div class="card-body">
                             <form action="update-expenditure.php" method="POST">
+                            	<input type="hidden" name="id" value="<?= $expenditure['id']; ?>">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control border" name="name" required>
+                                            <input type="text" class="form-control border" value="<?= $expenditure['name']; ?>" name="name" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control border" name="phone" pattern="[0-9]{10}" maxlength="10" required>
+                                            <input type="text" class="form-control border"  value="<?= $expenditure['phone']; ?>" name="phone" pattern="[0-9]{10}" maxlength="10" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Category</label>
-                                        <select class="form-control border" name="category_id" id="categorySelect" required>
-                                            <option value="">-- Select Category --</option>
-                                            <?php
-                                            $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
-                                            $result = $conn->query($query);
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
-                                            }
-                                            ?>
-                                        </select>
+                                        <label>Category</label>
+						                <select name="category_id" id="categorySelect" required>
+						                    <option value="">-- Select Category --</option>
+						                    <?php
+						                    $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
+						                    $result = $conn->query($query);
+						                    while ($row = $result->fetch_assoc()) {
+						                        $selected = ($row['id'] == $expenditure['category_id']) ? 'selected' : '';
+						                        echo "<option value='{$row['id']}' $selected>{$row['category_name']}</option>";
+						                    }
+						                    ?>
+						                </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
