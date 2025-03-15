@@ -37,7 +37,7 @@ $result = $conn->query($query);
 
 print_r($_POST);
 echo "<pre>";
-print_r($result);
+print_r($result->fetch_assoc());
 echo "</pre>";
 ?>
 
