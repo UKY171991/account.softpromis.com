@@ -14,7 +14,7 @@ $pending = isset($_POST['pending']) ? intval($_POST['pending']) : '';
 $query = "SELECT * FROM expenditure WHERE 1=1";
 
 if (!empty($person_name)) {
-    $query .= " AND person_name LIKE '%$person_name%'";
+    $query .= " AND name LIKE '%$person_name%'";
 }
 if (!empty($category)) {
     $query .= " AND category_id = $category";
@@ -23,16 +23,16 @@ if (!empty($subcategory)) {
     $query .= " AND subcategory_id = $subcategory";
 }
 if (!empty($month)) {
-    $query .= " AND DATE_FORMAT(transaction_date, '%Y-%m') = '$month'";
+    $query .= " AND DATE_FORMAT(entry_date, '%Y-%m') = '$month'";
 }
 if (!empty($year)) {
-    $query .= " AND YEAR(transaction_date) = $year";
+    $query .= " AND YEAR(entry_date) = $year";
 }
 if ($pending !== '') {
     $query .= " AND pending_amount " . ($pending == 1 ? "> 0" : "= 0");
 }
 
-$query .= " ORDER BY transaction_date DESC";
+$query .= " ORDER BY entry_date DESC";
 $result = $conn->query($query);
 
 ?>
