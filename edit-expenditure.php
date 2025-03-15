@@ -5,7 +5,28 @@ include 'inc/config.php';
 if (isset($_GET['id'])) {
     $expenditure_id = intval($_GET['id']);
     
-    $query = "SELECT * FROM expenditure WHERE id = ?";
+    $query = "SELECT * FROM expenditures WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $expenditure_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $expenditure = $result->fetch_assoc();
+    } else {
+        $_SESSION['error_msg'] = "Expenditure not found.";
+        header("Location: view-expenditure.php");
+        exit();
+    }
+} else {
+    header("Location: view-expenditure.php");
+    exit();
+}
+
+if (isset($_GET['id'])) {
+    $expenditure_id = intval($_GET['id']);
+    
+    $query = "SELECT * FROM expenditures WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $expenditure_id);
     $stmt->execute();
@@ -114,18 +135,17 @@ if (isset($_POST['category_id'])) {
                                     </div>
                                     <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label>Category</label>
-						                <select name="category_id" id="categorySelect" required>
-						                    <option value="">-- Select Category --</option>
-						                    <?php
-						                    $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
-						                    $result = $conn->query($query);
-						                    while ($row = $result->fetch_assoc()) {
-						                        $selected = ($row['id'] == $expenditure['category_id']) ? 'selected' : '';
-						                        echo "<option value='{$row['id']}' $selected>{$row['category_name']}</option>";
-						                    }
-						                    ?>
-						                </select>
+                                        <label class="form-label">Category</label>
+                                        <select class="form-control border" name="category_id" id="categorySelect" required>
+                                            <option value="">-- Select Category --</option>
+                                            <?php
+                                            $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
+                                            $result = $conn->query($query);
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
