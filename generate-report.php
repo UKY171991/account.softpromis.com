@@ -35,10 +35,6 @@ if ($pending !== '') {
 $query .= " ORDER BY transaction_date DESC";
 $result = $conn->query($query);
 
-print_r($_POST);
-echo "<pre>";
-print_r($result->fetch_assoc());
-echo "</pre>";
 ?>
 
 <!DOCTYPE html>
