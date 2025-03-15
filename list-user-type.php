@@ -88,9 +88,6 @@ include 'inc/config.php';
                         </div>
                     </div>
 
-                    <div class="text-end mt-3">
-                        <a href="add-user-type.php" class="btn bg-gradient-dark">Add New User Type</a>
-                    </div>
                 </div>
             </div>
         </div>
