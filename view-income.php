@@ -109,7 +109,7 @@ if(isset($_GET['ajax'])) {
                 { data: 9, className: 'text-center' },
                 { data: 10, className: 'text-center', orderable: false }
             ],
-            pageLength: 5,
+            pageLength: 10,
             processing: true,
             responsive: true,
             language: { emptyTable: "No income data found." }
