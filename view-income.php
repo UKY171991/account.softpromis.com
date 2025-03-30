@@ -47,16 +47,6 @@ if(isset($_GET['ajax'])) {
 <head>
     <title>Income Records</title>
     <?php include 'inc/head.php'; ?>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
-
 </head>
 <body class="bg-gray-100">
     <?php include 'inc/sidebar.php'; ?>
@@ -74,41 +64,33 @@ if(isset($_GET['ajax'])) {
 
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <table id="incomeTable" class="table table-hover table-bordered">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Category</th>
-                                <th>Sub-Category</th>
-                                <th>Actual Amount</th>
-                                <th>Received Amount</th>
-                                <th>Balance Amount</th>
-                                <th>Revenue</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="incomeTable" class="table table-hover table-bordered">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Category</th>
+                                    <th>Sub-Category</th>
+                                    <th>Actual Amount</th>
+                                    <th>Received Amount</th>
+                                    <th>Balance Amount</th>
+                                    <th>Revenue</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Scripts -->
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="assets/js/core/popper.min.js"></script>
-    <script src="assets/js/core/bootstrap.min.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
-
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <?php include 'inc/scripts.php'; ?>
 
     <script>
     $(document).ready(function() {
