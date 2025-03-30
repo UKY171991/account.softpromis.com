@@ -8,180 +8,207 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
     <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+        }
         .card {
-            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
         }
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
         }
         .card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            border-radius: 12px 12px 0 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin: 0;
+        }
+        .card-value {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #343a40;
+            margin: 0.5rem 0 0;
         }
         .section-title {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: #344767;
+            color: #343a40;
+            margin-bottom: 1.5rem;
+        }
+        .chart-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .chart-header {
+            padding: 1rem 1.5rem;
+            background: #343a40;
+            color: #fff;
+            border-radius: 12px 12px 0 0;
         }
     </style>
 </head>
 
-<body class="g-sidenav-show bg-gray-100">
+<body>
     <?php include 'inc/sidebar.php'; ?>
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <?php include 'inc/topbar.php'; ?>
 
-        <div class="container-fluid py-4">
+        <div class="container-fluid py-5">
             <!-- Expenditure Section -->
             <div class="row">
                 <div class="col-12">
-                    <h6 class="section-title">Expenditure Overview</h6>
+                    <h2 class="section-title">Expenditure Overview</h2>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-money-bill-wave text-danger"></i>
+                        <div class="card-header">
+                            <i class="fas fa-arrow-up text-danger fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Total Expenditure</p>
-                                <h4 class="mb-0">$<?= number_format($total_expenditure, 2) ?></h4>
+                                <p class="card-title">Total Expenditure</p>
+                                <h3 class="card-value">$<?= number_format($total_expenditure, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Updated Today</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Updated Today</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-check-circle text-success"></i>
+                        <div class="card-header">
+                            <i class="fas fa-check text-success fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Paid Expenditure</p>
-                                <h4 class="mb-0">$<?= number_format($total_paid, 2) ?></h4>
+                                <p class="card-title">Paid Expenditure</p>
+                                <h3 class="card-value">$<?= number_format($total_paid, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Amount Paid</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Amount Paid</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-exclamation-circle text-warning"></i>
+                        <div class="card-header">
+                            <i class="fas fa-exclamation text-warning fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Balance Expenditure</p>
-                                <h4 class="mb-0">$<?= number_format($total_balance, 2) ?></h4>
+                                <p class="card-title">Balance Expenditure</p>
+                                <h3 class="card-value">$<?= number_format($total_balance, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Unpaid Amount</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Unpaid Amount</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-hourglass-half text-info"></i>
+                        <div class="card-header">
+                            <i class="fas fa-hourglass text-info fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Pending Payments</p>
-                                <h4 class="mb-0">$<?= number_format($total_pending, 2) ?></h4>
+                                <p class="card-title">Pending Payments</p>
+                                <h3 class="card-value">$<?= number_format($total_pending, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Amount Yet to be Cleared</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Yet to be Cleared</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Income Section -->
-            <div class="row mt-4">
+            <div class="row mt-3">
                 <div class="col-12">
-                    <h6 class="section-title">Income Overview</h6>
+                    <h2 class="section-title">Income Overview</h2>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-wallet text-success"></i>
+                        <div class="card-header">
+                            <i class="fas fa-arrow-down text-success fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Total Income</p>
-                                <h4 class="mb-0">$<?= number_format($total_income, 2) ?></h4>
+                                <p class="card-title">Total Income</p>
+                                <h3 class="card-value">$<?= number_format($total_income, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Updated Today</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Updated Today</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-hand-holding-usd text-primary"></i>
+                        <div class="card-header">
+                            <i class="fas fa-hand-holding-usd text-primary fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Received Income</p>
-                                <h4 class="mb-0">$<?= number_format($received_income, 2) ?></h4>
+                                <p class="card-title">Received Income</p>
+                                <h3 class="card-value">$<?= number_format($received_income, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Amount Collected</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Amount Collected</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-clock text-warning"></i>
+                        <div class="card-header">
+                            <i class="fas fa-clock text-warning fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Balance Income</p>
-                                <h4 class="mb-0">$<?= number_format($balance_income, 2) ?></h4>
+                                <p class="card-title">Balance Income</p>
+                                <h3 class="card-value">$<?= number_format($balance_income, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Pending Income</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">Pending Income</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card">
-                        <div class="card-header p-3">
-                            <i class="fas fa-chart-line text-info"></i>
+                        <div class="card-header">
+                            <i class="fas fa-chart-line text-info fa-lg"></i>
                             <div>
-                                <p class="text-sm mb-0 text-capitalize">Total Revenue</p>
-                                <h4 class="mb-0">$<?= number_format($total_revenue, 2) ?></h4>
+                                <p class="card-title">Total Revenue</p>
+                                <h3 class="card-value">$<?= number_format($total_revenue, 2) ?></h3>
                             </div>
                         </div>
-                        <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
-                            <p class="mb-0 text-sm">Revenue from Operations</p>
+                        <div class="card-body">
+                            <p class="text-sm text-muted">From Operations</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Charts Section -->
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card shadow-lg">
-                        <div class="card-header bg-gradient-dark text-white">
+            <div class="row mt-5">
+                <div class="col-md-6 mb-4">
+                    <div class="chart-card">
+                        <div class="chart-header">
                             <h6 class="mb-0">Expenditure Trends</h6>
                         </div>
                         <div class="card-body">
@@ -189,9 +216,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card shadow-lg">
-                        <div class="card-header bg-gradient-dark text-white">
+                <div class="col-md-6 mb-4">
+                    <div class="chart-card">
+                        <div class="chart-header">
                             <h6 class="mb-0">Income Trends</h6>
                         </div>
                         <div class="card-body">
@@ -217,32 +244,45 @@
                             datasets: [
                                 {
                                     label: "Total Expenditure",
-                                    backgroundColor: "rgba(255, 99, 132, 0.7)",
+                                    backgroundColor: "rgba(220, 53, 69, 0.8)",
                                     data: data.expenditure,
-                                    borderRadius: 5
+                                    borderRadius: 8,
+                                    borderWidth: 0
                                 },
                                 {
                                     label: "Paid Amount",
-                                    backgroundColor: "rgba(75, 192, 192, 0.7)",
+                                    backgroundColor: "rgba(40, 167, 69, 0.8)",
                                     data: data.paid,
-                                    borderRadius: 5
+                                    borderRadius: 8,
+                                    borderWidth: 0
                                 },
                                 {
                                     label: "Balance Amount",
-                                    backgroundColor: "rgba(255, 206, 86, 0.7)",
+                                    backgroundColor: "rgba(255, 193, 7, 0.8)",
                                     data: data.balance,
-                                    borderRadius: 5
+                                    borderRadius: 8,
+                                    borderWidth: 0
                                 }
                             ]
                         },
                         options: {
                             responsive: true,
+                            maintainAspectRatio: false,
                             plugins: {
-                                legend: { position: "top" },
-                                tooltip: { enabled: true }
+                                legend: {
+                                    position: "top",
+                                    labels: { font: { size: 12, family: "Inter" } }
+                                },
+                                tooltip: { backgroundColor: "#343a40" }
                             },
                             scales: {
-                                y: { beginAtZero: true }
+                                y: {
+                                    beginAtZero: true,
+                                    grid: { color: "rgba(0, 0, 0, 0.05)" }
+                                },
+                                x: {
+                                    grid: { display: false }
+                                }
                             }
                         }
                     });
@@ -261,32 +301,45 @@
                             datasets: [
                                 {
                                     label: "Total Income",
-                                    backgroundColor: "rgba(75, 192, 192, 0.7)",
+                                    backgroundColor: "rgba(40, 167, 69, 0.8)",
                                     data: data.income,
-                                    borderRadius: 5
+                                    borderRadius: 8,
+                                    borderWidth: 0
                                 },
                                 {
                                     label: "Received Amount",
-                                    backgroundColor: "rgba(54, 162, 235, 0.7)",
+                                    backgroundColor: "rgba(0, 123, 255, 0.8)",
                                     data: data.received,
-                                    borderRadius: 5
+                                    borderRadius: 8,
+                                    borderWidth: 0
                                 },
                                 {
                                     label: "Balance Amount",
-                                    backgroundColor: "rgba(255, 206, 86, 0.7)",
+                                    backgroundColor: "rgba(255, 193, 7, 0.8)",
                                     data: data.balance,
-                                    borderRadius: 5
+                                    borderRadius: 8,
+                                    borderWidth: 0
                                 }
                             ]
                         },
                         options: {
                             responsive: true,
+                            maintainAspectRatio: false,
                             plugins: {
-                                legend: { position: "top" },
-                                tooltip: { enabled: true }
+                                legend: {
+                                    position: "top",
+                                    labels: { font: { size: 12, family: "Inter" } }
+                                },
+                                tooltip: { backgroundColor: "#343a40" }
                             },
                             scales: {
-                                y: { beginAtZero: true }
+                                y: {
+                                    beginAtZero: true,
+                                    grid: { color: "rgba(0, 0, 0, 0.05)" }
+                                },
+                                x: {
+                                    grid: { display: false }
+                                }
                             }
                         }
                     });
