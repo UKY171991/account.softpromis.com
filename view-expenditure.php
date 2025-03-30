@@ -16,8 +16,8 @@ if (isset($_GET['ajax'])) {
     $count = 1;
 
     while ($row = $result->fetch_assoc()) {
-        $actions = '<a href="edit-expenditure.php?id='.$row['id'].'" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a> '
-                 .'<a href="delete-expenditure.php?id='.$row['id'].'" class="btn btn-sm btn-danger" onclick="return confirm(\'Delete this record?\')"><i class="fa fa-trash"></i></a>';
+        $actions = '<a href="edit-expenditure.php?id='.$row['id'].'" class="btn btn-sm btn-success">Edit</a> '
+                 .'<a href="delete-expenditure.php?id='.$row['id'].'" class="btn btn-sm btn-danger" onclick="return confirm(\'Delete this record?\')">Delete</a>';
 
         $data[] = [
             $count++, 
