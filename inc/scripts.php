@@ -7,3 +7,5 @@
 <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script src="https://use.fontawesome.com/508cf0780d.js"></script>
