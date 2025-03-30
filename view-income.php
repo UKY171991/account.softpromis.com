@@ -2,50 +2,42 @@
 include 'inc/auth.php';
 include 'inc/config.php';
 
-// Create a separate PHP file for AJAX data (e.g., income_data.php)
+// Create income_data.php for AJAX separately
 if(isset($_GET['ajax'])) {
     $query = "SELECT 
-                i.id, 
-                i.name, 
-                i.phone,  
-                i.description, 
-                c.category_name, 
-                s.subcategory_name, 
-                i.actual_amount, 
-                i.received_amount, 
-                i.balance_amount, 
-                i.revenue, 
-                i.entry_date 
+                i.id, i.name, i.phone, i.description, 
+                c.category_name, s.subcategory_name, 
+                i.actual_amount, i.received_amount, 
+                i.balance_amount, i.revenue, i.entry_date 
               FROM income i
               INNER JOIN income_categories c ON i.category_id = c.id
               INNER JOIN income_subcategories s ON i.subcategory_id = s.id
               ORDER BY i.id DESC";
               
     $result = mysqli_query($conn, $query);
-    $data = array();
+    $data = [];
     $count = 1;
-    
+
     while($row = mysqli_fetch_assoc($result)) {
-        $formatted_date = date("d-m-Y", strtotime($row['entry_date']));
-        $actions = '<a href="edit-income.php?id='.$row['id'].'" class="badge bg-gradient-success"><i class="fa fa-edit"></i> Edit</a> ' .
-                  '<a href="delete-income.php?id='.$row['id'].'" class="badge bg-gradient-danger" onclick="return confirm(\'Are you sure?\')"><i class="fa fa-trash"></i> Delete</a>';
-                  
-        $data[] = array(
+        $actions = '<a href="edit-income.php?id='.$row['id'].'" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a> '
+                 .'<a href="delete-income.php?id='.$row['id'].'" class="btn btn-sm btn-danger" onclick="return confirm(\'Delete this entry?\')"><i class="fa fa-trash"></i></a>';
+
+        $data[] = [
             $count++,
-            $row['name'],
-            $row['phone'],
-            $row['category_name'],
-            $row['subcategory_name'],
-            $row['actual_amount'],
-            $row['received_amount'],
-            $row['balance_amount'],
-            $row['revenue'],
-            $formatted_date,
+            htmlspecialchars($row['name']),
+            htmlspecialchars($row['phone']),
+            htmlspecialchars($row['category_name']),
+            htmlspecialchars($row['subcategory_name']),
+            number_format($row['actual_amount'], 2),
+            number_format($row['received_amount'], 2),
+            number_format($row['balance_amount'], 2),
+            number_format($row['revenue'], 2),
+            date('d-m-Y', strtotime($row['entry_date'])),
             $actions
-        );
+        ];
     }
-    
-    echo json_encode(array("data" => $data));
+
+    echo json_encode(['data' => $data]);
     exit;
 }
 ?>
@@ -53,137 +45,78 @@ if(isset($_GET['ajax'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>View Income</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
-    <!-- Add DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <title>Income Records</title>
+    <?php include 'inc/head.php'; ?>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
 </head>
-
-<body class="g-sidenav-show bg-gray-100">
+<body class="bg-gray-100">
     <?php include 'inc/sidebar.php'; ?>
 
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <main class="main-content">
         <?php include 'inc/topbar.php'; ?>
 
         <div class="container-fluid py-4">
-            <div class="row">
-                <div class="col-6">
-                    <h4 class="text-dark">Income Records</h4>
-                </div>
-                <div class="col-6 text-end">
-                    <a href="add-income.php" class="btn btn-dark">
-                        <i class="fa fa-plus"></i> Add Income
-                    </a>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-dark">Income Records</h4>
+                <a href="add-income.php" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Add Income
+                </a>
             </div>
 
-            <!-- Display Messages -->
-            <div class="row">
-                <div class="col-md-12 mx-auto">
-                    <?php if (isset($_SESSION['success_msg'])): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= $_SESSION['success_msg']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        <?php unset($_SESSION['success_msg']); ?>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['error_msg'])): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= $_SESSION['error_msg']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        <?php unset($_SESSION['error_msg']); ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <div class="card mt-4">
-                <div class="card-header bg-gradient-dark text-white">
-                    <h6 class="mb-0 text-white">All Income Entries</h6>
-                </div>
-
-                <div class="card-body px-3">
-                    <div class="table-responsive">
-                        <table id="incomeTable" class="table align-items-center mb-0">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Category</th>
-                                    <th>Sub-Category</th>
-                                    <th>Actual Amount</th>
-                                    <th>Received Amount</th>
-                                    <th>Balance Amount</th>
-                                    <th>Revenue</th>
-                                    <th>Date</th>
-                                    <th class="text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table id="incomeTable" class="table table-hover table-bordered">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Category</th>
+                                <th>Sub-Category</th>
+                                <th>Actual Amount</th>
+                                <th>Received Amount</th>
+                                <th>Balance Amount</th>
+                                <th>Revenue</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Required Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="assets/js/core/popper.min.js"></script>
-    <script src="assets/js/core/bootstrap.min.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+    <!-- Scripts -->
+    <?php include 'inc/scripts.php'; ?>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
     $(document).ready(function() {
-        // Initialize DataTable
         $('#incomeTable').DataTable({
-            "ajax": {
-                "url": window.location.href,
-                "data": {"ajax": true},
-                "type": "POST"
-            },
-            "columns": [
-                { "data": 0, "className": "text-center" },
-                { "data": 1 },
-                { "data": 2 },
-                { "data": 3 },
-                { "data": 4 },
-                { "data": 5, "className": "text-end" },
-                { "data": 6, "className": "text-end" },
-                { "data": 7, "className": "text-end" },
-                { "data": 8, "className": "text-end" },
-                { "data": 9 },
-                { "data": 10, "className": "text-center" }
+            ajax: '?ajax=true',
+            columns: [
+                { data: 0, className: 'text-center' },
+                { data: 1 },
+                { data: 2 },
+                { data: 3 },
+                { data: 4 },
+                { data: 5, className: 'text-end' },
+                { data: 6, className: 'text-end' },
+                { data: 7, className: 'text-end' },
+                { data: 8, className: 'text-end' },
+                { data: 9, className: 'text-center' },
+                { data: 10, className: 'text-center', orderable: false }
             ],
-            "processing": true,
-            "serverSide": false,
-            "pageLength": 10,
-            "order": [[0, "desc"]],
-            "language": {
-                "emptyTable": "No income records available",
-                "loadingRecords": "Please wait - loading..."
-            }
+            pageLength: 10,
+            processing: true,
+            responsive: true,
+            language: { emptyTable: "No income data found." }
         });
 
-        // Auto-hide alerts
-        setTimeout(function() {
-            $(".alert").fadeOut("slow");
-        }, 3000);
+        setTimeout(() => $(".alert").fadeOut(), 3000);
     });
     </script>
 </body>
