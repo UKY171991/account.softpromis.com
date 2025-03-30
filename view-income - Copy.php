@@ -1,53 +1,6 @@
 <?php
 include 'inc/auth.php';
 include 'inc/config.php';
-
-// Create a separate PHP file for AJAX data (e.g., income_data.php)
-if(isset($_GET['ajax'])) {
-    $query = "SELECT 
-                i.id, 
-                i.name, 
-                i.phone,  
-                i.description, 
-                c.category_name, 
-                s.subcategory_name, 
-                i.actual_amount, 
-                i.received_amount, 
-                i.balance_amount, 
-                i.revenue, 
-                i.entry_date 
-              FROM income i
-              INNER JOIN income_categories c ON i.category_id = c.id
-              INNER JOIN income_subcategories s ON i.subcategory_id = s.id
-              ORDER BY i.id DESC";
-              
-    $result = mysqli_query($conn, $query);
-    $data = array();
-    $count = 1;
-    
-    while($row = mysqli_fetch_assoc($result)) {
-        $formatted_date = date("d-m-Y", strtotime($row['entry_date']));
-        $actions = '<a href="edit-income.php?id='.$row['id'].'" class="badge bg-gradient-success"><i class="fa fa-edit"></i> Edit</a> ' .
-                  '<a href="delete-income.php?id='.$row['id'].'" class="badge bg-gradient-danger" onclick="return confirm(\'Are you sure?\')"><i class="fa fa-trash"></i> Delete</a>';
-                  
-        $data[] = array(
-            $count++,
-            $row['name'],
-            $row['phone'],
-            $row['category_name'],
-            $row['subcategory_name'],
-            $row['actual_amount'],
-            $row['received_amount'],
-            $row['balance_amount'],
-            $row['revenue'],
-            $formatted_date,
-            $actions
-        );
-    }
-    
-    echo json_encode(array("data" => $data));
-    exit;
-}
 ?>
 
 <!DOCTYPE html>
@@ -63,8 +16,6 @@ if(isset($_GET['ajax'])) {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
-    <!-- Add DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -74,6 +25,7 @@ if(isset($_GET['ajax'])) {
         <?php include 'inc/topbar.php'; ?>
 
         <div class="container-fluid py-4">
+            
             <div class="row">
                 <div class="col-6">
                     <h4 class="text-dark">Income Records</h4>
@@ -113,35 +65,75 @@ if(isset($_GET['ajax'])) {
 
                 <div class="card-body px-3">
                     <div class="table-responsive">
-                        <table id="incomeTable" class="table align-items-center mb-0">
+                        <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Phone</th>
+                                    <th>Phone</th> 
                                     <th>Category</th>
                                     <th>Sub-Category</th>
                                     <th>Actual Amount</th>
                                     <th>Received Amount</th>
                                     <th>Balance Amount</th>
-                                    <th>Revenue</th>
+                                    <th>Revenue</th> <!-- Added Revenue Column -->
                                     <th>Date</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                <?php
+                                $query = "SELECT 
+                                            i.id, 
+                                            i.name, 
+                                            i.phone,  
+                                            i.description, 
+                                            c.category_name, 
+                                            s.subcategory_name, 
+                                            i.actual_amount, 
+                                            i.received_amount, 
+                                            i.balance_amount, 
+                                            i.revenue, 
+                                            i.entry_date 
+                                          FROM income i
+                                          INNER JOIN income_categories c ON i.category_id = c.id
+                                          INNER JOIN income_subcategories s ON i.subcategory_id = s.id
+                                          ORDER BY i.id DESC";
+                                $result = mysqli_query($conn, $query);
+                                $count = 1;
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    // Format date from YYYY-MM-DD to DD-MM-YYYY
+                                    $formatted_date = date("d-m-Y", strtotime($row['entry_date']));
+
+                                    echo "<tr>
+                                            <td>{$count}</td>
+                                            <td>{$row['name']}</td>
+                                            <td>{$row['phone']}</td> 
+                                            <td>{$row['category_name']}</td>
+                                            <td>{$row['subcategory_name']}</td>
+                                            <td style='text-align: end;'>{$row['actual_amount']}</td>
+                                            <td style='text-align: end;'>{$row['received_amount']}</td>
+                                            <td style='text-align: end;'>{$row['balance_amount']}</td>
+                                            <td style='text-align: end;'>{$row['revenue']}</td> <!-- Added Revenue Data -->
+                                            <td>{$formatted_date}</td> <!-- Fixed Date Format -->
+                                            <td class='text-center'>
+                                                <a href='edit-income.php?id={$row['id']}' class='badge bg-gradient-success'><i class='fa fa-edit'></i> Edit</a>
+                                                <a href='delete-income.php?id={$row['id']}' class='badge bg-gradient-danger' onclick='return confirm(\"Are you sure?\")'><i class='fa fa-trash'></i> Delete</a>
+                                            </td>
+                                        </tr>";
+                                    $count++;
+                                }
+                                ?>
+                            </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </div> <!-- End of .table-responsive -->
+                </div> <!-- End of .card-body -->
+            </div> <!-- End of .card -->
+        </div> <!-- End of .container-fluid -->
     </main>
 
-    <!-- Required Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="assets/js/core/popper.min.js"></script>
     <script src="assets/js/core/bootstrap.min.js"></script>
     <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -149,42 +141,12 @@ if(isset($_GET['ajax'])) {
     <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
 
     <script>
-    $(document).ready(function() {
-        // Initialize DataTable
-        $('#incomeTable').DataTable({
-            "ajax": {
-                "url": window.location.href,
-                "data": {"ajax": true},
-                "type": "POST"
-            },
-            "columns": [
-                { "data": 0, "className": "text-center" },
-                { "data": 1 },
-                { "data": 2 },
-                { "data": 3 },
-                { "data": 4 },
-                { "data": 5, "className": "text-end" },
-                { "data": 6, "className": "text-end" },
-                { "data": 7, "className": "text-end" },
-                { "data": 8, "className": "text-end" },
-                { "data": 9 },
-                { "data": 10, "className": "text-center" }
-            ],
-            "processing": true,
-            "serverSide": false,
-            "pageLength": 10,
-            "order": [[0, "desc"]],
-            "language": {
-                "emptyTable": "No income records available",
-                "loadingRecords": "Please wait - loading..."
-            }
+        $(document).ready(function() {
+            // Remove alert after 5 seconds (5000 milliseconds)
+            setTimeout(function() {
+                $(".alert").fadeOut("slow");
+            }, 3000);
         });
-
-        // Auto-hide alerts
-        setTimeout(function() {
-            $(".alert").fadeOut("slow");
-        }, 3000);
-    });
     </script>
 </body>
 </html>
