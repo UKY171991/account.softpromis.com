@@ -12,5 +12,5 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
 
 <style type="text/css">
-	#incomeTable_filter input{ border: 1px solid #d4d4d4 !important; }
+	#incomeTable_filter input, #expenditureTable_filter input{ border: 1px solid #d4d4d4 !important; }
 </style>
