@@ -44,7 +44,7 @@ if (isset($_POST['category_id'])) {
         <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-12">
-                    <h4 class="text-dark">Add Expenditure</h4>
+                    <h4 class="text-dark">Add Expenditure testingss</h4>
                 </div>
             </div>
 
