@@ -1,3 +1,23 @@
+<?php
+// Database connection
+$host = "localhost"; // Replace with your database host
+$username = "u820431346_new_account"; // Replace with your database username
+$password = "9g/?fYqP+"; // Replace with your database password
+$database = "u820431346_new_account"; // Replace with your database name
+
+// Create connection
+$conn = new mysqli($host, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch data from the expenditures table
+$sql = "SELECT id, date, name, description, category, subcategory, amount, paid, balance FROM expenditures";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,23 +112,30 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Sample Data Row -->
-              <tr>
-                <td>1</td>
-                <td>2024-04-01</td>
-                <td>Office Rent</td>
-                <td>Monthly rent for April</td>
-                <td>Utilities</td>
-                <td>Rent</td>
-                <td>₹20,000</td>
-                <td>₹20,000</td>
-                <td>₹0</td>
-                <td>
-                  <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                  <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-              </tr>
-              <!-- Add PHP loop here for real data -->
+              <?php
+              if ($result->num_rows > 0) {
+                  $sl_no = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+                      echo "<td>" . $sl_no++ . "</td>";
+                      echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td>
+                              <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
+                              <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
+                            </td>";
+                      echo "</tr>";
+                  }
+              } else {
+                  echo "<tr><td colspan='10' class='text-center'>No records found</td></tr>";
+              }
+              ?>
             </tbody>
           </table>
         </div>
@@ -140,3 +167,8 @@
   </script>
 </body>
 </html>
+
+<?php
+// Close the database connection
+$conn->close();
+?>
