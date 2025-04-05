@@ -3,9 +3,6 @@ session_start();
 include 'inc/config.php';
 
 
-<?php
-include 'inc/config.php';
-
 $username = "admin123";
 $password = password_hash("admin@123", PASSWORD_DEFAULT);
 $role = "admin";
@@ -18,7 +15,7 @@ if ($stmt->execute()) {
 } else {
     echo "Error: " . $conn->error;
 }
-?>
+
 
 
 
