@@ -1,3 +1,23 @@
+<?php
+// Database connection
+$host = "localhost"; // Replace with your database host
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$database = "your_database_name"; // Replace with your database name
+
+// Create connection
+$conn = new mysqli($host, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch data from the income table
+$sql = "SELECT id, date, name, category, subcategory, amount, received, balance FROM income";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -284,7 +304,6 @@
                 <th>SL No.</th>
                 <th>Date</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
@@ -294,44 +313,29 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>2024-04-01</td>
-                <td>John Doe</td>
-                <td>Service Payment</td>
-                <td>Consulting</td>
-                <td>Business</td>
-                <td>₹10,000</td>
-                <td>₹7,000</td>
-                <td>₹3,000</td>
-                <td class="action-column">
-                  <a href="#" class="btn btn-sm btn-primary" title="Edit">
-                    <i class="bi bi-pencil"></i> Edit
-                  </a>
-                  <a href="#" class="btn btn-sm btn-danger" title="Delete">
-                    <i class="bi bi-trash"></i> Delete
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>2024-04-05</td>
-                <td>Jane Smith</td>
-                <td>Product Sale</td>
-                <td>Products</td>
-                <td>Retail</td>
-                <td>₹15,000</td>
-                <td>₹15,000</td>
-                <td>₹0</td>
-                <td class="action-column">
-                  <a href="#" class="btn btn-sm btn-primary" title="Edit">
-                    <i class="bi bi-pencil"></i> Edit
-                  </a>
-                  <a href="#" class="btn btn-sm btn-danger" title="Delete">
-                    <i class="bi bi-trash"></i> Delete
-                  </a>
-                </td>
-              </tr>
+              <?php
+              if ($result->num_rows > 0) {
+                  $sl_no = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+                      echo "<td>" . $sl_no++ . "</td>";
+                      echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['received'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td class='action-column'>
+                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i> Edit</a>
+                              <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i> Delete</a>
+                            </td>";
+                      echo "</tr>";
+                  }
+              } else {
+                  echo "<tr><td colspan='9' class='text-center'>No records found</td></tr>";
+              }
+              ?>
             </tbody>
           </table>
         </div>
@@ -362,3 +366,8 @@
   </script>
 </body>
 </html>
+
+<?php
+// Close the database connection
+$conn->close();
+?>
