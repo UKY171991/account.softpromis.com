@@ -3,7 +3,7 @@ session_start();
 include 'inc/config.php';
 
 
-$username = "admin123";
+$username = "admin";
 $password = password_hash("admin@123", PASSWORD_DEFAULT);
 $role = "admin";
 
