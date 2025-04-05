@@ -52,6 +52,58 @@ $result = $conn->query($sql);
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
+    .table-responsive {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .table th {
+      background-color: #f1f1f1;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #495057;
+      padding: 0.75rem;
+      font-size: 0.75rem;
+      border-bottom: 2px solid #dee2e6;
+      text-align: center;
+    }
+    .table td {
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .table tbody tr:hover {
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
+    }
+    .table td .btn {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .table td .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .table td .btn-primary:hover {
+      background-color: #0b5ed7;
+    }
+    .table td .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .table td .btn-danger:hover {
+      background-color: #bb2d3b;
+    }
   </style>
 </head>
 <body>
