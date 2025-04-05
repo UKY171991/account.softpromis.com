@@ -154,7 +154,6 @@ $result = $conn->query($sql);
                 <th>SL No.</th>
                 <th>Date</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
@@ -173,7 +172,6 @@ $result = $conn->query($sql);
                       echo "<td>" . $sl_no++ . "</td>";
                       echo "<td>" . htmlspecialchars($row['date']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
