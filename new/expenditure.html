@@ -23,7 +23,14 @@
     }
     .main-content {
       margin-left: 250px;
-      padding: 2rem;
+    }
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 1rem 2rem;
     }
   </style>
 </head>
@@ -34,9 +41,9 @@
       <h4 class="text-white">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <li><a href="dashboard.html" class="nav-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li><a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
         <li><a href="income.html" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
-        <li><a href="expenditure.html" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
+        <li><a href="expenditure.html" class="nav-link active"><i class="bi bi-wallet2"></i> Expenditure</a></li>
         <li><a href="report.html" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
         <li><a href="client.html" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
         <li><a href="users.html" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
@@ -45,47 +52,66 @@
 
     <!-- Main content -->
     <div class="main-content w-100">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>Expenditure Records</h3>
-        <a href="add-expenditure.html" class="btn btn-danger"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
+      <!-- Top Navbar -->
+      <div class="top-navbar d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Expenditure Records</h4>
+        <div class="d-flex align-items-center gap-3">
+          <i class="bi bi-bell fs-5"></i>
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <div class="table-responsive">
-        <table id="expenditureTable" class="table table-bordered table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>SL No.</th>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Sub-category</th>
-              <th>Total Amount</th>
-              <th>Paid Amount</th>
-              <th>Balance</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Sample Data Row -->
-            <tr>
-              <td>1</td>
-              <td>2024-04-01</td>
-              <td>Office Rent</td>
-              <td>Monthly rent for April</td>
-              <td>Utilities</td>
-              <td>Rent</td>
-              <td>₹20,000</td>
-              <td>₹20,000</td>
-              <td>₹0</td>
-              <td>
-                <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                <a href="#" class="btn btn-sm btn-danger">Delete</a>
-              </td>
-            </tr>
-            <!-- Add PHP loop here for real data -->
-          </tbody>
-        </table>
+      <div class="p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5>Expenditure Records</h5>
+          <a href="add-expenditure.html" class="btn btn-danger"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
+        </div>
+
+        <div class="table-responsive">
+          <table id="expenditureTable" class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>SL No.</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Sub-category</th>
+                <th>Total Amount</th>
+                <th>Paid Amount</th>
+                <th>Balance</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Sample Data Row -->
+              <tr>
+                <td>1</td>
+                <td>2024-04-01</td>
+                <td>Office Rent</td>
+                <td>Monthly rent for April</td>
+                <td>Utilities</td>
+                <td>Rent</td>
+                <td>₹20,000</td>
+                <td>₹20,000</td>
+                <td>₹0</td>
+                <td>
+                  <a href="#" class="btn btn-sm btn-primary">Edit</a>
+                  <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+              </tr>
+              <!-- Add PHP loop here for real data -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
