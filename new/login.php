@@ -3,18 +3,18 @@ session_start();
 include 'inc/config.php';
 
 
-$username = "admin";
-$password = password_hash("admin@123", PASSWORD_DEFAULT);
-$role = "admin";
+// $username = "admin";
+// $password = password_hash("admin@123", PASSWORD_DEFAULT);
+// $role = "admin";
 
-$stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
-$stmt->bind_param("sss", $username, $password, $role);
+// $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
+// $stmt->bind_param("sss", $username, $password, $role);
 
-if ($stmt->execute()) {
-    echo "User created successfully.";
-} else {
-    echo "Error: " . $conn->error;
-}
+// if ($stmt->execute()) {
+//     echo "User created successfully.";
+// } else {
+//     echo "Error: " . $conn->error;
+// }
 
 
 
