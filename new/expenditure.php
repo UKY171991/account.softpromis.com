@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch data from the expenditures table
-$sql = "SELECT id, date, name, description, category, subcategory, amount, paid, balance FROM expenditures";
+$sql = "SELECT id, date, name, description, category, subcategory, amount, paid, balance, created_at FROM expenditures";
 $result = $conn->query($sql);
 ?>
 
@@ -160,6 +160,7 @@ $result = $conn->query($sql);
                 <th>Total Amount</th>
                 <th>Paid Amount</th>
                 <th>Balance</th>
+                <th>Created At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -178,6 +179,7 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                       echo "<td>
                               <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                               <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
@@ -185,7 +187,7 @@ $result = $conn->query($sql);
                       echo "</tr>";
                   }
               } else {
-                  echo "<tr><td colspan='10' class='text-center'>No records found</td></tr>";
+                  echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
               }
               ?>
             </tbody>
