@@ -22,7 +22,14 @@
     }
     .main-content {
       margin-left: 250px;
-      padding: 2rem;
+    }
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 1rem 2rem;
     }
   </style>
 </head>
@@ -33,59 +40,77 @@
     <h4 class="text-white">Account Panel</h4>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li><a href="dashboard.html" class="nav-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-        <li><a href="income.html" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
-        <li><a href="expenditure.html" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
-        <li><a href="report.html" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
-        <li><a href="client.html" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
-        <li><a href="users.html" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
-      </ul>
+      <li><a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      <li><a href="income.html" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
+      <li><a href="expenditure.html" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
+      <li><a href="report.html" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
+      <li><a href="client.html" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
+      <li><a href="users.html" class="nav-link active"><i class="bi bi-people"></i> Users</a></li>
+    </ul>
   </nav>
 
   <!-- Main Content -->
   <div class="main-content w-100">
-    <h3 class="mb-4">Add New User</h3>
-    <form action="#" method="POST">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="col-md-6">
-          <label for="fullname" class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="fullname" name="fullname" required>
-        </div>
-        <div class="col-md-6">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="col-md-6">
-          <label for="role" class="form-label">Role</label>
-          <select id="role" name="role" class="form-select" required>
-            <option selected disabled>Choose Role</option>
-            <option value="Admin">Admin</option>
-            <option value="Manager">Manager</option>
-            <option value="Staff">Staff</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <div class="col-md-6">
-          <label for="status" class="form-label">Status</label>
-          <select id="status" name="status" class="form-select" required>
-            <option value="Active" selected>Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
+    <!-- Top Navbar -->
+    <div class="top-navbar d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Add User</h4>
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-bell fs-5"></i>
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
         </div>
       </div>
+    </div>
 
-      <div class="mt-4">
-        <button type="submit" class="btn btn-primary">Create User</button>
-        <a href="users.php" class="btn btn-secondary">Cancel</a>
-      </div>
-    </form>
+    <div class="p-4">
+      <form action="#" method="POST">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
+          <div class="col-md-6">
+            <label for="fullname" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullname" name="fullname" required>
+          </div>
+          <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="col-md-6">
+            <label for="role" class="form-label">Role</label>
+            <select id="role" name="role" class="form-select" required>
+              <option selected disabled>Choose Role</option>
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Staff">Staff</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <div class="col-md-6">
+            <label for="status" class="form-label">Status</label>
+            <select id="status" name="status" class="form-select" required>
+              <option value="Active" selected>Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary">Create User</button>
+          <a href="users.html" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
