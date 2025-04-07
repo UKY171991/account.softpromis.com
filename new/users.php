@@ -44,21 +44,21 @@
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
-      font-size: 0.875rem; /* Smaller font size for the entire table */
+      font-size: 0.8rem; /* Smaller font size for the entire table */
     }
     .table th {
       background-color: #f8f9fa;
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      padding: 0.75rem;
-      font-size: 0.85rem; /* Slightly larger font size for headers */
+      padding: 0.6rem; /* Adjusted padding for smaller headers */
+      font-size: 0.75rem; /* Smaller font size for headers */
       border-bottom: 2px solid #dee2e6;
       text-align: center;
     }
     .table td {
-      padding: 0.75rem;
-      font-size: 0.85rem;
+      padding: 0.5rem; /* Adjusted padding for table cells */
+      font-size: 0.75rem; /* Smaller font size for table data */
       vertical-align: middle;
       border-bottom: 1px solid #dee2e6;
       text-align: center;
@@ -68,8 +68,8 @@
       transition: background-color 0.3s ease;
     }
     .table td .btn {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.75rem;
+      padding: 0.3rem 0.6rem; /* Compact button padding */
+      font-size: 0.7rem; /* Smaller font size for buttons */
       border-radius: 0.3rem;
       display: inline-flex;
       align-items: center;
@@ -96,8 +96,8 @@
       transform: scale(1.05); /* Slight zoom effect */
     }
     .badge {
-      font-size: 0.75rem;
-      padding: 0.4rem 0.6rem;
+      font-size: 0.7rem; /* Smaller font size for badges */
+      padding: 0.3rem 0.5rem; /* Adjusted padding for badges */
       border-radius: 0.3rem;
     }
   </style>
