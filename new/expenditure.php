@@ -16,6 +16,16 @@ if ($conn->connect_error) {
 // Fetch data from the expenditures table
 $sql = "SELECT id, date, name, description, category, subcategory, amount, paid, balance, created_at FROM expenditures";
 $result = $conn->query($sql);
+
+// Debugging: Check if the query executed successfully
+if (!$result) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Debugging: Check if rows are returned
+if ($result->num_rows === 0) {
+    echo "<script>console.log('No records found in the expenditures table.');</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -168,6 +178,7 @@ $result = $conn->query($sql);
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
+                      echo "<script>console.log(" . json_encode($row) . ");</script>";
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
                       echo "<td>" . htmlspecialchars($row['date']) . "</td>";
