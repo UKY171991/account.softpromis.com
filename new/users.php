@@ -54,14 +54,14 @@
       padding: 0.6rem; /* Adjusted padding for smaller headers */
       font-size: 0.75rem; /* Smaller font size for headers */
       border-bottom: 2px solid #dee2e6;
-      text-align: center;
+      text-align: left; /* Align header text to the left */
     }
     .table td {
       padding: 0.5rem; /* Adjusted padding for table cells */
       font-size: 0.75rem; /* Smaller font size for table data */
       vertical-align: middle;
       border-bottom: 1px solid #dee2e6;
-      text-align: center;
+      text-align: left; /* Align table data text to the left */
     }
     .table tbody tr:hover {
       background-color: #f9f9f9;
