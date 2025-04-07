@@ -69,17 +69,54 @@ $result = $conn->query($sql);
     /* Top Navbar */
     .top-navbar {
       margin-left: 250px;
-      background: rgba(255, 255, 255, 0.9);
+      background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Subtle gradient */
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
       position: sticky;
       top: 0;
       z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+
     .top-navbar h4 {
+      font-size: 1.25rem;
       font-weight: bold;
+      color: #495057;
+      margin: 0;
+    }
+
+    .top-navbar .dropdown a {
+      color: #495057;
+      text-decoration: none;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .top-navbar .dropdown a:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+
+    .top-navbar .bi-bell {
+      font-size: 1.5rem;
+      color: #495057;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .top-navbar .bi-bell:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+
+    .dropdown-menu {
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     /* Main Content */
@@ -274,13 +311,13 @@ $result = $conn->query($sql);
     <!-- Main Content -->
     <div class="w-100">
       <!-- Top Navbar -->
-      <div class="top-navbar d-flex justify-content-between align-items-center">
+      <div class="top-navbar">
         <h4>Income Records</h4>
         <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-bell fs-5"></i>
+          <i class="bi bi-bell" title="Notifications"></i>
           <div class="dropdown">
-            <a href="#" class="dropdown-toggle text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle fs-5"></i> Admin
+            <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Admin
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" href="#">Profile</a></li>
