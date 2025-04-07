@@ -32,6 +32,40 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
+    .table-responsive {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .table th {
+      background-color: #f1f1f1;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #495057;
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #dee2e6;
+      text-align: center;
+    }
+    .table td {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .table tbody tr:hover {
+      background-color: #f1f1f1;
+      transition: background-color 0.3s ease;
+    }
+    .table td:last-child {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -109,13 +143,23 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>2024-04-01</td>
+              <td>01-04-2024</td>
               <td>Income</td>
               <td>John Doe</td>
               <td>Consulting Fee</td>
               <td>Services</td>
               <td>IT</td>
               <td>₹15,000</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>02-04-2024</td>
+              <td>Expenditure</td>
+              <td>Jane Smith</td>
+              <td>Office Supplies</td>
+              <td>Operations</td>
+              <td>Stationery</td>
+              <td>₹5,000</td>
             </tr>
           </tbody>
         </table>
