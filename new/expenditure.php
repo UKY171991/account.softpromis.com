@@ -144,7 +144,7 @@ $result = $conn->query($sql);
       <div class="p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5>Expenditure Records</h5>
-          <a href="add-expenditure.html" class="btn btn-danger"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
+          <a href="add-expenditure.php" class="btn btn-danger"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
 
         <div class="table-responsive">
