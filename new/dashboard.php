@@ -30,11 +30,70 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
     .top-navbar {
+      margin-left: 250px;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Subtle gradient */
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 0.3rem 1.5rem; /* Reduced top and bottom padding */
       position: sticky;
       top: 0;
-      z-index: 1030;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-navbar .navbar-brand {
+      font-size: 1.15rem; /* Slightly smaller font size */
+      font-weight: bold;
+      color: #495057;
+      margin: 0;
+    }
+    .top-navbar .btn {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem; /* Compact button padding */
+      border-radius: 0.3rem;
+    }
+    .top-navbar .btn-success {
+      background-color: #198754;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .top-navbar .btn-success:hover {
+      background-color: #157347;
+    }
+    .top-navbar .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .top-navbar .btn-danger:hover {
+      background-color: #bb2d3b;
+    }
+    .top-navbar .bi-bell {
+      font-size: 1.3rem; /* Slightly smaller icon size */
+      color: #495057;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .top-navbar .bi-bell:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+    .top-navbar .dropdown a {
+      color: #495057;
+      text-decoration: none;
+      font-size: 0.95rem; /* Slightly smaller font size */
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+    .top-navbar .dropdown a:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+    .dropdown-menu {
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     canvas {
       background-color: white;
@@ -136,7 +195,7 @@
         <div class="col-md-4">
           <div class="card dashboard-card p-3">
             <div class="card-body">
-              <h5 class="card-title">Pending (This Month)</h5>
+              <h5 class="card-title">Pending (This Month)</h3>
               <h3 class="text-warning">₹10,700</h3>
             </div>
           </div>
