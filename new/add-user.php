@@ -107,7 +107,7 @@
 
         <div class="mt-4">
           <button type="submit" class="btn btn-primary">Create User</button>
-          <a href="users.html" class="btn btn-secondary">Cancel</a>
+          <a href="users.php" class="btn btn-secondary">Cancel</a>
         </div>
       </form>
     </div>
