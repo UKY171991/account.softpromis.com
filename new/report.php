@@ -14,84 +14,32 @@
     .sidebar {
       height: 100vh;
       background-color: #343a40;
-      padding: 1rem;
     }
     .sidebar .nav-link {
       color: #ffffff;
-      margin-bottom: 0.5rem;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-      transition: background-color 0.3s ease;
-    }
-    .sidebar .nav-link:hover {
-      background-color: #495057;
     }
     .sidebar .nav-link.active {
       background-color: #495057;
-      font-weight: bold;
     }
     .main-content {
       margin-left: 250px;
-      padding: 2rem;
     }
     .top-navbar {
       position: sticky;
       top: 0;
       z-index: 1030;
-      background: #ffffff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .form-label {
-      font-weight: bold;
-    }
-    .table-responsive {
-      border-radius: 0.5rem;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      background-color: white;
-      padding: 1.5rem;
-      margin-top: 1rem;
-    }
-    .table th {
-      background-color: #f1f1f1;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: #495057;
-      padding: 0.75rem;
-      font-size: 0.75rem;
-      border-bottom: 2px solid #dee2e6;
-      text-align: center;
-    }
-    .table td {
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .table tbody tr:hover {
-      background-color: #f1f1f1;
-      transition: background-color 0.3s ease;
-    }
-    .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-    .btn-primary:hover {
-      background-color: #0b5ed7;
     }
   </style>
 </head>
 <body>
 <div class="d-flex">
   <!-- Sidebar -->
-  <nav class="sidebar d-flex flex-column">
-    <h4 class="text-white mb-4">Account Panel</h4>
+  <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
+    <h4 class="text-white">Account Panel</h4>
+    <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
       <li><a href="income.php" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
@@ -161,7 +109,7 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>01-04-2024</td>
+              <td>2024-04-01</td>
               <td>Income</td>
               <td>John Doe</td>
               <td>Consulting Fee</td>
