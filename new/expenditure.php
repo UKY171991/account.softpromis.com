@@ -178,8 +178,9 @@ if ($result->num_rows === 0) {
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      // Format the date to dd-mm-yyyy
+                      // Format the date and created_at to dd-mm-yyyy
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
+                      $formatted_created_at = date("d-m-Y", strtotime($row['created_at']));
                       
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
@@ -190,7 +191,7 @@ if ($result->num_rows === 0) {
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                      echo "<td>" . htmlspecialchars($formatted_created_at) . "</td>";
                       echo "<td>
                               <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                               <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
