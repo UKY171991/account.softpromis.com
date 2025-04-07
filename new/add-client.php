@@ -66,6 +66,59 @@
       border-radius: 0.5rem;
     }
 
+    /* Top Navbar */
+    .top-navbar {
+      margin-left: 250px;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Subtle gradient */
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 0.5rem 1.5rem; /* Reduced padding for a compact look */
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-navbar h4 {
+      font-size: 1.15rem; /* Slightly smaller font size */
+      font-weight: bold;
+      color: #495057;
+      margin: 0;
+    }
+
+    .top-navbar .dropdown a {
+      color: #495057;
+      text-decoration: none;
+      font-size: 0.95rem; /* Slightly smaller font size */
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .top-navbar .dropdown a:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+
+    .top-navbar .bi-bell {
+      font-size: 1.3rem; /* Slightly smaller icon size */
+      color: #495057;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .top-navbar .bi-bell:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+
+    .dropdown-menu {
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .sidebar {
@@ -98,6 +151,21 @@
 
     <!-- Main Content -->
     <div class="main-content w-100">
+      <div class="top-navbar">
+        <h4>Add New Client</h4>
+        <div class="d-flex align-items-center gap-3">
+          <i class="bi bi-bell" title="Notifications"></i>
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Admin
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <h3 class="mb-4">Add New Client</h3>
       <form action="#" method="POST">
         <div class="row g-3">
