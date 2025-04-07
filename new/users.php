@@ -51,12 +51,40 @@
       position: sticky;
       top: 0;
       z-index: 1030;
-      background: white;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Subtle gradient */
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #dee2e6; /* Subtle border */
+    }
+    .top-navbar h4 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #495057;
+      margin: 0;
+    }
+    .top-navbar .dropdown a {
+      color: #495057;
+      text-decoration: none;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+    .top-navbar .dropdown a:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+    .top-navbar .bi-bell {
+      font-size: 1.5rem;
+      color: #495057;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .top-navbar .bi-bell:hover {
+      color: #0d6efd; /* Hover effect */
     }
     .table-responsive {
       border-radius: 0.5rem;
