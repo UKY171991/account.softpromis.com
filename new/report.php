@@ -32,6 +32,41 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
+    .table-responsive {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .table {
+      margin: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.875rem; /* Smaller font size for the entire table */
+    }
+    .table th {
+      background-color: #f8f9fa;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #495057;
+      padding: 0.75rem;
+      font-size: 0.85rem; /* Slightly larger font size for headers */
+      border-bottom: 2px solid #dee2e6;
+      text-align: center;
+    }
+    .table td {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
+      text-align: center;
+    }
+    .table tbody tr:hover {
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
+    }
   </style>
 </head>
 <body>
@@ -117,6 +152,16 @@
               <td>IT</td>
               <td>₹15,000</td>
             </tr>
+            <tr>
+              <td>2</td>
+              <td>2024-04-02</td>
+              <td>Expenditure</td>
+              <td>Jane Smith</td>
+              <td>Office Supplies</td>
+              <td>Operations</td>
+              <td>Stationery</td>
+              <td>₹5,000</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -133,7 +178,16 @@
     $('#reportTable').DataTable({
       responsive: true,
       pageLength: 10,
-      lengthMenu: [5, 10, 25, 50, 100]
+      lengthMenu: [5, 10, 25, 50, 100],
+      language: {
+        search: "Search:",
+        lengthMenu: "Show _MENU_ entries",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        paginate: {
+          next: "Next",
+          previous: "Previous"
+        }
+      }
     });
   });
 </script>
