@@ -32,6 +32,74 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
+    .table-responsive {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .table {
+      margin: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.875rem; /* Smaller font size for the entire table */
+    }
+    .table th {
+      background-color: #f8f9fa;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #495057;
+      padding: 0.75rem;
+      font-size: 0.85rem; /* Slightly larger font size for headers */
+      border-bottom: 2px solid #dee2e6;
+      text-align: center;
+    }
+    .table td {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
+      text-align: center;
+    }
+    .table tbody tr:hover {
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
+    }
+    .table td .btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+      border-radius: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .table td .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      color: white;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .table td .btn-primary:hover {
+      background-color: #0b5ed7;
+      transform: scale(1.05); /* Slight zoom effect */
+    }
+    .table td .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      color: white;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .table td .btn-danger:hover {
+      background-color: #bb2d3b;
+      transform: scale(1.05); /* Slight zoom effect */
+    }
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.3rem;
+    }
   </style>
 </head>
 <body>
