@@ -54,14 +54,12 @@
       padding: 0.75rem;
       font-size: 0.85rem; /* Slightly larger font size for headers */
       border-bottom: 2px solid #dee2e6;
-      text-align: center;
     }
     .table td {
       padding: 0.75rem;
       font-size: 0.85rem;
       vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
-      text-align: center;
+      border-bottom: 1px solid #dee2e6; 
     }
     .table tbody tr:hover {
       background-color: #f9f9f9;
