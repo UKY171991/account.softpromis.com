@@ -178,10 +178,12 @@ if ($result->num_rows === 0) {
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      echo "<script>console.log(" . json_encode($row) . ");</script>";
+                      // Format the date to dd-mm-yyyy
+                      $formatted_date = date("d-m-Y", strtotime($row['date']));
+                      
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
-                      echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                      echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
