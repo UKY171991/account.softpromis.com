@@ -32,40 +32,6 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
-    .table-responsive {
-      border-radius: 0.5rem;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      background-color: white;
-      padding: 1.5rem;
-      margin-top: 1rem;
-    }
-    .table th {
-      background-color: #f1f1f1;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: #495057;
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      border-bottom: 2px solid #dee2e6;
-      text-align: center;
-    }
-    .table td {
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .table tbody tr:hover {
-      background-color: #f1f1f1;
-      transition: background-color 0.3s ease;
-    }
-    .table td:last-child {
-      text-align: center;
-    }
   </style>
 </head>
 <body>
@@ -107,11 +73,11 @@
       <form class="row g-3 mb-4">
         <div class="col-md-3">
           <label for="from_date" class="form-label">From Date</label>
-          <input type="text" class="form-control" id="from_date" placeholder="DD-MM-YYYY" onfocus="formatDateInput(this)" onblur="validateDateInput(this)">
+          <input type="date" class="form-control" id="from_date">
         </div>
         <div class="col-md-3">
           <label for="to_date" class="form-label">To Date</label>
-          <input type="text" class="form-control" id="to_date" placeholder="DD-MM-YYYY" onfocus="formatDateInput(this)" onblur="validateDateInput(this)">
+          <input type="date" class="form-control" id="to_date">
         </div>
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
@@ -143,23 +109,13 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>01-04-2024</td>
+              <td>2024-04-01</td>
               <td>Income</td>
               <td>John Doe</td>
               <td>Consulting Fee</td>
               <td>Services</td>
               <td>IT</td>
               <td>₹15,000</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>02-04-2024</td>
-              <td>Expenditure</td>
-              <td>Jane Smith</td>
-              <td>Office Supplies</td>
-              <td>Operations</td>
-              <td>Stationery</td>
-              <td>₹5,000</td>
             </tr>
           </tbody>
         </table>
@@ -180,22 +136,6 @@
       lengthMenu: [5, 10, 25, 50, 100]
     });
   });
-
-  // Function to format the date input field
-  function formatDateInput(input) {
-    input.type = 'date'; // Change input type to date for the date picker
-  }
-
-  // Function to validate and format the date back to DD-MM-YYYY
-  function validateDateInput(input) {
-    input.type = 'text'; // Change input type back to text
-    const dateValue = input.value;
-    if (dateValue) {
-      const date = new Date(dateValue);
-      const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
-      input.value = formattedDate; // Set the formatted date
-    }
-  }
 </script>
 </body>
 </html>
