@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch data from the expenditures table
-$sql = "SELECT id, date, name, description, category, subcategory, amount, paid, balance, created_at FROM expenditures";
+$sql = "SELECT id, date, name, category, subcategory, amount, paid, balance, created_at FROM expenditures";
 $result = $conn->query($sql);
 
 // Debugging: Check if the query executed successfully
