@@ -10,148 +10,37 @@
   <style>
     body {
       background-color: #f8f9fa;
-      font-family: 'Roboto', sans-serif;
     }
     .sidebar {
       height: 100vh;
       background-color: #343a40;
-      color: white;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 250px;
-      padding: 1.5rem 1rem;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-    }
-    .sidebar h4 {
-      font-weight: bold;
-      text-align: center;
     }
     .sidebar .nav-link {
       color: #ffffff;
-      font-size: 0.875rem;
-      padding: 0.75rem 1rem;
-      border-radius: 0.3rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease-in-out;
     }
-    .sidebar .nav-link.active,
-    .sidebar .nav-link:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-      color: #f8f9fa;
+    .sidebar .nav-link.active {
+      background-color: #495057;
     }
     .main-content {
       margin-left: 250px;
-      padding: 2rem;
     }
     .top-navbar {
       position: sticky;
       top: 0;
       z-index: 1030;
-      background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Subtle gradient */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #dee2e6; /* Subtle border */
-    }
-    .top-navbar h4 {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #495057;
-      margin: 0;
-    }
-    .top-navbar .dropdown a {
-      color: #495057;
-      text-decoration: none;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: color 0.3s ease;
-    }
-    .top-navbar .dropdown a:hover {
-      color: #0d6efd; /* Hover effect */
-    }
-    .top-navbar .bi-bell {
-      font-size: 1.5rem;
-      color: #495057;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-    .top-navbar .bi-bell:hover {
-      color: #0d6efd; /* Hover effect */
-    }
-    .table-responsive {
-      border-radius: 0.5rem;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      background-color: white;
-      padding: 1.5rem;
-      margin-top: 1rem;
-    }
-    .table th {
-      background-color: #f1f1f1;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: #495057;
-      padding: 0.75rem;
-      font-size: 0.75rem;
-      border-bottom: 2px solid #dee2e6;
-      text-align: center;
-    }
-    .table td {
-      padding: 0.5rem;
-      font-size: 0.85rem;
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .table tbody tr:hover {
-      background-color: #f9f9f9;
-      transition: background-color 0.3s ease;
-    }
-    .table td .btn {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.75rem;
-      border-radius: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .table td .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-    .table td .btn-primary:hover {
-      background-color: #0b5ed7;
-    }
-    .table td .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-    .table td .btn-danger:hover {
-      background-color: #bb2d3b;
-    }
-    .badge {
-      font-size: 0.75rem;
-      padding: 0.4rem 0.6rem;
-      border-radius: 0.3rem;
     }
   </style>
 </head>
 <body>
 <div class="d-flex">
   <!-- Sidebar -->
-  <nav class="sidebar">
-    <h4>Account Panel</h4>
+  <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
+    <h4 class="text-white">Account Panel</h4>
     <hr>
-    <ul class="nav flex-column">
+    <ul class="nav nav-pills flex-column mb-auto">
       <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
       <li><a href="income.php" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
       <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
@@ -164,15 +53,15 @@
   <!-- Main Content -->
   <div class="main-content w-100">
     <!-- Top Navbar -->
-    <div class="top-navbar">
-      <h4>User Management</h4>
+    <div class="top-navbar d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">User Management</h4>
       <div class="d-flex align-items-center gap-3">
         <i class="bi bi-bell fs-5"></i>
         <div class="dropdown">
-          <a href="#" class="dropdown-toggle text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-5"></i> Admin
+          <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5 me-1"></i> Admin
           </a>
-          <ul class="dropdown-menu dropdown-menu-end">
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><a class="dropdown-item" href="#">Logout</a></li>
           </ul>
@@ -209,8 +98,8 @@
               <td>Administrator</td>
               <td><span class="badge bg-success">Active</span></td>
               <td>
-                <a href="#" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Edit</a>
-                <a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Delete</a>
+                <a href="#" class="btn btn-sm btn-primary">Edit</a>
+                <a href="#" class="btn btn-sm btn-danger">Delete</a>
               </td>
             </tr>
           </tbody>
@@ -229,16 +118,7 @@
     $('#userTable').DataTable({
       responsive: true,
       pageLength: 10,
-      lengthMenu: [5, 10, 25, 50, 100],
-      language: {
-        search: "Search:",
-        lengthMenu: "Show _MENU_ entries",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        paginate: {
-          next: "Next",
-          previous: "Previous"
-        }
-      }
+      lengthMenu: [5, 10, 25, 50, 100]
     });
   });
 </script>
