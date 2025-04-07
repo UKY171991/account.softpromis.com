@@ -107,11 +107,11 @@
       <form class="row g-3 mb-4">
         <div class="col-md-3">
           <label for="from_date" class="form-label">From Date</label>
-          <input type="date" class="form-control" id="from_date">
+          <input type="text" class="form-control" id="from_date" placeholder="DD-MM-YYYY" onfocus="formatDateInput(this)" onblur="validateDateInput(this)">
         </div>
         <div class="col-md-3">
           <label for="to_date" class="form-label">To Date</label>
-          <input type="date" class="form-control" id="to_date">
+          <input type="text" class="form-control" id="to_date" placeholder="DD-MM-YYYY" onfocus="formatDateInput(this)" onblur="validateDateInput(this)">
         </div>
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
@@ -180,6 +180,22 @@
       lengthMenu: [5, 10, 25, 50, 100]
     });
   });
+
+  // Function to format the date input field
+  function formatDateInput(input) {
+    input.type = 'date'; // Change input type to date for the date picker
+  }
+
+  // Function to validate and format the date back to DD-MM-YYYY
+  function validateDateInput(input) {
+    input.type = 'text'; // Change input type back to text
+    const dateValue = input.value;
+    if (dateValue) {
+      const date = new Date(dateValue);
+      const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+      input.value = formattedDate; // Set the formatted date
+    }
+  }
 </script>
 </body>
 </html>
