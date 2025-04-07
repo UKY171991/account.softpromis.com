@@ -72,7 +72,7 @@
     <div class="p-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5>Clients</h5>
-        <a href="add-client.html" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Client</a>
+        <a href="add-client.php" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Client</a>
       </div>
 
       <div class="table-responsive">
