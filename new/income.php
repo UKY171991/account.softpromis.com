@@ -73,7 +73,7 @@ $result = $conn->query($sql);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 1rem 2rem;
+      padding: 0.5rem 1.5rem; /* Reduced padding for a compact look */
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -83,7 +83,7 @@ $result = $conn->query($sql);
     }
 
     .top-navbar h4 {
-      font-size: 1.25rem;
+      font-size: 1.15rem; /* Slightly smaller font size */
       font-weight: bold;
       color: #495057;
       margin: 0;
@@ -92,7 +92,7 @@ $result = $conn->query($sql);
     .top-navbar .dropdown a {
       color: #495057;
       text-decoration: none;
-      font-size: 1rem;
+      font-size: 0.95rem; /* Slightly smaller font size */
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -104,7 +104,7 @@ $result = $conn->query($sql);
     }
 
     .top-navbar .bi-bell {
-      font-size: 1.5rem;
+      font-size: 1.3rem; /* Slightly smaller icon size */
       color: #495057;
       cursor: pointer;
       transition: color 0.3s ease;
