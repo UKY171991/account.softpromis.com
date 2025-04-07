@@ -169,7 +169,6 @@ if ($result->num_rows === 0) {
                 <th>Total Amount</th>
                 <th>Paid Amount</th>
                 <th>Balance</th>
-                <th>Created At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -191,7 +190,6 @@ if ($result->num_rows === 0) {
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . htmlspecialchars($formatted_created_at) . "</td>";
                       echo "<td>
                               <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                               <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
