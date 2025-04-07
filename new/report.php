@@ -17,20 +17,73 @@
     }
     .sidebar .nav-link {
       color: #ffffff;
+      margin-bottom: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar .nav-link:hover {
+      background-color: #495057;
     }
     .sidebar .nav-link.active {
       background-color: #495057;
+      font-weight: bold;
     }
     .main-content {
       margin-left: 250px;
+      padding: 2rem;
     }
     .top-navbar {
       position: sticky;
       top: 0;
       z-index: 1030;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       padding: 1rem 2rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      border: none;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #0056b3, #003f7f);
+      transform: scale(1.05);
+    }
+    .table-responsive {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .table th {
+      background-color: #f1f1f1;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #495057;
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #dee2e6;
+      text-align: center;
+    }
+    .table td {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .table tbody tr:hover {
+      background-color: #f1f1f1;
+      transition: background-color 0.3s ease;
     }
   </style>
 </head>
@@ -109,7 +162,7 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>2024-04-01</td>
+              <td>01-04-2024</td>
               <td>Income</td>
               <td>John Doe</td>
               <td>Consulting Fee</td>
