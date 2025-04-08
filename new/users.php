@@ -172,7 +172,7 @@ include 'inc/config.php'; // Include the database connection file
                     }
 
                     echo "<td>
-                            <a href='include/edit-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
+                            <a href='edit-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                             <a href='delete-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this user?\")'>Delete</a>
                           </td>";
                     echo "</tr>";
