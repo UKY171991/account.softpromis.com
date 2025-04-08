@@ -212,14 +212,31 @@
         datasets: [{
           label: 'Income Distribution',
           data: [40000, 30000, 20000], // Replace with your actual data
-          backgroundColor: ['#28a745', '#17a2b8', '#ffc107'], // Colors for each slice
-          hoverOffset: 4
+          backgroundColor: ['#4caf50', '#2196f3', '#ff9800'], // Vibrant colors
+          borderColor: '#ffffff', // White border for better visibility
+          borderWidth: 2, // Border width
+          hoverOffset: 8 // Increased hover effect
         }]
       },
       options: {
         plugins: {
           legend: {
-            position: 'bottom'
+            position: 'top', // Move legend to the top
+            labels: {
+              font: {
+                size: 14 // Larger font size for legend
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                const value = tooltipItem.raw;
+                const percentage = ((value / total) * 100).toFixed(2);
+                return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
+              }
+            }
           }
         }
       }
@@ -233,14 +250,31 @@
         datasets: [{
           label: 'Expenditure Distribution',
           data: [15000, 10000, 25000], // Replace with your actual data
-          backgroundColor: ['#dc3545', '#fd7e14', '#6c757d'], // Colors for each slice
-          hoverOffset: 4
+          backgroundColor: ['#e91e63', '#ff5722', '#9c27b0'], // Vibrant colors
+          borderColor: '#ffffff', // White border for better visibility
+          borderWidth: 2, // Border width
+          hoverOffset: 8 // Increased hover effect
         }]
       },
       options: {
         plugins: {
           legend: {
-            position: 'bottom'
+            position: 'top', // Move legend to the top
+            labels: {
+              font: {
+                size: 14 // Larger font size for legend
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                const value = tooltipItem.raw;
+                const percentage = ((value / total) * 100).toFixed(2);
+                return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
+              }
+            }
           }
         }
       }
