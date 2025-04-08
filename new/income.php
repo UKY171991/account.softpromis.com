@@ -31,7 +31,7 @@ $result = $conn->query($sql);
     .sidebar {
       height: 100vh;
       width: 250px;
-      background: linear-gradient(135deg, #343a40, #23272b);
+      background-color: #343a40;
       color: white;
       position: fixed;
       top: 0;
