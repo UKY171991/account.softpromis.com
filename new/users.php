@@ -28,10 +28,6 @@ if (isset($_GET['id'])) {
         header("Location: users.php?error=Failed to delete user");
         exit();
     }
-} else {
-    // Redirect back to the users page if no ID is provided
-    header("Location: users.php?error=No user ID provided");
-    exit();
 }
 
 $conn->close();
