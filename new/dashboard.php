@@ -28,6 +28,11 @@
     .dashboard-card {
       border-radius: 1rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    }
+    .dashboard-card:hover {
+      transform: translateY(-5px); /* Slight upward movement */
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Enhanced shadow on hover */
     }
     .top-navbar {
       position: sticky;
