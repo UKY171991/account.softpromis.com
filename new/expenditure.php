@@ -69,6 +69,18 @@ if ($result->num_rows === 0) {
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
+      scrollbar-width: thin; /* For Firefox */
+      scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
+    }
+    .table-responsive::-webkit-scrollbar {
+      height: 8px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb {
+      background-color: #dee2e6;
+      border-radius: 4px;
+    }
+    .table-responsive::-webkit-scrollbar-track {
+      background-color: #f8f9fa;
     }
     .table {
       white-space: nowrap; /* Prevent text wrapping */
@@ -111,12 +123,12 @@ if ($result->num_rows === 0) {
       color: #ffffff;
     }
     .table td .btn {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.75rem;
-      border-radius: 0.3rem;
+      padding: 0.3rem 0.6rem; /* Compact button padding */
+      font-size: 0.75rem; /* Smaller font size for buttons */
+      border-radius: 0.3rem; /* Rounded corners */
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.3rem; /* Space between icon and text */
     }
     .table td .btn-primary {
       background-color: #0d6efd;
@@ -222,8 +234,8 @@ if ($result->num_rows === 0) {
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . $status . "</td>"; // Status Badge
                       echo "<td>
-                              <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                              <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
+                              <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary' title='Edit'><i class='bi bi-pencil'></i></a>
+                              <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
                             </td>";
                       echo "</tr>";
                   }
