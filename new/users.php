@@ -159,7 +159,7 @@ if ($conn->connect_error) {
           <tbody>
             <?php
             // Fetch users from the database
-            $sql = "SELECT id, username, name, email, role, created_at FROM users";
+            $sql = "SELECT id, username, name, email, role, status, created_at FROM users"; // Include the 'status' column
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -171,7 +171,14 @@ if ($conn->connect_error) {
                     echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['role']) . "</td>";
-                    echo "<td><span class='badge bg-success'>Active</span></td>";
+
+                    // Display status dynamically
+                    if ($row['status'] === 'Active') {
+                        echo "<td><span class='badge bg-success'>Active</span></td>";
+                    } else {
+                        echo "<td><span class='badge bg-danger'>Inactive</span></td>";
+                    }
+
                     echo "<td>
                             <a href='edit-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                             <a href='delete-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this user?\")'>Delete</a>
