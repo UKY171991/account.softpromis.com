@@ -160,6 +160,17 @@
         </div>
       </div>
 
+      <div class="row g-4 mt-4">
+        <div class="col-md-6">
+          <h5 class="mb-3">Income Distribution</h5>
+          <canvas id="incomePieChart" height="300"></canvas>
+        </div>
+        <div class="col-md-6">
+          <h5 class="mb-3">Expenditure Distribution</h5>
+          <canvas id="expenditurePieChart" height="300"></canvas>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -190,6 +201,48 @@
           data: [15000, 20000, 18000, 22000, 21000, 25000],
           backgroundColor: 'rgba(220,53,69,0.7)'
         }]
+      }
+    });
+
+    // Income Pie Chart
+    const incomePieChart = new Chart(document.getElementById('incomePieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Consulting', 'Product Sales', 'Other Income'],
+        datasets: [{
+          label: 'Income Distribution',
+          data: [40000, 30000, 20000], // Replace with your actual data
+          backgroundColor: ['#28a745', '#17a2b8', '#ffc107'], // Colors for each slice
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // Expenditure Pie Chart
+    const expenditurePieChart = new Chart(document.getElementById('expenditurePieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Office Supplies', 'Utilities', 'Salaries'],
+        datasets: [{
+          label: 'Expenditure Distribution',
+          data: [15000, 10000, 25000], // Replace with your actual data
+          backgroundColor: ['#dc3545', '#fd7e14', '#6c757d'], // Colors for each slice
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
       }
     });
   </script>
