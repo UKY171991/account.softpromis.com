@@ -1,30 +1,19 @@
 <?php
 // Database connection
-$host = "localhost"; // Replace with your database host
-$username = "u820431346_new_account"; // Replace with your database username
-$password = "9g/?fYqP+"; // Replace with your database password
-$database = "u820431346_new_account"; // Replace with your database name
+$host = "localhost";
+$username = "u820431346_new_account";
+$password = "9g/?fYqP+";
+$database = "u820431346_new_account";
 
-// Create connection
 $conn = new mysqli($host, $username, $password, $database);
-
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch data from the expenditures table
 $sql = "SELECT id, date, name, category, subcategory, amount, paid, balance, created_at FROM expenditures";
 $result = $conn->query($sql);
-
-// Debugging: Check if the query executed successfully
 if (!$result) {
     die("Error executing query: " . $conn->error);
-}
-
-// Debugging: Check if rows are returned
-if ($result->num_rows === 0) {
-    echo "<script>console.log('No records found in the expenditures table.');</script>";
 }
 ?>
 
@@ -38,22 +27,34 @@ if ($result->num_rows === 0) {
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <style>
+    html, body {
+      height: 100%;
+      overflow: auto;
+    }
+
     body {
       background-color: #f8f9fa;
     }
+
     .sidebar {
       height: 100vh;
       background-color: #343a40;
     }
+
     .sidebar .nav-link {
       color: #ffffff;
     }
+
     .sidebar .nav-link.active {
       background-color: #495057;
     }
+
     .main-content {
       margin-left: 250px;
+      overflow-y: auto;
+      height: 100vh;
     }
+
     .top-navbar {
       position: sticky;
       top: 0;
@@ -62,22 +63,20 @@ if ($result->num_rows === 0) {
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
-   
-    /* Table Container for Horizontal Scrolling */
+
     .table-responsive {
       border-radius: 0.5rem;
-      overflow-x: auto; /* Enable horizontal scrolling */
+      overflow-x: auto;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
-      scrollbar-width: thin; /* For Firefox */
-      scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #dee2e6 #f8f9fa;
     }
 
-    /* Scrollbar Styling for Webkit Browsers */
     .table-responsive::-webkit-scrollbar {
-      height: 8px; /* Horizontal scrollbar height */
+      height: 8px;
     }
 
     .table-responsive::-webkit-scrollbar-thumb {
@@ -89,34 +88,34 @@ if ($result->num_rows === 0) {
       background-color: #f8f9fa;
     }
 
-    /* Table Styling */
     .table {
-      white-space: nowrap; /* Prevent text wrapping */
+      white-space: nowrap;
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
-      font-size: 0.875rem; /* Smaller font size for the entire table */
+      font-size: 0.875rem;
     }
 
     .table th, .table td {
-      text-align: center; /* Center-align content */
+      text-align: center;
       vertical-align: middle;
-      padding: 0.75rem; /* Adjusted padding for better spacing */
+      padding: 0.75rem;
       border-bottom: 1px solid #dee2e6;
     }
 
     .table th {
-      background-color: #f8f9fa; /* Light gray background for headers */
+      background-color: #f8f9fa;
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      font-size: 0.8rem; /* Slightly smaller font size */
+      font-size: 0.8rem;
     }
 
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
     }
+
     .table td .btn {
       padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
@@ -125,30 +124,34 @@ if ($result->num_rows === 0) {
       align-items: center;
       gap: 0.3rem;
     }
+
     .table td .btn-primary {
       background-color: #0d6efd;
       border: none;
       transition: background-color 0.3s ease;
     }
+
     .table td .btn-primary:hover {
       background-color: #0b5ed7;
     }
+
     .table td .btn-danger {
       background-color: #dc3545;
       border: none;
       transition: background-color 0.3s ease;
     }
+
     .table td .btn-danger:hover {
       background-color: #bb2d3b;
     }
-    /* Status Badges */
+
     .badge {
-      font-size: 0.75rem; /* Smaller font size */
-      padding: 0.3rem 0.5rem; /* Compact padding */
-      border-radius: 0.3rem; /* Rounded corners */
+      font-size: 0.75rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.3rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.2rem; /* Space between icon and text */
+      gap: 0.2rem;
     }
 
     .badge.bg-success {
@@ -159,6 +162,10 @@ if ($result->num_rows === 0) {
     .badge.bg-danger {
       background-color: #dc3545;
       color: #ffffff;
+    }
+
+    .dataTables_wrapper {
+      overflow-x: auto;
     }
   </style>
 </head>
@@ -180,7 +187,6 @@ if ($result->num_rows === 0) {
 
     <!-- Main content -->
     <div class="main-content w-100">
-      <!-- Top Navbar -->
       <div class="top-navbar d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Expenditure Records</h4>
         <div class="d-flex align-items-center gap-3">
@@ -203,8 +209,8 @@ if ($result->num_rows === 0) {
           <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
 
-        <div class="table-responsive" >
-          <table id="expenditureTable" class="table table-bordered table-hover table-responsive">
+        <div class="table-responsive">
+          <table id="expenditureTable" class="table table-bordered table-hover">
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
@@ -225,15 +231,10 @@ if ($result->num_rows === 0) {
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      // Format the date to dd-mm-yyyy
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
-                      
-                      // Generate Invoice Number
                       $invoice_number = "EXP-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT);
-
-                      // Determine the status badge
-                      $status = ($row['balance'] == 0) 
-                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
+                      $status = ($row['balance'] == 0)
+                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>"
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
@@ -271,7 +272,7 @@ if ($result->num_rows === 0) {
   <script>
     $(document).ready(function () {
       $('#expenditureTable').DataTable({
-        responsive: true,
+        responsive: false,
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50, 100],
         language: {
@@ -290,6 +291,5 @@ if ($result->num_rows === 0) {
 </html>
 
 <?php
-// Close the database connection
 $conn->close();
 ?>
