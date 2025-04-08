@@ -170,6 +170,7 @@ if ($conn->connect_error) {
                     echo "<tr>";
                     echo "<td>" . $sl_no++ . "</td>";
                     echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['role']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                     echo "<td><span class='badge bg-success'>Active</span></td>";
