@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt->close();
 }
-
+$conn->close();
 ?>
 
 
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="main-content w-100">
       <h3 class="mb-4">Add New Income</h3>
 
-      <?php $message; ?>
+      <?php echo $message; ?>
       <form action="#" method="POST">
         <div class="row g-3">
           <div class="col-md-4">
@@ -154,6 +154,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </script>
 </body>
 </html>
-
-
-<?php $conn->close(); ?>
