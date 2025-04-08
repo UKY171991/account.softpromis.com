@@ -1,3 +1,35 @@
+<?php
+// Database connection
+include 'inc/config.php'; // Include the database connection file
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $date = $conn->real_escape_string($_POST['date']);
+    $name = $conn->real_escape_string($_POST['name']);
+    $phone = $conn->real_escape_string($_POST['phone']);
+    $description = $conn->real_escape_string($_POST['description']);
+    $category = $conn->real_escape_string($_POST['category']);
+    $subcategory = $conn->real_escape_string($_POST['subcategory']);
+    $total_amount = floatval($_POST['total_amount']);
+    $received_amount = floatval($_POST['received_amount']);
+    $balance_amount = $total_amount - $received_amount;
+
+    // Insert income record into the database
+    $sql = "INSERT INTO income (date, name, phone, description, category, subcategory, amount, received, balance) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $total_amount, $received_amount, $balance_amount);
+
+    if ($stmt->execute()) {
+        // Redirect to income page with success message
+        header("Location: income.php?message=Income record added successfully");
+        exit();
+    } else {
+        $error = "Error: " . $stmt->error;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +65,7 @@
       <h4 class="text-white">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <li><a href="dashboard.php" class="nav-link "><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
         <li><a href="income.php" class="nav-link active"><i class="bi bi-currency-rupee"></i> Income</a></li>
         <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
         <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
@@ -45,7 +77,10 @@
     <!-- Main content -->
     <div class="main-content w-100">
       <h3 class="mb-4">Add New Income</h3>
-      <form action="#" method="POST">
+      <?php if (isset($error)): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+      <?php endif; ?>
+      <form action="" method="POST">
         <div class="row g-3">
           <div class="col-md-4">
             <label for="date" class="form-label">Date</label>
@@ -77,7 +112,7 @@
             <label for="subcategory" class="form-label">Sub-category</label>
             <select id="subcategory" name="subcategory" class="form-select" required>
               <option selected disabled>Choose...</option>
-              <option>IT</option>
+              <option>IT Services</option>
               <option>Marketing</option>
               <option>Sales</option>
             </select>
