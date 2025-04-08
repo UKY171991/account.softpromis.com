@@ -9,28 +9,6 @@ $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-// Check if the user ID is provided
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']); // Sanitize the input to prevent SQL injection
-
-    // Delete the user from the database
-    $sql = "DELETE FROM users WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-
-    if ($stmt->execute()) {
-        // Redirect back to the users page with a success message
-        header("Location: users.php?message=User deleted successfully");
-        exit();
-    } else {
-        // Redirect back to the users page with an error message
-        header("Location: users.php?error=Failed to delete user");
-        exit();
-    }
-}
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -180,9 +158,8 @@ $conn->close();
           </thead>
           <tbody>
             <?php
-           
             // Fetch users from the database
-            $sql = "SELECT * FROM users";
+            $sql = "SELECT id, username, name, email, role, created_at FROM users";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -196,8 +173,8 @@ $conn->close();
                     echo "<td>" . htmlspecialchars($row['role']) . "</td>";
                     echo "<td><span class='badge bg-success'>Active</span></td>";
                     echo "<td>
-                            <a href='#' class='btn btn-sm btn-primary'>Edit</a>
-                            <a href='delete-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger'>Delete</a>
+                            <a href='edit-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
+                            <a href='delete-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this user?\")'>Delete</a>
                           </td>";
                     echo "</tr>";
                 }
