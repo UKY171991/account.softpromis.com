@@ -89,20 +89,6 @@ $result = $conn->query($sql);
       margin: 0;
     }
 
-    .top-navbar .btn-outline-secondary {
-      font-size: 0.85rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.3rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .top-navbar .btn-outline-secondary:hover {
-      background-color: #e9ecef;
-      color: #495057;
-    }
-
     .top-navbar .dropdown a {
       color: #495057;
       text-decoration: none;
@@ -114,6 +100,17 @@ $result = $conn->query($sql);
     }
 
     .top-navbar .dropdown a:hover {
+      color: #0d6efd; /* Hover effect */
+    }
+
+    .top-navbar .bi-bell {
+      font-size: 1.3rem; /* Slightly smaller icon size */
+      color: #495057;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .top-navbar .bi-bell:hover {
       color: #0d6efd; /* Hover effect */
     }
 
@@ -317,16 +314,14 @@ $result = $conn->query($sql);
       <div class="top-navbar">
         <h4>Income Records</h4>
         <div class="d-flex align-items-center gap-3">
-          <a href="notifications.php" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-bell"></i> Notifications
-          </a>
+          <i class="bi bi-bell" title="Notifications"></i>
           <div class="dropdown">
             <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i> Admin
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-              <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
           </div>
         </div>
