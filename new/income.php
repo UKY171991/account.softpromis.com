@@ -225,6 +225,15 @@ $result = $conn->query($sql);
           <a href="add-income.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Income</a>
         </div>
 
+        <?php
+      if (isset($_GET['message'])) {
+          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+      }
+      if (isset($_GET['error'])) {
+          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+      }
+      ?>
+
         <div class="table-responsive">
           <table id="incomeTable" class="table table-hover">
             <thead>
