@@ -2,6 +2,8 @@
 // Database connection
 include 'inc/config.php'; // Include the database connection file
 
+$message = '';
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date = $_POST['date'];
@@ -17,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $received, $balance);
 
     if ($stmt->execute()) {
-        echo "<div class='alert alert-success'>Income entry added successfully.</div>";
+        $message = "<div class='alert alert-success'>Income entry added successfully.</div>";
     } else {
-        echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+      $message= "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
     }
 
     $stmt->close();
@@ -76,6 +78,8 @@ $conn->close();
     <!-- Main content -->
     <div class="main-content w-100">
       <h3 class="mb-4">Add New Income</h3>
+
+      <?php $message; ?>
       <form action="#" method="POST">
         <div class="row g-3">
           <div class="col-md-4">
