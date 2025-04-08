@@ -63,23 +63,39 @@ if ($result->num_rows === 0) {
       padding: 1rem 2rem;
     }
    
-    /* Table Container */
+    /* Table Container for Horizontal Scrolling */
     .table-responsive {
       border-radius: 0.5rem;
+      overflow-x: auto; /* Enable horizontal scrolling */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
+      scrollbar-width: thin; /* For Firefox */
+      scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
+    }
+
+    /* Scrollbar Styling for Webkit Browsers */
+    .table-responsive::-webkit-scrollbar {
+      height: 8px; /* Horizontal scrollbar height */
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+      background-color: #dee2e6;
+      border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+      background-color: #f8f9fa;
     }
 
     /* Table Styling */
     .table {
+      white-space: nowrap; /* Prevent text wrapping */
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.875rem; /* Smaller font size for the entire table */
-      table-layout: fixed; /* Ensure the table fits within the container */
-      width: 100%; /* Make the table take up the full width */
     }
 
     .table th, .table td {
@@ -87,9 +103,6 @@ if ($result->num_rows === 0) {
       vertical-align: middle;
       padding: 0.75rem; /* Adjusted padding for better spacing */
       border-bottom: 1px solid #dee2e6;
-      overflow: hidden; /* Prevent content overflow */
-      text-overflow: ellipsis; /* Add ellipsis for overflowing text */
-      white-space: nowrap; /* Prevent text wrapping */
     }
 
     .table th {
@@ -190,8 +203,8 @@ if ($result->num_rows === 0) {
           <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
 
-        <div class="table-responsive">
-          <table id="expenditureTable" class="table table-bordered table-hover">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table id="expenditureTable" class="table table-bordered table-hover table-responsive">
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
