@@ -75,9 +75,7 @@ if ($result->num_rows === 0) {
     } */
 
     /* Scrollbar Styling for Webkit Browsers */
-    .table-responsive::-webkit-scrollbar {
-      height: 8px; /* Horizontal scrollbar height */
-    }
+ 
 
     .table-responsive::-webkit-scrollbar-thumb {
       background-color: #dee2e6;
