@@ -226,7 +226,7 @@ $result = $conn->query($sql);
         </div>
 
         <?php
-      if (isset($_GET['message'])) {
+      if (isset($_GET['message']))  { 
           echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
       }
       if (isset($_GET['error'])) {
