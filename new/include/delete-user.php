@@ -13,11 +13,11 @@ if (isset($_GET['id'])) {
 
     if ($stmt->execute()) {
         // Redirect back to the users page with a success message
-        header("Location: users.php?message=User deleted successfully");
+        header("Location: ../users.php?message=User deleted successfully");
         exit();
     } else {
         // Redirect back to the users page with an error message
-        header("Location: users.php?error=Failed to delete user");
+        header("Location: ../users.php?error=Failed to delete user");
         exit();
     }
 } else {
