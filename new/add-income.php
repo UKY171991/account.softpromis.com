@@ -18,10 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare("INSERT INTO income (date, name, category, subcategory, amount, received, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $received, $balance);
 
+    // if ($stmt->execute()) {
+    //     $message = "<div class='alert alert-success'>Income entry added successfully.</div>";
+    // } else {
+    //   $message= "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+    // }
+
     if ($stmt->execute()) {
-        $message = "<div class='alert alert-success'>Income entry added successfully.</div>";
+      // Redirect back to the income page with a success message
+      header("Location: ../income.php?message=Income entry added successfully");
+      exit();
     } else {
-      $message= "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+        // Redirect back to the income page with an error message
+        header("Location: ../income.php?error=Error: " . $stmt->error . "");
+        exit();
     }
 
     $stmt->close();
