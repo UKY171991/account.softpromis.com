@@ -42,6 +42,9 @@ $result = $conn->query($sql);
     .sidebar h4 {
       font-weight: bold;
     }
+    .sidebar hr {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
     .sidebar .nav-link {
       color: #ffffff;
       font-size: 1rem;
@@ -200,9 +203,10 @@ $result = $conn->query($sql);
 <body>
   <div class="d-flex">
     <!-- Sidebar -->
-    <nav class="sidebar">
-      <h4 class="text-white mb-4">Account Panel</h4>
-      <ul class="nav flex-column">
+    <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
+      <h4 class="text-white">Account Panel</h4>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
         <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
         <li><a href="income.php" class="nav-link active"><i class="bi bi-currency-rupee"></i> Income</a></li>
         <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
