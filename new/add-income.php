@@ -1,3 +1,34 @@
+<?php
+// Database connection
+include 'inc/config.php'; // Include the database connection file
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $date = $_POST['date'];
+    $name = ucfirst(trim($_POST['name']));
+    $category = $_POST['category'];
+    $subcategory = $_POST['subcategory'];
+    $amount = floatval($_POST['total_amount']);
+    $received = floatval($_POST['received_amount']);
+    $balance = $amount - $received;
+
+    // Insert into database
+    $stmt = $conn->prepare("INSERT INTO income (date, name, category, subcategory, amount, received, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $received, $balance);
+
+    if ($stmt->execute()) {
+        echo "<div class='alert alert-success'>Income entry added successfully.</div>";
+    } else {
+        echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+}
+$conn->close();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
