@@ -5,8 +5,6 @@ include '../inc/config.php'; // Include the database connection file
 // Check if the income ID is provided
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Sanitize the input to prevent SQL injection
-    echo "ID received: " . $id;
-    exit();
 
     // Delete the income record from the database
     $sql = "DELETE FROM income WHERE id = ?";
@@ -23,8 +21,6 @@ if (isset($_GET['id'])) {
         exit();
     }
 } else {
-    echo "No ID provided.";
-    exit();
     // Redirect back to the income page if no ID is provided
     header("Location: ../income.php?error=No income ID provided");
     exit();
