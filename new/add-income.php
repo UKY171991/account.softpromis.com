@@ -26,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
       // Redirect back to the income page with a success message
-      header("Location: ../income.php?message=Income entry added successfully");
+      header("Location: income.php?message=Income entry added successfully");
       exit();
     } else {
         // Redirect back to the income page with an error message
-        header("Location: ../income.php?error=Error: " . $stmt->error . "");
+        header("Location: income.php?error=Error: " . $stmt->error . "");
         exit();
     }
 
