@@ -415,7 +415,51 @@ $password = "9g/?fYqP+"; // Replace with your database password
 $database = "u820431346_new_account"; // Replace with your database name
 
 // Create connection
-$conn = new mysqli($host, $username, $password, $database);
+$conn = new mysqli($host, $username, $password, $database)<div class="table-responsive">
+  <table id="incomeTable" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>SL No.</th>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Sub-category</th>
+        <th>Total Amount</th>
+        <th>Received Amount</th>
+        <th>Balance</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      if ($result->num_rows > 0) {
+          $sl_no = 1;
+          while ($row = $result->fetch_assoc()) {
+              // Format the date to dd-mm-yyyy
+              $formatted_date = date("d-m-Y", strtotime($row['date']));
+              
+              echo "<tr>";
+              echo "<td>" . $sl_no++ . "</td>";
+              echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
+              echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+              echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+              echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+              echo "<td>₹" . number_format($row['received'], 2) . "</td>";
+              echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+              echo "<td>
+                      <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm'>Edit</a>
+                      <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
+                    </td>";
+              echo "</tr>";
+          }
+      } else {
+          echo "<tr><td colspan='9' class='text-center'>No records found</td></tr>";
+      }
+      ?>
+    </tbody>
+  </table>
+</div>;
 
 // Check connection
 if ($conn->connect_error) {
