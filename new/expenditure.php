@@ -114,6 +114,25 @@ if ($result->num_rows === 0) {
     .table td .btn-danger:hover {
       background-color: #bb2d3b;
     }
+    /* Status Badges */
+    .badge {
+      font-size: 0.75rem; /* Smaller font size */
+      padding: 0.3rem 0.5rem; /* Compact padding */
+      border-radius: 0.3rem; /* Rounded corners */
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem; /* Space between icon and text */
+    }
+
+    .badge.bg-success {
+      background-color: #198754;
+      color: #ffffff;
+    }
+
+    .badge.bg-danger {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
@@ -162,6 +181,7 @@ if ($result->num_rows === 0) {
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
+                <th>Invoice Number</th> <!-- New Column -->
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -169,6 +189,7 @@ if ($result->num_rows === 0) {
                 <th>Total Amount</th>
                 <th>Paid Amount</th>
                 <th>Balance</th>
+                <th>Status</th> <!-- New Column -->
                 <th>Action</th>
               </tr>
             </thead>
@@ -177,12 +198,20 @@ if ($result->num_rows === 0) {
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      // Format the date and created_at to dd-mm-yyyy
+                      // Format the date to dd-mm-yyyy
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
-                      $formatted_created_at = date("d-m-Y", strtotime($row['created_at']));
                       
+                      // Generate Invoice Number
+                      $invoice_number = "EXP-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT);
+
+                      // Determine the status badge
+                      $status = ($row['balance'] == 0) 
+                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
+                          : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
+
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
+                      echo "<td>" . htmlspecialchars($invoice_number) . "</td>"; // Invoice Number
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
@@ -190,6 +219,7 @@ if ($result->num_rows === 0) {
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td>" . $status . "</td>"; // Status Badge
                       echo "<td>
                               <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                               <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
