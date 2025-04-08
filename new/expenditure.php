@@ -62,30 +62,8 @@ if ($result->num_rows === 0) {
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
-    /* Table Container for Horizontal Scrolling */
-    /* .table-responsive {
-      border-radius: 0.5rem;
-      overflow-x: auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      background-color: white;
-      padding: 1.5rem;
-      margin-top: 1rem;
-      scrollbar-width: thin;
-      scrollbar-color: #dee2e6 #f8f9fa;
-    } */
-
-    /* Scrollbar Styling for Webkit Browsers */
- 
-
-    .table-responsive::-webkit-scrollbar-thumb {
-      background-color: #dee2e6;
-      border-radius: 4px;
-    }
-
-    .table-responsive::-webkit-scrollbar-track {
-      background-color: #f8f9fa;
-    }
-
+   
+  
     /* Table Styling */
     .table {
       white-space: nowrap; /* Prevent text wrapping */
