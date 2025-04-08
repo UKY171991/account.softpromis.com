@@ -63,73 +63,40 @@ if ($result->num_rows === 0) {
       padding: 1rem 2rem;
     }
     .table-responsive {
-      overflow-x: auto; /* Enable horizontal scrolling */
-      max-width: 100%; /* Ensure it doesn't exceed the container width */
       border-radius: 0.5rem;
+      overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
-      scrollbar-width: thin; /* For Firefox */
-      scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
-    }
-    .table-responsive::-webkit-scrollbar {
-      height: 8px; /* Horizontal scrollbar height */
-    }
-    .table-responsive::-webkit-scrollbar-thumb {
-      background-color: #dee2e6;
-      border-radius: 4px;
-    }
-    .table-responsive::-webkit-scrollbar-track {
-      background-color: #f8f9fa;
-    }
-    .table {
-      white-space: nowrap; /* Prevent text wrapping */
-      margin: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-      font-size: 0.875rem; /* Smaller font size for the entire table */
-    }
-    .table th, .table td {
-      text-align: center; /* Center-align content */
-      vertical-align: middle;
-      padding: 0.75rem; /* Adjusted padding for better spacing */
-      border-bottom: 1px solid #dee2e6;
     }
     .table th {
-      background-color: #f8f9fa; /* Light gray background for headers */
+      background-color: #f1f1f1;
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      font-size: 0.8rem; /* Slightly smaller font size */
+      padding: 0.75rem;
+      font-size: 0.75rem;
+      border-bottom: 2px solid #dee2e6;
+      text-align: center;
+    }
+    .table td {
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
     }
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
     }
-    .badge {
-      font-size: 0.75rem; /* Smaller font size */
-      padding: 0.3rem 0.5rem; /* Compact padding */
-      border-radius: 0.3rem; /* Rounded corners */
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem; /* Space between icon and text */
-    }
-    .badge.bg-success {
-      background-color: #198754;
-      color: #ffffff;
-    }
-    .badge.bg-danger {
-      background-color: #dc3545;
-      color: #ffffff;
-    }
     .table td .btn {
-      padding: 0.3rem 0.6rem; /* Compact button padding */
-      font-size: 0.75rem; /* Smaller font size for buttons */
-      border-radius: 0.3rem; /* Rounded corners */
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 0.3rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem; /* Space between icon and text */
+      gap: 0.3rem;
     }
     .table td .btn-primary {
       background-color: #0d6efd;
@@ -190,12 +157,11 @@ if ($result->num_rows === 0) {
           <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
 
-        <div class="table-responsive" style="overflow-x: auto; max-width: 100%; height: auto;">
+        <div class="table-responsive">
           <table id="expenditureTable" class="table table-bordered table-hover">
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
-                <th>Invoice Number</th> <!-- New Column -->
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -203,7 +169,6 @@ if ($result->num_rows === 0) {
                 <th>Total Amount</th>
                 <th>Paid Amount</th>
                 <th>Balance</th>
-                <th>Status</th> <!-- New Column -->
                 <th>Action</th>
               </tr>
             </thead>
@@ -212,20 +177,12 @@ if ($result->num_rows === 0) {
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      // Format the date to dd-mm-yyyy
+                      // Format the date and created_at to dd-mm-yyyy
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
+                      $formatted_created_at = date("d-m-Y", strtotime($row['created_at']));
                       
-                      // Generate Invoice Number
-                      $invoice_number = "EXP-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT);
-
-                      // Determine the status badge
-                      $status = ($row['balance'] == 0) 
-                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
-                          : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
-
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
-                      echo "<td>" . htmlspecialchars($invoice_number) . "</td>"; // Invoice Number
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
@@ -233,10 +190,9 @@ if ($result->num_rows === 0) {
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . $status . "</td>"; // Status Badge
                       echo "<td>
-                              <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary' title='Edit'><i class='bi bi-pencil'></i></a>
-                              <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                              <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
+                              <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
                             </td>";
                       echo "</tr>";
                   }
