@@ -62,35 +62,17 @@ if ($result->num_rows === 0) {
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
-    /* Table Container for Horizontal Scrolling */
+    /* Table Container */
     .table-responsive {
       border-radius: 0.5rem;
-      overflow-x: auto; /* Enable horizontal scrolling */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
-      scrollbar-width: thin; /* For Firefox */
-      scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
-    }
-
-    /* Scrollbar Styling for Webkit Browsers */
-    .table-responsive::-webkit-scrollbar {
-      height: 8px; /* Horizontal scrollbar height */
-    }
-
-    .table-responsive::-webkit-scrollbar-thumb {
-      background-color: #dee2e6;
-      border-radius: 4px;
-    }
-
-    .table-responsive::-webkit-scrollbar-track {
-      background-color: #f8f9fa;
     }
 
     /* Table Styling */
     .table {
-      white-space: nowrap; /* Prevent text wrapping */
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
