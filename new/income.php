@@ -129,69 +129,43 @@ $result = $conn->query($sql);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    /* Table Styling */
+    /* Table Container for Horizontal Scrolling */
     .table-responsive {
       border-radius: 0.5rem;
-      overflow: hidden;
+      overflow-x: auto; /* Enable horizontal scrolling */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
     }
 
+    /* Table Styling */
     .table {
+      white-space: nowrap; /* Prevent text wrapping */
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.875rem; /* Smaller font size for the entire table */
     }
 
+    .table th, .table td {
+      text-align: center; /* Center-align content */
+      vertical-align: middle;
+      padding: 0.75rem; /* Adjusted padding for better spacing */
+      border-bottom: 1px solid #dee2e6;
+    }
+
     .table th {
-      background-color: #f1f1f1;
+      background-color: #f8f9fa; /* Light gray background for headers */
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      padding: 0.75rem; /* Adjusted padding for smaller headers */
-      font-size: 0.75rem; /* Reduced font size for table headers */
-      border-bottom: 2px solid #dee2e6;
-      text-align: center; /* Center-align header content */
-    }
-
-    .table td {
-      padding: 0.5rem; /* Adjusted padding for table cells */
-      font-size: 0.85rem; /* Smaller font size for table data */
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
+      font-size: 0.8rem; /* Slightly smaller font size */
     }
 
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
-    }
-
-    .table .btn {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.75rem; /* Smaller font size for buttons */
-    }
-
-    .table .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .table .btn-primary:hover {
-      background-color: #0b5ed7;
-    }
-
-    .table .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .table .btn-danger:hover {
-      background-color: #bb2d3b;
     }
 
     /* Buttons */
