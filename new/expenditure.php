@@ -63,14 +63,23 @@ if ($result->num_rows === 0) {
       padding: 1rem 2rem;
     }
    
-  
+    /* Table Container */
+    .table-responsive {
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
     /* Table Styling */
     .table {
-      white-space: nowrap; /* Prevent text wrapping */
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.875rem; /* Smaller font size for the entire table */
+      table-layout: fixed; /* Ensure the table fits within the container */
+      width: 100%; /* Make the table take up the full width */
     }
 
     .table th, .table td {
@@ -78,6 +87,9 @@ if ($result->num_rows === 0) {
       vertical-align: middle;
       padding: 0.75rem; /* Adjusted padding for better spacing */
       border-bottom: 1px solid #dee2e6;
+      overflow: hidden; /* Prevent content overflow */
+      text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+      white-space: nowrap; /* Prevent text wrapping */
     }
 
     .table th {
