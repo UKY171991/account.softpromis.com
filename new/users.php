@@ -9,6 +9,32 @@ $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Check if the user ID is provided
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']); // Sanitize the input to prevent SQL injection
+
+    // Delete the user from the database
+    $sql = "DELETE FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        // Redirect back to the users page with a success message
+        header("Location: users.php?message=User deleted successfully");
+        exit();
+    } else {
+        // Redirect back to the users page with an error message
+        header("Location: users.php?error=Failed to delete user");
+        exit();
+    }
+} else {
+    // Redirect back to the users page if no ID is provided
+    header("Location: users.php?error=No user ID provided");
+    exit();
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -134,6 +160,15 @@ if ($conn->connect_error) {
         <a href="add-user.php" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add User</a>
       </div>
 
+      <?php
+      if (isset($_GET['message'])) {
+          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+      }
+      if (isset($_GET['error'])) {
+          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+      }
+      ?>
+
       <div class="table-responsive">
         <table id="userTable" class="table table-bordered table-hover">
           <thead class="table-light">
@@ -166,7 +201,7 @@ if ($conn->connect_error) {
                     echo "<td><span class='badge bg-success'>Active</span></td>";
                     echo "<td>
                             <a href='#' class='btn btn-sm btn-primary'>Edit</a>
-                            <a href='#' class='btn btn-sm btn-danger'>Delete</a>
+                            <a href='delete-user.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger'>Delete</a>
                           </td>";
                     echo "</tr>";
                 }
