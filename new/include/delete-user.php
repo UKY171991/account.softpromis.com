@@ -1,6 +1,6 @@
 <?php
 // Database connection
-include 'inc/config.php'; // Include the database connection file
+include '../inc/config.php'; // Include the database connection file
 
 // Check if the user ID is provided
 if (isset($_GET['id'])) {
