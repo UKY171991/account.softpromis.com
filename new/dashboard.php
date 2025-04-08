@@ -163,11 +163,11 @@
       <div class="row g-4 mt-4">
         <div class="col-md-6">
           <h5 class="mb-3">Income Distribution</h5>
-          <canvas id="incomePieChart" height="300"></canvas>
+          <canvas id="incomePieChart" height="200" width="200"></canvas> <!-- Reduced height and width -->
         </div>
         <div class="col-md-6">
           <h5 class="mb-3">Expenditure Distribution</h5>
-          <canvas id="expenditurePieChart" height="300"></canvas>
+          <canvas id="expenditurePieChart" height="200" width="200"></canvas> <!-- Reduced height and width -->
         </div>
       </div>
 
@@ -215,7 +215,7 @@
           backgroundColor: ['#4caf50', '#2196f3', '#ff9800'], // Vibrant colors
           borderColor: '#ffffff', // White border for better visibility
           borderWidth: 2, // Border width
-          hoverOffset: 8 // Increased hover effect
+          hoverOffset: 6 // Slightly reduced hover effect
         }]
       },
       options: {
@@ -224,7 +224,7 @@
             position: 'top', // Move legend to the top
             labels: {
               font: {
-                size: 14 // Larger font size for legend
+                size: 10 // Smaller font size for legend
               }
             }
           },
@@ -236,6 +236,9 @@
                 const percentage = ((value / total) * 100).toFixed(2);
                 return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
               }
+            },
+            bodyFont: {
+              size: 10 // Smaller font size for tooltips
             }
           }
         }
@@ -253,7 +256,7 @@
           backgroundColor: ['#e91e63', '#ff5722', '#9c27b0'], // Vibrant colors
           borderColor: '#ffffff', // White border for better visibility
           borderWidth: 2, // Border width
-          hoverOffset: 8 // Increased hover effect
+          hoverOffset: 6 // Slightly reduced hover effect
         }]
       },
       options: {
@@ -262,7 +265,7 @@
             position: 'top', // Move legend to the top
             labels: {
               font: {
-                size: 14 // Larger font size for legend
+                size: 10 // Smaller font size for legend
               }
             }
           },
@@ -274,6 +277,9 @@
                 const percentage = ((value / total) * 100).toFixed(2);
                 return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
               }
+            },
+            bodyFont: {
+              size: 10 // Smaller font size for tooltips
             }
           }
         }
