@@ -203,7 +203,7 @@ if ($result->num_rows === 0) {
           <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
 
-        <div class="table-responsive" style="overflow-x: auto;">
+        <div class="table-responsive" >
           <table id="expenditureTable" class="table table-bordered table-hover table-responsive">
             <thead class="table-light">
               <tr>
