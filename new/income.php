@@ -414,8 +414,8 @@ $result = $conn->query($sql);
                       
                       // Determine the status badge
                       $status = ($row['balance'] == 0) 
-                          ? "<span class='badge bg-success d-flex align-items-center gap-1'><i class='bi bi-check-circle'></i> Paid</span>" 
-                          : "<span class='badge bg-danger d-flex align-items-center gap-1'><i class='bi bi-x-circle'></i> Pending</span>";
+                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
+                          : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
