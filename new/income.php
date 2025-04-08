@@ -1,19 +1,15 @@
 <?php
 // Database connection
-$host = "localhost"; // Replace with your database host
-$username = "u820431346_new_account"; // Replace with your database username
-$password = "9g/?fYqP+"; // Replace with your database password
-$database = "u820431346_new_account"; // Replace with your database name
+$host = "localhost";
+$username = "u820431346_new_account";
+$password = "9g/?fYqP+";
+$database = "u820431346_new_account";
 
-// Create connection
 $conn = new mysqli($host, $username, $password, $database);
-
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch data from the income table
 $sql = "SELECT id, date, name, category, subcategory, amount, received, balance FROM income";
 $result = $conn->query($sql);
 ?>
@@ -21,20 +17,17 @@ $result = $conn->query($sql);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Income</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Income Records</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
   <style>
-    /* General Body Styling */
     body {
       background: linear-gradient(135deg, #f9f9f9, #e9ecef);
       font-family: 'Roboto', sans-serif;
     }
-
-    /* Sidebar Styling */
     .sidebar {
       height: 100vh;
       width: 250px;
@@ -65,15 +58,13 @@ $result = $conn->query($sql);
       background-color: rgba(255, 255, 255, 0.15);
       color: #f8f9fa;
     }
-
-    /* Top Navbar */
     .top-navbar {
       margin-left: 250px;
-      background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Subtle gradient */
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 0.5rem 1.5rem; /* Reduced padding for a compact look */
+      padding: 0.5rem 1.5rem;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -81,304 +72,128 @@ $result = $conn->query($sql);
       justify-content: space-between;
       align-items: center;
     }
-
     .top-navbar h4 {
-      font-size: 1.15rem; /* Slightly smaller font size */
+      font-size: 1.15rem;
       font-weight: bold;
       color: #495057;
       margin: 0;
     }
-
     .top-navbar .dropdown a {
       color: #495057;
       text-decoration: none;
-      font-size: 0.95rem; /* Slightly smaller font size */
+      font-size: 0.95rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       transition: color 0.3s ease;
     }
-
-    .top-navbar .dropdown a:hover {
-      color: #0d6efd; /* Hover effect */
+    .top-navbar .dropdown a:hover,
+    .top-navbar .bi-bell:hover {
+      color: #0d6efd;
     }
-
     .top-navbar .bi-bell {
-      font-size: 1.3rem; /* Slightly smaller icon size */
+      font-size: 1.3rem;
       color: #495057;
       cursor: pointer;
-      transition: color 0.3s ease;
     }
-
-    .top-navbar .bi-bell:hover {
-      color: #0d6efd; /* Hover effect */
-    }
-
-    .dropdown-menu {
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Main Content */
     .main-content {
       margin-left: 250px;
       margin-top: 1rem;
       padding: 2rem;
-      background-color: #ffffff;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-
-    <div class="table-responsive">
-      <table id="incomeTable" class="table table-hover">
-        <thead>
-          <tr>
-            <th>SL No.</th>
-            <th>Invoice Number</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Sub-category</th>
-            <th>Total Amount</th>
-            <th>Received Amount</th>
-            <th>Balance</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-          if ($result->num_rows > 0) {
-              $sl_no = 1;
-              while ($row = $result->fetch_assoc()) {
-                  // Format the date to dd-mm-yyyy
-                  $formatted_date = date("d-m-Y", strtotime($row['date']));
-                  
-                  // Determine the status badge
-                  $status = ($row['balance'] == 0) 
-                      ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
-                      : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
-    
-                  echo "<tr>";
-                  echo "<td>" . $sl_no++ . "</td>";
-                  echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
-                  echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
-                  echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
-                  echo "<td>₹" . number_format($row['received'], 2) . "</td>";
-                  echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                  echo "<td>" . $status . "</td>";
-                  echo "<td class='action-column'>
-                          <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary' title='Edit'><i class='bi bi-pencil'></i></a>
-                          <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
-                        </td>";
-                  echo "</tr>";
-              }
-          } else {
-              echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
-          }
-          ?>
-        </tbody>
-      </table>
-    </div>
-    
-    <!-- Pagination Section -->
-    <div class="pagination-container mt-3">
-      <nav>
-        <ul class="pagination justify-content-center">
-          <!-- Pagination links will be dynamically generated by DataTables -->
-        </ul>
-      </nav>
-    </div>    /* Table Container for Horizontal Scrolling */
     .table-responsive {
       border-radius: 0.5rem;
-      overflow-x: auto; /* Enable horizontal scrolling */
+      overflow-x: auto;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
     }
-
-    /* Table Styling */
     .table {
-      white-space: nowrap; /* Prevent text wrapping */
-      margin: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-      font-size: 0.875rem; /* Smaller font size for the entire table */
+      white-space: nowrap;
+      font-size: 0.875rem;
     }
-
     .table th, .table td {
-      text-align: center; /* Center-align content */
+      text-align: center;
       vertical-align: middle;
-      padding: 0.75rem; /* Adjusted padding for better spacing */
+      padding: 0.75rem;
       border-bottom: 1px solid #dee2e6;
     }
-
     .table th {
-      background-color: #f8f9fa; /* Light gray background for headers */
+      background-color: #f8f9fa;
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      font-size: 0.8rem; /* Slightly smaller font size */
+      font-size: 0.8rem;
     }
-
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
     }
-
-    /* Buttons */
+    .action-column {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .action-column .btn {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+      transform: scale(1.05);
+    }
+    .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background-color: #bb2d3b;
+      transform: scale(1.05);
+    }
     .btn-success {
       background-color: #198754;
       border: none;
-      transition: all 0.3s ease-in-out;
     }
     .btn-success:hover {
       background-color: #157347;
     }
-
-    /* Dropdown Button Styling */
-    .dropdown-toggle {
-      background-color: #ffffff;
-      border: 1px solid #ced4da;
-      border-radius: 0.5rem;
-      padding: 0.5rem 1rem;
-      color: #495057;
-      font-weight: bold;
-      display: flex;
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.3rem;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease-in-out;
+      gap: 0.2rem;
     }
-    .dropdown-toggle:hover {
-      background-color: #f1f1f1;
-      color: #343a40;
+    .badge.bg-success {
+      background-color: #198754;
     }
-    .dropdown-menu {
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .badge.bg-danger {
+      background-color: #dc3545;
     }
-
-    /* Responsive Design */
     @media (max-width: 768px) {
       .sidebar {
         position: static;
         width: 100%;
         height: auto;
       }
-      .top-navbar {
-        margin-left: 0;
-      }
+      .top-navbar,
       .main-content {
         margin-left: 0;
       }
-    }
-
-    /* Action Buttons */
-    .table td .btn {
-      padding: 0.3rem 0.6rem; /* Compact button padding */
-      font-size: 0.75rem; /* Smaller font size for buttons */
-      border-radius: 0.3rem; /* Rounded corners */
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem; /* Space between icon and text */
-    }
-
-    .table td .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      color: #ffffff;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .table td .btn-primary:hover {
-      background-color: #0b5ed7;
-      transform: scale(1.05); /* Slight zoom effect */
-    }
-
-    .table td .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      color: #ffffff;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .table td .btn-danger:hover {
-      background-color: #bb2d3b;
-      transform: scale(1.05); /* Slight zoom effect */
-    }
-
-    /* Ensure Action Buttons are in a Single Line */
-    .action-column {
-      display: flex;
-      justify-content: center; /* Center the buttons horizontally */
-      align-items: center; /* Align the buttons vertically */
-      gap: 0.5rem; /* Add space between the buttons */
-    }
-
-    .action-column .btn {
-      padding: 0.3rem 0.6rem; /* Compact button padding */
-      font-size: 0.75rem; /* Smaller font size for buttons */
-      border-radius: 0.3rem; /* Rounded corners */
-      display: inline-flex; /* Ensure buttons stay inline */
-      align-items: center; /* Align icon and text vertically */
-      gap: 0.3rem; /* Space between icon and text */
-    }
-
-    /* Action Buttons */
-    .action-column .btn {
-      padding: 0.4rem 0.6rem; /* Compact button padding */
-      font-size: 0.85rem; /* Slightly larger font size */
-      border-radius: 0.3rem; /* Rounded corners */
-      display: inline-flex; /* Ensure buttons stay inline */
-      align-items: center; /* Align icon and text vertically */
-      justify-content: center;
-      transition: all 0.3s ease; /* Smooth hover effect */
-    }
-
-    .action-column .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      color: #ffffff;
-    }
-
-    .action-column .btn-primary:hover {
-      background-color: #0b5ed7;
-      transform: scale(1.1); /* Slight zoom effect */
-    }
-
-    .action-column .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      color: #ffffff;
-    }
-
-    .action-column .btn-danger:hover {
-      background-color: #bb2d3b;
-      transform: scale(1.1); /* Slight zoom effect */
-    }
-
-    /* Status Badges */
-    .badge {
-      font-size: 0.75rem; /* Smaller font size */
-      padding: 0.2rem 0.4rem; /* Reduced padding */
-      border-radius: 0.3rem; /* Slightly rounded corners */
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem; /* Reduced space between icon and text */
-    }
-
-    .badge.bg-success {
-      background-color: #198754;
-      color: #ffffff;
-    }
-
-    .badge.bg-danger {
-      background-color: #dc3545;
-      color: #ffffff;
     }
   </style>
 </head>
@@ -416,7 +231,7 @@ $result = $conn->query($sql);
         </div>
       </div>
 
-      <!-- Content Area -->
+      <!-- Content -->
       <div class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5>Income Records</h5>
@@ -428,15 +243,15 @@ $result = $conn->query($sql);
             <thead>
               <tr>
                 <th>SL No.</th>
-                <th>Invoice Number</th> <!-- New Column -->
+                <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
-                <th>Received Amount</th>
+                <th>Received</th>
                 <th>Balance</th>
-                <th>Status</th> <!-- New Column -->
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -445,17 +260,14 @@ $result = $conn->query($sql);
               if ($result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      // Format the date to dd-mm-yyyy
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
-                      
-                      // Determine the status badge
                       $status = ($row['balance'] == 0) 
                           ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
-                      echo "<td>" . $sl_no++ . "</td>";
-                      echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>"; // Generate Invoice Number
+                      echo "<td>{$sl_no}</td>";
+                      echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
@@ -463,12 +275,13 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['received'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . $status . "</td>"; // Add Status Badge
+                      echo "<td>" . $status . "</td>";
                       echo "<td class='action-column'>
-                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary' title='Edit'><i class='bi bi-pencil'></i></a>
-                              <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
+                              <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
                             </td>";
                       echo "</tr>";
+                      $sl_no++;
                   }
               } else {
                   echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
@@ -506,6 +319,5 @@ $result = $conn->query($sql);
 </html>
 
 <?php
-// Close the database connection
 $conn->close();
 ?>
