@@ -47,14 +47,6 @@ $result = $conn->query($sql);
     }
     .sidebar .nav-link {
       color: #ffffff;
-      font-size: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: 0.3rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease-in-out;
     }
     .sidebar .nav-link.active,
     .sidebar .nav-link:hover {
