@@ -265,7 +265,7 @@ $result = $conn->query($sql);
                       echo "<td>" . $status . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
-                              <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                              <a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
                             </td>";
                       echo "</tr>";
                       $sl_no++;
