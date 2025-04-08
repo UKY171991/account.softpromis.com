@@ -129,69 +129,96 @@ $result = $conn->query($sql);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    /* Table Styling */
+    <div class="table-responsive">
+      <table id="incomeTable" class="table table-hover">
+        <thead>
+          <tr>
+            <th>SL No.</th>
+            <th>Invoice Number</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Sub-category</th>
+            <th>Total Amount</th>
+            <th>Received Amount</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if ($result->num_rows > 0) {
+              $sl_no = 1;
+              while ($row = $result->fetch_assoc()) {
+                  // Format the date to dd-mm-yyyy
+                  $formatted_date = date("d-m-Y", strtotime($row['date']));
+                  
+                  // Determine the status badge
+                  $status = ($row['balance'] == 0) 
+                      ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
+                      : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
+    
+                  echo "<tr>";
+                  echo "<td>" . $sl_no++ . "</td>";
+                  echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
+                  echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
+                  echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                  echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                  echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                  echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+                  echo "<td>₹" . number_format($row['received'], 2) . "</td>";
+                  echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                  echo "<td>" . $status . "</td>";
+                  echo "<td class='action-column'>
+                          <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary' title='Edit'><i class='bi bi-pencil'></i></a>
+                          <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                        </td>";
+                  echo "</tr>";
+              }
+          } else {
+              echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
+          }
+          ?>
+        </tbody>
+      </table>
+    </div>    /* Table Container for Horizontal Scrolling */
     .table-responsive {
       border-radius: 0.5rem;
-      overflow: hidden;
+      overflow-x: auto; /* Enable horizontal scrolling */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
     }
 
+    /* Table Styling */
     .table {
+      white-space: nowrap; /* Prevent text wrapping */
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.875rem; /* Smaller font size for the entire table */
     }
 
+    .table th, .table td {
+      text-align: center; /* Center-align content */
+      vertical-align: middle;
+      padding: 0.75rem; /* Adjusted padding for better spacing */
+      border-bottom: 1px solid #dee2e6;
+    }
+
     .table th {
-      background-color: #f1f1f1;
+      background-color: #f8f9fa; /* Light gray background for headers */
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      padding: 0.75rem; /* Adjusted padding for smaller headers */
-      font-size: 0.75rem; /* Reduced font size for table headers */
-      border-bottom: 2px solid #dee2e6;
-      text-align: center; /* Center-align header content */
-    }
-
-    .table td {
-      padding: 0.5rem; /* Adjusted padding for table cells */
-      font-size: 0.85rem; /* Smaller font size for table data */
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
+      font-size: 0.8rem; /* Slightly smaller font size */
     }
 
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
-    }
-
-    .table .btn {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.75rem; /* Smaller font size for buttons */
-    }
-
-    .table .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .table .btn-primary:hover {
-      background-color: #0b5ed7;
-    }
-
-    .table .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .table .btn-danger:hover {
-      background-color: #bb2d3b;
     }
 
     /* Buttons */
