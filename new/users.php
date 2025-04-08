@@ -149,19 +149,9 @@ if ($conn->connect_error) {
           </thead>
           <tbody>
             <?php
-            // Database connection
-            $host = "localhost";
-            $username = "u820431346_new_account";
-            $password = "9g/?fYqP+";
-            $database = "u820431346_new_account";
-
-            $conn = new mysqli($host, $username, $password, $database);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
+           
             // Fetch users from the database
-            $sql = "SELECT id, username, role, created_at FROM users";
+            $sql = "SELECT * FROM users";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
