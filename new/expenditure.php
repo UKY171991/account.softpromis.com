@@ -62,17 +62,35 @@ if ($result->num_rows === 0) {
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
-    /* Table Container */
+    /* Table Container for Horizontal Scrolling */
     .table-responsive {
       border-radius: 0.5rem;
+      overflow-x: auto; /* Enable horizontal scrolling */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
+      scrollbar-width: thin; /* For Firefox */
+      scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
+    }
+
+    /* Scrollbar Styling for Webkit Browsers */
+    .table-responsive::-webkit-scrollbar {
+      height: 8px; /* Horizontal scrollbar height */
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+      background-color: #dee2e6;
+      border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+      background-color: #f8f9fa;
     }
 
     /* Table Styling */
     .table {
+      white-space: nowrap; /* Prevent text wrapping */
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
@@ -189,7 +207,7 @@ if ($result->num_rows === 0) {
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
-                <th>Invoice Number</th> <!-- New Column -->
+                <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -197,7 +215,7 @@ if ($result->num_rows === 0) {
                 <th>Total Amount</th>
                 <th>Paid Amount</th>
                 <th>Balance</th>
-                <th>Status</th> <!-- New Column -->
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -219,7 +237,7 @@ if ($result->num_rows === 0) {
 
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
-                      echo "<td>" . htmlspecialchars($invoice_number) . "</td>"; // Invoice Number
+                      echo "<td>" . htmlspecialchars($invoice_number) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
@@ -227,7 +245,7 @@ if ($result->num_rows === 0) {
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . $status . "</td>"; // Status Badge
+                      echo "<td>" . $status . "</td>";
                       echo "<td>
                               <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
                               <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
