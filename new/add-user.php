@@ -1,3 +1,39 @@
+<?php
+// Database connection
+$host = "localhost";
+$username = "u820431346_new_account";
+$password = "9g/?fYqP+";
+$database = "u820431346_new_account";
+
+$conn = new mysqli($host, $username, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $conn->real_escape_string($_POST['username']);
+    $fullname = $conn->real_escape_string($_POST['fullname']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $role = $conn->real_escape_string($_POST['role']);
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password
+    $status = $conn->real_escape_string($_POST['status']);
+
+    // Insert user into the database
+    $sql = "INSERT INTO users (username, name, email, role, password, status) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssss", $username, $fullname, $email, $role, $password, $status);
+
+    if ($stmt->execute()) {
+        // Redirect to users page with success message
+        header("Location: users.php?message=User added successfully");
+        exit();
+    } else {
+        $error = "Error: " . $stmt->error;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,7 +105,10 @@
     </div>
 
     <div class="p-4">
-      <form action="#" method="POST">
+      <?php if (isset($error)): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+      <?php endif; ?>
+      <form action="" method="POST">
         <div class="row g-3">
           <div class="col-md-6">
             <label for="username" class="form-label">Username</label>
