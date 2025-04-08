@@ -291,6 +291,59 @@ $result = $conn->query($sql);
       align-items: center; /* Align icon and text vertically */
       gap: 0.3rem; /* Space between icon and text */
     }
+
+    /* Action Buttons */
+    .action-column .btn {
+      padding: 0.4rem 0.6rem; /* Compact button padding */
+      font-size: 0.85rem; /* Slightly larger font size */
+      border-radius: 0.3rem; /* Rounded corners */
+      display: inline-flex; /* Ensure buttons stay inline */
+      align-items: center; /* Align icon and text vertically */
+      justify-content: center;
+      transition: all 0.3s ease; /* Smooth hover effect */
+    }
+
+    .action-column .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      color: #ffffff;
+    }
+
+    .action-column .btn-primary:hover {
+      background-color: #0b5ed7;
+      transform: scale(1.1); /* Slight zoom effect */
+    }
+
+    .action-column .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      color: #ffffff;
+    }
+
+    .action-column .btn-danger:hover {
+      background-color: #bb2d3b;
+      transform: scale(1.1); /* Slight zoom effect */
+    }
+
+    /* Status Badges */
+    .badge {
+      font-size: 0.85rem; /* Slightly larger font size */
+      padding: 0.4rem 0.6rem; /* Adjusted padding */
+      border-radius: 0.5rem; /* Rounded corners */
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem; /* Space between icon and text */
+    }
+
+    .badge.bg-success {
+      background-color: #198754;
+      color: #ffffff;
+    }
+
+    .badge.bg-danger {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
