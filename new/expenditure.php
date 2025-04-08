@@ -63,8 +63,9 @@ if ($result->num_rows === 0) {
       padding: 1rem 2rem;
     }
     .table-responsive {
-      border-radius: 0.5rem;
       overflow-x: auto; /* Enable horizontal scrolling */
+      max-width: 100%; /* Ensure it doesn't exceed the container width */
+      border-radius: 0.5rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
@@ -73,7 +74,7 @@ if ($result->num_rows === 0) {
       scrollbar-color: #dee2e6 #f8f9fa; /* For Firefox */
     }
     .table-responsive::-webkit-scrollbar {
-      height: 8px;
+      height: 8px; /* Horizontal scrollbar height */
     }
     .table-responsive::-webkit-scrollbar-thumb {
       background-color: #dee2e6;
@@ -189,7 +190,7 @@ if ($result->num_rows === 0) {
           <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
 
-        <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
+        <div class="table-responsive" style="overflow-x: auto; max-width: 100%; height: auto;">
           <table id="expenditureTable" class="table table-bordered table-hover">
             <thead class="table-light">
               <tr>
