@@ -135,22 +135,17 @@ if ($result->num_rows === 0) {
     <!-- Main content -->
     <div class="main-content w-100">
       <!-- Top Navbar -->
-       <!-- Main Content -->
-    <div class="w-100">
-      <!-- Top Navbar -->
-      <div class="top-navbar">
-        <h4>Income Records</h4>
+      <div class="top-navbar d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Expenditure Records</h4>
         <div class="d-flex align-items-center gap-3">
-          <a href="notifications.php" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-bell"></i> Notifications
-          </a>
+          <i class="bi bi-bell fs-5"></i>
           <div class="dropdown">
-            <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle"></i> Admin
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5 me-1"></i> Admin
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-              <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
           </div>
         </div>
