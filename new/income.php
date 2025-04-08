@@ -327,12 +327,12 @@ $result = $conn->query($sql);
 
     /* Status Badges */
     .badge {
-      font-size: 0.85rem; /* Slightly larger font size */
-      padding: 0.4rem 0.6rem; /* Adjusted padding */
-      border-radius: 0.5rem; /* Rounded corners */
+      font-size: 0.75rem; /* Smaller font size */
+      padding: 0.2rem 0.4rem; /* Reduced padding */
+      border-radius: 0.3rem; /* Slightly rounded corners */
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem; /* Space between icon and text */
+      gap: 0.2rem; /* Reduced space between icon and text */
     }
 
     .badge.bg-success {
@@ -414,8 +414,8 @@ $result = $conn->query($sql);
                       
                       // Determine the status badge
                       $status = ($row['balance'] == 0) 
-                          ? "<span class='badge bg-success d-flex align-items-center gap-1'><i class='bi bi-check-circle'></i> Paid</span>" 
-                          : "<span class='badge bg-danger d-flex align-items-center gap-1'><i class='bi bi-x-circle'></i> Pending</span>";
+                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
+                          : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
