@@ -39,7 +39,9 @@ $result = $conn->query($sql);
       padding: 1.5rem 1rem;
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
     }
-
+    .sidebar h4 {
+      font-weight: bold;
+    }
     .sidebar hr {
       border-color: rgba(255, 255, 255, 0.2);
     }

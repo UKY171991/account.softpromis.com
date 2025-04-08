@@ -1,3 +1,16 @@
+<?php
+// Database connection
+$host = "localhost";
+$username = "u820431346_new_account";
+$password = "9g/?fYqP+";
+$database = "u820431346_new_account";
+
+$conn = new mysqli($host, $username, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,26 +86,6 @@
       align-items: center;
       gap: 0.3rem;
     }
-    .table td .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      color: white;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    .table td .btn-primary:hover {
-      background-color: #0b5ed7;
-      transform: scale(1.05); /* Slight zoom effect */
-    }
-    .table td .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      color: white;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    .table td .btn-danger:hover {
-      background-color: #bb2d3b;
-      transform: scale(1.05); /* Slight zoom effect */
-    }
     .badge {
       font-size: 0.7rem; /* Smaller font size for badges */
       padding: 0.3rem 0.5rem; /* Adjusted padding for badges */
@@ -155,19 +148,43 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Sample Data Row -->
-            <tr>
-              <td>1</td>
-              <td>admin</td>
-              <td>Admin User</td>
-              <td>admin@example.com</td>
-              <td>Administrator</td>
-              <td><span class="badge bg-success">Active</span></td>
-              <td>
-                <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                <a href="#" class="btn btn-sm btn-danger">Delete</a>
-              </td>
-            </tr>
+            <?php
+            // Database connection
+            $host = "localhost";
+            $username = "u820431346_new_account";
+            $password = "9g/?fYqP+";
+            $database = "u820431346_new_account";
+
+            $conn = new mysqli($host, $username, $password, $database);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Fetch users from the database
+            $sql = "SELECT id, username, role, created_at FROM users";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                $sl_no = 1;
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $sl_no++ . "</td>";
+                    echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['role']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                    echo "<td><span class='badge bg-success'>Active</span></td>";
+                    echo "<td>
+                            <a href='#' class='btn btn-sm btn-primary'>Edit</a>
+                            <a href='#' class='btn btn-sm btn-danger'>Delete</a>
+                          </td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='7' class='text-center'>No users found</td></tr>";
+            }
+
+            $conn->close();
+            ?>
           </tbody>
         </table>
       </div>
