@@ -223,24 +223,7 @@ $result = $conn->query($sql);
       background-color: #0d6efd;
       color: #ffffff;
       border-color: #0d6efd;
-    }    <script>
-      $(document).ready(function () {
-        $('#incomeTable').DataTable({
-          responsive: true,
-          pageLength: 10,
-          language: {
-            search: "Search:",
-            lengthMenu: "Show _MENU_ entries",
-            info: "Showing _START_ to _END_ of _TOTAL_ entries",
-            paginate: {
-              next: "Next",
-              previous: "Previous"
-            }
-          },
-          dom: '<"table-responsive"t><"pagination-container"p>' // Move pagination outside the table
-        });
-      });
-    </script>    /* Table Container for Horizontal Scrolling */
+    }    /* Table Container for Horizontal Scrolling */
     .table-responsive {
       border-radius: 0.5rem;
       overflow-x: auto; /* Enable horizontal scrolling */
