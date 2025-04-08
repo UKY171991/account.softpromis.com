@@ -146,21 +146,24 @@ $result = $conn->query($sql);
       font-size: 0.875rem; /* Smaller font size for the entire table */
     }
 
+    /* Table Header Styling */
     .table th {
-      background-color: #f1f1f1;
+      background-color: #f8f9fa; /* Light gray background */
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      padding: 0.75rem; /* Adjusted padding for smaller headers */
-      font-size: 0.75rem; /* Reduced font size for table headers */
-      border-bottom: 2px solid #dee2e6;
+      padding: 0.75rem; /* Adjusted padding for headers */
+      font-size: 0.8rem; /* Slightly smaller font size */
       text-align: center; /* Center-align header content */
+      border-bottom: 2px solid #dee2e6;
     }
 
+    /* Table Cell Styling */
     .table td {
-      padding: 0.5rem; /* Adjusted padding for table cells */
-      font-size: 0.85rem; /* Smaller font size for table data */
+      padding: 0.6rem; /* Adjusted padding for table cells */
+      font-size: 0.85rem; /* Consistent font size for table data */
       vertical-align: middle;
+      text-align: center; /* Center-align content */
       border-bottom: 1px solid #dee2e6;
     }
 
@@ -328,11 +331,11 @@ $result = $conn->query($sql);
     /* Status Badges */
     .badge {
       font-size: 0.75rem; /* Smaller font size */
-      padding: 0.2rem 0.4rem; /* Reduced padding */
-      border-radius: 0.3rem; /* Slightly rounded corners */
+      padding: 0.3rem 0.5rem; /* Compact padding */
+      border-radius: 0.3rem; /* Rounded corners */
       display: inline-flex;
       align-items: center;
-      gap: 0.2rem; /* Reduced space between icon and text */
+      gap: 0.2rem; /* Space between icon and text */
     }
 
     .badge.bg-success {
