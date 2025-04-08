@@ -339,6 +339,7 @@ $result = $conn->query($sql);
             <thead>
               <tr>
                 <th>SL No.</th>
+                <th>Invoice Number</th> <!-- New Column -->
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -346,6 +347,7 @@ $result = $conn->query($sql);
                 <th>Total Amount</th>
                 <th>Received Amount</th>
                 <th>Balance</th>
+                <th>Status</th> <!-- New Column -->
                 <th>Action</th>
               </tr>
             </thead>
@@ -357,8 +359,12 @@ $result = $conn->query($sql);
                       // Format the date to dd-mm-yyyy
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
                       
+                      // Determine the status badge
+                      $status = ($row['balance'] == 0) ? "<span class='badge bg-success'>✅ Paid</span>" : "<span class='badge bg-danger'>❌ Pending</span>";
+
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
+                      echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>"; // Generate Invoice Number
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
@@ -366,6 +372,7 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['received'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td>" . $status . "</td>"; // Add Status Badge
                       echo "<td class='action-column'>
                               <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i> Edit</a>
                               <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i> Delete</a>
@@ -373,7 +380,7 @@ $result = $conn->query($sql);
                       echo "</tr>";
                   }
               } else {
-                  echo "<tr><td colspan='9' class='text-center'>No records found</td></tr>";
+                  echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
               }
               ?>
             </tbody>
