@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt->close();
 }
-$conn->close();
+
 ?>
 
 
@@ -154,3 +154,6 @@ $conn->close();
   </script>
 </body>
 </html>
+
+
+<?php $conn->close(); ?>
