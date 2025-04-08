@@ -291,6 +291,59 @@ $result = $conn->query($sql);
       align-items: center; /* Align icon and text vertically */
       gap: 0.3rem; /* Space between icon and text */
     }
+
+    /* Action Buttons */
+    .action-column .btn {
+      padding: 0.4rem 0.6rem; /* Compact button padding */
+      font-size: 0.85rem; /* Slightly larger font size */
+      border-radius: 0.3rem; /* Rounded corners */
+      display: inline-flex; /* Ensure buttons stay inline */
+      align-items: center; /* Align icon and text vertically */
+      justify-content: center;
+      transition: all 0.3s ease; /* Smooth hover effect */
+    }
+
+    .action-column .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      color: #ffffff;
+    }
+
+    .action-column .btn-primary:hover {
+      background-color: #0b5ed7;
+      transform: scale(1.1); /* Slight zoom effect */
+    }
+
+    .action-column .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      color: #ffffff;
+    }
+
+    .action-column .btn-danger:hover {
+      background-color: #bb2d3b;
+      transform: scale(1.1); /* Slight zoom effect */
+    }
+
+    /* Status Badges */
+    .badge {
+      font-size: 0.85rem; /* Slightly larger font size */
+      padding: 0.4rem 0.6rem; /* Adjusted padding */
+      border-radius: 0.5rem; /* Rounded corners */
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem; /* Space between icon and text */
+    }
+
+    .badge.bg-success {
+      background-color: #198754;
+      color: #ffffff;
+    }
+
+    .badge.bg-danger {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
@@ -360,7 +413,9 @@ $result = $conn->query($sql);
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
                       
                       // Determine the status badge
-                      $status = ($row['balance'] == 0) ? "<span class='badge bg-success'>✅ Paid</span>" : "<span class='badge bg-danger'>❌ Pending</span>";
+                      $status = ($row['balance'] == 0) 
+                          ? "<span class='badge bg-success d-flex align-items-center gap-1'><i class='bi bi-check-circle'></i> Paid</span>" 
+                          : "<span class='badge bg-danger d-flex align-items-center gap-1'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
@@ -374,8 +429,8 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . $status . "</td>"; // Add Status Badge
                       echo "<td class='action-column'>
-                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i> Edit</a>
-                              <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i> Delete</a>
+                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary' title='Edit'><i class='bi bi-pencil'></i></a>
+                              <a href='delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' title='Delete' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
                             </td>";
                       echo "</tr>";
                   }
