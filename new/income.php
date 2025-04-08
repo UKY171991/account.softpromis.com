@@ -54,12 +54,18 @@ $result = $conn->query($sql);
       color: #f8f9fa;
     }
     .top-navbar {
+      margin-left: 250px;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 0.5rem 1.5rem;
       position: sticky;
       top: 0;
-      z-index: 1030;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      padding: 1rem 2rem;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .top-navbar h4 {
       font-size: 1.15rem;
