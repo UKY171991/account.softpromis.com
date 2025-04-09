@@ -145,6 +145,15 @@ $result = $conn->query($sql);
         <a href="add-client.php" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Client</a>
       </div>
 
+      <?php
+      if (isset($_GET['message']))  { 
+          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+      }
+      if (isset($_GET['error'])) {
+          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+      }
+      ?>
+
       <div class="table-responsive">
         <table id="clientTable" class="table table-bordered table-hover">
           <thead class="table-light">
