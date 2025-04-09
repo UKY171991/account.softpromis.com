@@ -1,6 +1,5 @@
 <?php
 include 'inc/auth.php'; // Include the database connection file
-// Database connection
 include 'inc/config.php'; // Include the database connection file
 
 // Fetch clients from the database
@@ -178,7 +177,7 @@ $result = $conn->query($sql);
                   <td><?php echo htmlspecialchars($row['email']); ?></td>
                   <td><?php echo htmlspecialchars($row['phone']); ?></td>
                   <td><?php echo htmlspecialchars($row['address']); ?></td>
-                  <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                  <td><?php echo date('d-m-Y', strtotime($row['created_at'])); ?></td>
                   <td>
                     <a href="edit-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Edit</a>
                     <a href="include/delete-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this client?');"><i class="bi bi-trash"></i> Delete</a>
