@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <?php foreach ($reports as $report): ?>
                 <tr>
                   <td><?php echo $sl++; ?></td>
-                  <td><?php echo htmlspecialchars($report['date']); ?></td>
+                  <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td> <!-- Format date -->
                   <td><?php echo htmlspecialchars($report['type'] ?? ($type === 'income' ? 'Income' : 'Expenditure')); ?></td>
                   <td><?php echo htmlspecialchars($report['name']); ?></td>
                   <td><?php echo htmlspecialchars($report['category']); ?></td>
