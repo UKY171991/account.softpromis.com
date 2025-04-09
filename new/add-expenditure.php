@@ -76,6 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background-color: #0056b3;
       border-color: #004085;
     }
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      padding: 1rem 2rem;
+    }
   </style>
 </head>
 <body>
@@ -96,6 +104,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Main content -->
     <div class="main-content w-100">
+      <!-- Top Navbar -->
+      <div class="top-navbar d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Add Expenditure</h4>
+        <div class="d-flex align-items-center gap-3">
+          <i class="bi bi-bell fs-5"></i>
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="form-container mx-auto" style="max-width: 800px;">
         <h3>Add New Expenditure</h3>
         <?php if (!empty($message)): ?>
