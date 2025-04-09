@@ -170,11 +170,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <form class="row g-3 mb-4" method="POST">
         <div class="col-md-3">
           <label for="from_date" class="form-label">From Date</label>
-          <input type="date" class="form-control" id="from_date" name="from_date">
+          <input type="text" class="form-control date-picker" id="from_date" name="from_date" placeholder="dd-mm-yyyy">
         </div>
         <div class="col-md-3">
           <label for="to_date" class="form-label">To Date</label>
-          <input type="date" class="form-control" id="to_date" name="to_date">
+          <input type="text" class="form-control date-picker" id="to_date" name="to_date" placeholder="dd-mm-yyyy">
         </div>
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
@@ -238,6 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
   $(document).ready(function () {
+    // Initialize DataTable
     $('#reportTable').DataTable({
       responsive: true,
       pageLength: 10,
@@ -250,6 +251,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           next: "Next",
           previous: "Previous"
         }
+      }
+    });
+
+    // Date Picker Formatting
+    $('.date-picker').on('focus', function () {
+      $(this).attr('type', 'date');
+    }).on('blur', function () {
+      $(this).attr('type', 'text');
+    });
+
+    // Convert date format to dd-mm-yyyy
+    $('.date-picker').on('change', function () {
+      const date = new Date($(this).val());
+      if (!isNaN(date.getTime())) {
+        const formattedDate = ('0' + date.getDate()).slice(-2) + '-' +
+                              ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                              date.getFullYear();
+        $(this).val(formattedDate);
       }
     });
   });
