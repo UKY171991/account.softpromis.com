@@ -14,28 +14,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Build the query dynamically based on filters
     if ($type === 'income') {
-        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received, balance FROM income";
+        $query = "SELECT 'Income' AS type, created_at, name, category, subcategory, amount, received, balance FROM income";
     } elseif ($type === 'expenditure') {
-        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid, balance FROM expenditures";
+        $query = "SELECT 'Expenditure' AS type, created_at, name, category, subcategory, amount, paid, balance FROM expenditures";
     } else {
-        $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
+        $query = "(SELECT 'Income' AS type, created_at, name, category, subcategory, amount, received AS paid_received, balance FROM income 
                    UNION ALL 
-                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures) AS combined";
+                   SELECT 'Expenditure' AS type, created_at, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures) AS combined";
     }
 
     $conditions = [];
     if ($from_date) {
-        $conditions[] = "date >= '$from_date'";
+        $conditions[] = "created_at >= '$from_date'";
     }
     if ($to_date) {
-        $conditions[] = "date <= '$to_date'";
+        $conditions[] = "created_at <= '$to_date'";
     }
 
     if (!empty($conditions)) {
         $query .= " WHERE " . implode(" AND ", $conditions);
     }
 
-    $query .= " ORDER BY id ASC";
+    $query .= " ORDER BY created_at ASC";
 
     $result = $conn->query($query);
     if ($result) {
