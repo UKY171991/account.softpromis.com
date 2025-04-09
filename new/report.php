@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Build the query dynamically based on filters
     if ($type === 'income') {
-        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount FROM income";
+        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received, balance FROM income";
     } elseif ($type === 'expenditure') {
-        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount FROM expenditures";
+        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid, balance FROM expenditures";
     } else {
-        $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount FROM income 
+        $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
                    UNION ALL 
-                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount FROM expenditures) AS combined";
+                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures) AS combined";
     }
 
     $conditions = [];
@@ -186,10 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <th>Date</th>
               <th>Type</th>
               <th>Name</th>
-              <th>Description</th>
               <th>Category</th>
               <th>Sub-category</th>
               <th>Amount</th>
+              <th>Paid/Received</th>
+              <th>Balance</th>
             </tr>
           </thead>
           <tbody>
@@ -201,15 +202,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td> <!-- Date formatted -->
                   <td><?php echo htmlspecialchars($report['type']); ?></td>
                   <td><?php echo htmlspecialchars($report['name']); ?></td>
-                  <td><?php echo htmlspecialchars($report['description'] ?? 'N/A'); ?></td>
                   <td><?php echo htmlspecialchars($report['category']); ?></td>
                   <td><?php echo htmlspecialchars($report['subcategory']); ?></td>
                   <td>₹<?php echo number_format($report['amount'], 2); ?></td>
+                  <td>₹<?php echo number_format($report['paid_received'], 2); ?></td>
+                  <td>₹<?php echo number_format($report['balance'], 2); ?></td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="8" class="text-center">No records found.</td>
+                <td colspan="9" class="text-center">No records found.</td>
               </tr>
             <?php endif; ?>
           </tbody>
