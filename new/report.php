@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query .= " WHERE " . implode(" AND ", $conditions);
     }
 
-    $query .= " ORDER BY date ASC";
+    $query .= " ORDER BY id ASC";
 
     $result = $conn->query($query);
     if ($result) {
