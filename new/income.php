@@ -1,4 +1,5 @@
 <?php
+include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
 $sql = "SELECT id, date, name, category, subcategory, amount, received, balance FROM income";

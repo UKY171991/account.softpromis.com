@@ -1,4 +1,5 @@
 <?php
+include 'inc/auth.php'; // Include the authentication file
 // Database connection
 include 'inc/config.php'; // Include the database connection file
 
