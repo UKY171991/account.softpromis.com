@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Build the query dynamically based on filters
     if ($type === 'income') {
-        $query = "SELECT 'Income' AS type, date, name, description, category, subcategory, amount FROM income";
+        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount FROM income";
     } elseif ($type === 'expenditure') {
-        $query = "SELECT 'Expenditure' AS type, date, name, description, category, subcategory, amount FROM expenditures";
+        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount FROM expenditures";
     } else {
-        $query = "(SELECT 'Income' AS type, date, name, description, category, subcategory, amount FROM income 
+        $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount FROM income 
                    UNION ALL 
-                   SELECT 'Expenditure' AS type, date, name, description, category, subcategory, amount FROM expenditures) AS combined";
+                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount FROM expenditures) AS combined";
     }
 
     $conditions = [];
