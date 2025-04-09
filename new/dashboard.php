@@ -1,3 +1,54 @@
+<?php
+// Database connection
+include 'inc/config.php';
+
+// Fetch total income
+$totalIncomeQuery = "SELECT SUM(amount) AS total_income FROM income";
+$totalIncomeResult = $conn->query($totalIncomeQuery);
+$totalIncome = $totalIncomeResult->fetch_assoc()['total_income'] ?? 0;
+
+// Fetch total expenditure
+$totalExpenditureQuery = "SELECT SUM(amount) AS total_expenditure FROM expenditures";
+$totalExpenditureResult = $conn->query($totalExpenditureQuery);
+$totalExpenditure = $totalExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
+
+// Fetch pending payments
+$pendingPaymentsQuery = "SELECT SUM(balance) AS pending_payments FROM expenditures";
+$pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
+$pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
+
+// Fetch monthly income and expenditure
+$monthlyIncomeQuery = "SELECT MONTH(date) AS month, SUM(amount) AS total FROM income GROUP BY MONTH(date)";
+$monthlyIncomeResult = $conn->query($monthlyIncomeQuery);
+$monthlyIncomeData = [];
+while ($row = $monthlyIncomeResult->fetch_assoc()) {
+    $monthlyIncomeData[$row['month']] = $row['total'];
+}
+
+$monthlyExpenditureQuery = "SELECT MONTH(date) AS month, SUM(amount) AS total FROM expenditures GROUP BY MONTH(date)";
+$monthlyExpenditureResult = $conn->query($monthlyExpenditureQuery);
+$monthlyExpenditureData = [];
+while ($row = $monthlyExpenditureResult->fetch_assoc()) {
+    $monthlyExpenditureData[$row['month']] = $row['total'];
+}
+
+// Fetch income distribution
+$incomeDistributionQuery = "SELECT category, SUM(amount) AS total FROM income GROUP BY category";
+$incomeDistributionResult = $conn->query($incomeDistributionQuery);
+$incomeDistributionData = [];
+while ($row = $incomeDistributionResult->fetch_assoc()) {
+    $incomeDistributionData[] = ['category' => $row['category'], 'total' => $row['total']];
+}
+
+// Fetch expenditure distribution
+$expenditureDistributionQuery = "SELECT category, SUM(amount) AS total FROM expenditures GROUP BY category";
+$expenditureDistributionResult = $conn->query($expenditureDistributionQuery);
+$expenditureDistributionData = [];
+while ($row = $expenditureDistributionResult->fetch_assoc()) {
+    $expenditureDistributionData[] = ['category' => $row['category'], 'total' => $row['total']];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,11 +79,11 @@
     .dashboard-card {
       border-radius: 1rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .dashboard-card:hover {
-      transform: translateY(-5px); /* Slight upward movement */
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Enhanced shadow on hover */
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
     .top-navbar {
       position: sticky;
@@ -48,6 +99,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -101,7 +153,7 @@
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Income</h5>
-              <h3 class="text-success">₹1,25,000</h3>
+              <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -109,7 +161,7 @@
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Expenditure</h5>
-              <h3 class="text-danger">₹98,500</h3>
+              <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -117,7 +169,7 @@
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Pending Payments</h5>
-              <h3 class="text-warning">₹26,500</h3>
+              <h3 class="text-warning">₹<?php echo number_format($pendingPayments, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -126,7 +178,7 @@
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Income (This Month)</h5>
-              <h3 class="text-success">₹52,000</h3>
+              <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -134,7 +186,7 @@
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Expenditure (This Month)</h5>
-              <h3 class="text-danger">₹41,300</h3>
+              <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -142,7 +194,7 @@
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Pending (This Month)</h5>
-              <h3 class="text-warning">₹10,700</h3>
+              <h3 class="text-warning">₹<?php echo number_format(($monthlyIncomeData[date('n')] ?? 0) - ($monthlyExpenditureData[date('n')] ?? 0), 2); ?></h3>
             </div>
           </div>
         </div>
@@ -163,11 +215,11 @@
       <div class="row g-4 mt-4">
         <div class="col-md-6">
           <h5 class="mb-3">Income Distribution</h5>
-          <canvas id="incomePieChart" height="200" width="200"></canvas> <!-- Reduced height and width -->
+          <canvas id="incomePieChart" height="200" width="200"></canvas>
         </div>
         <div class="col-md-6">
           <h5 class="mb-3">Expenditure Distribution</h5>
-          <canvas id="expenditurePieChart" height="200" width="200"></canvas> <!-- Reduced height and width -->
+          <canvas id="expenditurePieChart" height="200" width="200"></canvas>
         </div>
       </div>
 
@@ -180,10 +232,10 @@
     const incomeChart = new Chart(document.getElementById('incomeChart'), {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        labels: <?php echo json_encode(array_keys($monthlyIncomeData)); ?>,
         datasets: [{
           label: 'Income',
-          data: [20000, 25000, 30000, 28000, 32000, 36000],
+          data: <?php echo json_encode(array_values($monthlyIncomeData)); ?>,
           borderColor: 'green',
           backgroundColor: 'rgba(0,128,0,0.1)',
           tension: 0.3,
@@ -195,10 +247,10 @@
     const expenditureChart = new Chart(document.getElementById('expenditureChart'), {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        labels: <?php echo json_encode(array_keys($monthlyExpenditureData)); ?>,
         datasets: [{
           label: 'Expenditure',
-          data: [15000, 20000, 18000, 22000, 21000, 25000],
+          data: <?php echo json_encode(array_values($monthlyExpenditureData)); ?>,
           backgroundColor: 'rgba(220,53,69,0.7)'
         }]
       }
@@ -208,23 +260,22 @@
     const incomePieChart = new Chart(document.getElementById('incomePieChart'), {
       type: 'pie',
       data: {
-        labels: ['Consulting', 'Product Sales', 'Other Income'],
+        labels: <?php echo json_encode(array_column($incomeDistributionData, 'category')); ?>,
         datasets: [{
-          label: 'Income Distribution',
-          data: [40000, 30000, 20000], // Replace with your actual data
-          backgroundColor: ['#4caf50', '#2196f3', '#ff9800'], // Vibrant colors
-          borderColor: '#ffffff', // White border for better visibility
-          borderWidth: 2, // Border width
-          hoverOffset: 6 // Slightly reduced hover effect
+          data: <?php echo json_encode(array_column($incomeDistributionData, 'total')); ?>,
+          backgroundColor: ['#4caf50', '#2196f3', '#ff9800'],
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 6
         }]
       },
       options: {
         plugins: {
           legend: {
-            position: 'top', // Move legend to the top
+            position: 'top',
             labels: {
               font: {
-                size: 10 // Smaller font size for legend
+                size: 10
               }
             }
           },
@@ -238,7 +289,7 @@
               }
             },
             bodyFont: {
-              size: 10 // Smaller font size for tooltips
+              size: 10
             }
           }
         }
@@ -249,23 +300,22 @@
     const expenditurePieChart = new Chart(document.getElementById('expenditurePieChart'), {
       type: 'pie',
       data: {
-        labels: ['Office Supplies', 'Utilities', 'Salaries'],
+        labels: <?php echo json_encode(array_column($expenditureDistributionData, 'category')); ?>,
         datasets: [{
-          label: 'Expenditure Distribution',
-          data: [15000, 10000, 25000], // Replace with your actual data
-          backgroundColor: ['#e91e63', '#ff5722', '#9c27b0'], // Vibrant colors
-          borderColor: '#ffffff', // White border for better visibility
-          borderWidth: 2, // Border width
-          hoverOffset: 6 // Slightly reduced hover effect
+          data: <?php echo json_encode(array_column($expenditureDistributionData, 'total')); ?>,
+          backgroundColor: ['#e91e63', '#ff5722', '#9c27b0'],
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 6
         }]
       },
       options: {
         plugins: {
           legend: {
-            position: 'top', // Move legend to the top
+            position: 'top',
             labels: {
               font: {
-                size: 10 // Smaller font size for legend
+                size: 10
               }
             }
           },
@@ -279,7 +329,7 @@
               }
             },
             bodyFont: {
-              size: 10 // Smaller font size for tooltips
+              size: 10
             }
           }
         }
