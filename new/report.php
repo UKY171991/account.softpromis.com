@@ -12,17 +12,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $to_date = $_POST['to_date'] ?? null;
     $type = $_POST['type'] ?? 'all';
 
-    // Build the query dynamically based on filters
+    // Initialize the base query
     if ($type === 'income') {
-        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received, balance FROM income";
+        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income";
     } elseif ($type === 'expenditure') {
-        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid, balance FROM expenditures";
+        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures";
     } else {
         $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
                    UNION ALL 
                    SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures) AS combined";
     }
 
+    // Add conditions dynamically
     $conditions = [];
     if ($from_date) {
         $conditions[] = "date >= '$from_date'";
@@ -31,12 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conditions[] = "date <= '$to_date'";
     }
 
+    // Append conditions to the query
     if (!empty($conditions)) {
         $query .= " WHERE " . implode(" AND ", $conditions);
     }
 
+    // Add ordering
     $query .= " ORDER BY date ASC";
 
+    // Execute the query
     $result = $conn->query($query);
     if ($result) {
         $reports = $result->fetch_all(MYSQLI_ASSOC);
@@ -168,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
           <select id="type" name="type" class="form-select">
-            <!-- <option selected value="all">All</option> -->
+            <option selected value="all">All</option>
             <option value="income">Income</option>
             <option value="expenditure">Expenditure</option>
           </select>
@@ -199,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <?php foreach ($reports as $report): ?>
                 <tr>
                   <td><?php echo $sl++; ?></td>
-                  <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td> <!-- Date formatted -->
+                  <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td>
                   <td><?php echo htmlspecialchars($report['type']); ?></td>
                   <td><?php echo htmlspecialchars($report['name']); ?></td>
                   <td><?php echo htmlspecialchars($report['category']); ?></td>
