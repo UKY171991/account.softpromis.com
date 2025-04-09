@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <div class="form-container mx-auto" style="max-width: 800px;">
+      <div class="form-container w-100">
         <h3>Add New Expenditure</h3>
         <?php if (!empty($message)): ?>
           <?php echo $message; ?>
