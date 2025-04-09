@@ -1,12 +1,10 @@
 <?php
 include 'auth.php'; // Include authentication check
-// Database connection
-include 'inc/config.php';
+include 'inc/config.php'; // Database connection
 
 $message = '';
 $reports = [];
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $from_date = $_POST['from_date'] ?? null;
     $to_date = $_POST['to_date'] ?? null;
@@ -20,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
                    UNION ALL 
-                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures) AS combined";
+                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures)";
     }
 
     // Add conditions dynamically
@@ -34,15 +32,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Append conditions to the query
     if (!empty($conditions)) {
+        $where_clause = " WHERE " . implode(" AND ", $conditions);
         if ($type === 'all') {
-            $query .= " WHERE " . implode(" AND ", $conditions);
+            $query = "$query AS combined $where_clause";
         } else {
-            $query .= " AND " . implode(" AND ", $conditions);
+            $query .= $where_clause;
         }
     }
 
     // Add ordering
-    $query .= " ORDER BY date ASC";
+    if ($type === 'all') {
+        $query .= " ORDER BY date ASC";
+    } else {
+        $query .= " ORDER BY date ASC";
+    }
 
     // Execute the query
     $result = $conn->query($query);
