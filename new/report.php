@@ -5,6 +5,12 @@ include 'inc/config.php'; // Database connection
 $message = '';
 $reports = [];
 
+// Default conditions for page load
+$from_date = null;
+$to_date = null;
+$type = 'all';
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $from_date = $_POST['from_date'] ?? null;
     $to_date = $_POST['to_date'] ?? null;
@@ -17,47 +23,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($to_date) {
         $to_date = DateTime::createFromFormat('d-m-Y', $to_date)->format('Y-m-d');
     }
+}
 
-    // Initialize the base query
-    if ($type === 'income') {
-        $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income";
-    } elseif ($type === 'expenditure') {
-        $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures";
+// Initialize the base query
+if ($type === 'income') {
+    $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income";
+} elseif ($type === 'expenditure') {
+    $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures";
+} else {
+    $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
+               UNION ALL 
+               SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures)";
+}
+
+// Add conditions dynamically
+$conditions = [];
+if ($from_date) {
+    $conditions[] = "date >= '$from_date'";
+}
+if ($to_date) {
+    $conditions[] = "date <= '$to_date'";
+}
+
+// Append conditions to the query
+if (!empty($conditions)) {
+    $where_clause = " WHERE " . implode(" AND ", $conditions);
+    if ($type === 'all') {
+        $query = "$query AS combined $where_clause";
     } else {
-        $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
-                   UNION ALL 
-                   SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures)";
+        $query .= $where_clause;
     }
+}
 
-    // Add conditions dynamically
-    $conditions = [];
-    if ($from_date) {
-        $conditions[] = "date >= '$from_date'";
-    }
-    if ($to_date) {
-        $conditions[] = "date <= '$to_date'";
-    }
+// Add ordering
+$query .= " ORDER BY date ASC";
 
-    // Append conditions to the query
-    if (!empty($conditions)) {
-        $where_clause = " WHERE " . implode(" AND ", $conditions);
-        if ($type === 'all') {
-            $query = "$query AS combined $where_clause";
-        } else {
-            $query .= $where_clause;
-        }
-    }
-
-    // Add ordering
-    $query .= " ORDER BY date ASC";
-
-    // Execute the query
-    $result = $conn->query($query);
-    if ($result) {
-        $reports = $result->fetch_all(MYSQLI_ASSOC);
-    } else {
-        $message = "<div class='alert alert-danger'>Error generating report: " . $conn->error . "</div>";
-    }
+// Execute the query
+$result = $conn->query($query);
+if ($result) {
+    $reports = $result->fetch_all(MYSQLI_ASSOC);
+} else {
+    $message = "<div class='alert alert-danger'>Error generating report: " . $conn->error . "</div>";
 }
 ?>
 
