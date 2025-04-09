@@ -34,7 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Append conditions to the query
     if (!empty($conditions)) {
-        $query .= " WHERE " . implode(" AND ", $conditions);
+        if ($type === 'all') {
+            $query .= " WHERE " . implode(" AND ", $conditions);
+        } else {
+            $query .= " AND " . implode(" AND ", $conditions);
+        }
     }
 
     // Add ordering
