@@ -28,11 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $conn->real_escape_string($_POST['email']);
     $role = $conn->real_escape_string($_POST['role']);
     $status = $conn->real_escape_string($_POST['status']);
+    $password = $_POST['password'] ?? null; // Optional password field
 
-    // Update user details in the database
-    $sql = "UPDATE users SET username = ?, name = ?, email = ?, role = ?, status = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssi", $username, $fullname, $email, $role, $status, $id);
+    if (!empty($password)) {
+        // Hash the password if provided
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "UPDATE users SET username = ?, name = ?, email = ?, role = ?, status = ?, password = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssii", $username, $fullname, $email, $role, $status, $hashed_password, $id);
+    } else {
+        // Update without changing the password
+        $sql = "UPDATE users SET username = ?, name = ?, email = ?, role = ?, status = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssi", $username, $fullname, $email, $role, $status, $id);
+    }
 
     if ($stmt->execute()) {
         header("Location: users.php?message=User updated successfully");
@@ -145,6 +154,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <option value="Active" <?php echo $user['status'] === 'Active' ? 'selected' : ''; ?>>Active</option>
               <option value="Inactive" <?php echo $user['status'] === 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
             </select>
+          </div>
+          <div class="col-md-6">
+            <label for="password" class="form-label">Password (Optional)</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
           </div>
         </div>
 
