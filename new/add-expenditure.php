@@ -55,6 +55,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-left: 250px;
       padding: 2rem;
     }
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h3 {
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+    .form-container .form-label {
+      font-weight: 500;
+    }
+    .form-container .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .form-container .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
   </style>
 </head>
 <body>
@@ -75,57 +96,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Main content -->
     <div class="main-content w-100">
-      <h3 class="mb-4">Add New Expenditure</h3>
-      <?php if (!empty($message)): ?>
-        <?php echo $message; ?>
-      <?php endif; ?>
-      <form action="" method="POST">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label for="date" class="form-label">Date</label>
-            <input type="date" class="form-control" id="date" name="date" required>
+      <div class="form-container mx-auto" style="max-width: 800px;">
+        <h3>Add New Expenditure</h3>
+        <?php if (!empty($message)): ?>
+          <?php echo $message; ?>
+        <?php endif; ?>
+        <form action="" method="POST">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label for="date" class="form-label">Date</label>
+              <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <div class="col-md-6">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
+            </div>
+            <div class="col-md-6">
+              <label for="category" class="form-label">Category</label>
+              <select id="category" name="category" class="form-select" required>
+                <option selected disabled>Choose...</option>
+                <option>Utilities</option>
+                <option>Maintenance</option>
+                <option>Salaries</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="subcategory" class="form-label">Sub-category</label>
+              <select id="subcategory" name="subcategory" class="form-select" required>
+                <option selected disabled>Choose...</option>
+                <option>Electricity</option>
+                <option>Water</option>
+                <option>Stationery</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="total_amount" class="form-label">Total Amount (₹)</label>
+              <input type="number" class="form-control" id="total_amount" name="total_amount" placeholder="Enter total amount" required>
+            </div>
+            <div class="col-md-4">
+              <label for="paid_amount" class="form-label">Paid Amount (₹)</label>
+              <input type="number" class="form-control" id="paid_amount" name="paid_amount" placeholder="Enter paid amount" required>
+            </div>
+            <div class="col-md-4">
+              <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
+              <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
+            </div>
           </div>
-          <div class="col-md-4">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-          </div>
-          <div class="col-md-4">
-            <label for="category" class="form-label">Category</label>
-            <select id="category" name="category" class="form-select" required>
-              <option selected disabled>Choose...</option>
-              <option>Utilities</option>
-              <option>Maintenance</option>
-              <option>Salaries</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="subcategory" class="form-label">Sub-category</label>
-            <select id="subcategory" name="subcategory" class="form-select" required>
-              <option selected disabled>Choose...</option>
-              <option>Electricity</option>
-              <option>Water</option>
-              <option>Stationery</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="total_amount" class="form-label">Total Amount (₹)</label>
-            <input type="number" class="form-control" id="total_amount" name="total_amount" required>
-          </div>
-          <div class="col-md-4">
-            <label for="paid_amount" class="form-label">Paid Amount (₹)</label>
-            <input type="number" class="form-control" id="paid_amount" name="paid_amount" required>
-          </div>
-          <div class="col-md-4">
-            <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
-            <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
-          </div>
-        </div>
 
-        <div class="mt-4">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <a href="expenditure.php" class="btn btn-secondary">Cancel</a>
-        </div>
-      </form>
+          <div class="mt-4 d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="expenditure.php" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
