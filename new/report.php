@@ -10,6 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $to_date = $_POST['to_date'] ?? null;
     $type = $_POST['type'] ?? 'all';
 
+    // Convert dates to SQL format (yyyy-mm-dd)
+    if ($from_date) {
+        $from_date = DateTime::createFromFormat('d-m-Y', $from_date)->format('Y-m-d');
+    }
+    if ($to_date) {
+        $to_date = DateTime::createFromFormat('d-m-Y', $to_date)->format('Y-m-d');
+    }
+
     // Initialize the base query
     if ($type === 'income') {
         $query = "SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income";
@@ -41,11 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Add ordering
-    if ($type === 'all') {
-        $query .= " ORDER BY date ASC";
-    } else {
-        $query .= " ORDER BY date ASC";
-    }
+    $query .= " ORDER BY date ASC";
 
     // Execute the query
     $result = $conn->query($query);
@@ -65,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Reports</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <style>
     body {
@@ -236,8 +241,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
   $(document).ready(function () {
+    // Initialize Flatpickr for date pickers
+    $('.date-picker').flatpickr({
+      dateFormat: "d-m-Y"
+    });
+
     // Initialize DataTable
     $('#reportTable').DataTable({
       responsive: true,
@@ -251,24 +262,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           next: "Next",
           previous: "Previous"
         }
-      }
-    });
-
-    // Date Picker Formatting
-    $('.date-picker').on('focus', function () {
-      $(this).attr('type', 'date');
-    }).on('blur', function () {
-      $(this).attr('type', 'text');
-    });
-
-    // Convert date format to dd-mm-yyyy
-    $('.date-picker').on('change', function () {
-      const date = new Date($(this).val());
-      if (!isNaN(date.getTime())) {
-        const formattedDate = ('0' + date.getDate()).slice(-2) + '-' +
-                              ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-                              date.getFullYear();
-        $(this).val(formattedDate);
       }
     });
   });
