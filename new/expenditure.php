@@ -181,15 +181,6 @@ if (!$result) {
       <div class="top-navbar d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Expenditure Records</h4>
 
-        <?php
-      if (isset($_GET['message']))  { 
-          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
-      }
-      if (isset($_GET['error'])) {
-          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
-      }
-      ?>
-      
         <div class="d-flex align-items-center gap-3">
           <i class="bi bi-bell fs-5"></i>
           <div class="dropdown">
@@ -209,6 +200,15 @@ if (!$result) {
           <h5>Expenditure Records</h5>
           <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
         </div>
+
+        <?php
+      if (isset($_GET['message']))  { 
+          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+      }
+      if (isset($_GET['error'])) {
+          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+      }
+      ?>
 
 
         <div class="table-responsive">
