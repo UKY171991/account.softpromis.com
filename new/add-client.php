@@ -1,3 +1,31 @@
+<?php
+// Database connection
+include 'inc/config.php'; // Include the database connection file
+
+$message = '';
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = ucfirst(trim($_POST['name']));
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $address = trim($_POST['address']);
+
+    // Insert into database
+    $stmt = $conn->prepare("INSERT INTO clients (name, email, phone, address) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $name, $email, $phone, $address);
+
+    if ($stmt->execute()) {
+        // Redirect back to the client page with a success message
+        header("Location: client.php?message=Client added successfully");
+        exit();
+    } else {
+        // Show error message
+        $message = "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +127,10 @@
     <!-- Main Content -->
     <div class="main-content w-100">
       <h3 class="mb-4">Add New Client</h3>
-      <form action="#" method="POST">
+      <?php if (!empty($message)): ?>
+        <?php echo $message; ?>
+      <?php endif; ?>
+      <form action="" method="POST">
         <div class="row g-3">
           <div class="col-md-6">
             <label for="name" class="form-label">Full Name</label>
@@ -115,13 +146,13 @@
           </div>
           <div class="col-md-6">
             <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" placeholder="Enter address">
+            <textarea class="form-control" id="address" name="address" placeholder="Enter address" rows="3"></textarea>
           </div>
         </div>
 
         <div class="mt-4 d-flex justify-content-between">
           <button type="submit" class="btn btn-primary w-100 me-2">Submit</button>
-          <a href="clients.php" class="btn btn-secondary w-100 ms-2">Cancel</a>
+          <a href="client.php" class="btn btn-secondary w-100 ms-2">Cancel</a>
         </div>
       </form>
     </div>
