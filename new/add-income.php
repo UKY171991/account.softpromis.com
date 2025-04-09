@@ -7,7 +7,8 @@ $message = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $date = $_POST['date'];
+    // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
+    $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
     $name = ucfirst(trim($_POST['name']));
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
@@ -19,28 +20,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare("INSERT INTO income (date, name, category, subcategory, amount, received, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $received, $balance);
 
-    // if ($stmt->execute()) {
-    //     $message = "<div class='alert alert-success'>Income entry added successfully.</div>";
-    // } else {
-    //   $message= "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
-    // }
-
     if ($stmt->execute()) {
-      // Redirect back to the income page with a success message
-      header("Location: income.php?message=Income entry added successfully");
-      exit();
+        // Redirect back to the income page with a success message
+        header("Location: income.php?message=Income entry added successfully");
+        exit();
     } else {
         // Redirect back to the income page with an error message
-        header("Location: income.php?error=Error: " . $stmt->error . "");
-        exit();
+        $message = "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
     }
 
     $stmt->close();
 }
 $conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +41,7 @@ $conn->close();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Income</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <style>
     body {
@@ -77,7 +70,7 @@ $conn->close();
       <h4 class="text-white">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <li><a href="dashboard.php" class="nav-link "><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
         <li><a href="income.php" class="nav-link active"><i class="bi bi-currency-rupee"></i> Income</a></li>
         <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
         <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
@@ -91,11 +84,11 @@ $conn->close();
       <h3 class="mb-4">Add New Income</h3>
 
       <?php echo $message; ?>
-      <form action="#" method="POST">
+      <form action="" method="POST">
         <div class="row g-3">
           <div class="col-md-4">
             <label for="date" class="form-label">Date</label>
-            <input type="date" class="form-control" id="date" name="date" required>
+            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="dd-mm-yyyy" required>
           </div>
           <div class="col-md-4">
             <label for="name" class="form-label">Name</label>
@@ -152,7 +145,14 @@ $conn->close();
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
+    // Initialize Flatpickr for date picker
+    flatpickr('.date-picker', {
+      dateFormat: "d-m-Y"
+    });
+
+    // Update balance amount dynamically
     document.getElementById('received_amount').addEventListener('input', updateBalance);
     document.getElementById('total_amount').addEventListener('input', updateBalance);
 
