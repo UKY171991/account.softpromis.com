@@ -1,3 +1,51 @@
+<?php
+// Database connection
+include 'inc/config.php';
+
+$message = '';
+$reports = [];
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $from_date = $_POST['from_date'] ?? null;
+    $to_date = $_POST['to_date'] ?? null;
+    $type = $_POST['type'] ?? 'all';
+
+    // Build the query dynamically based on filters
+    $query = "SELECT * FROM ";
+    if ($type === 'income') {
+        $query .= "income";
+    } elseif ($type === 'expenditure') {
+        $query .= "expenditures";
+    } else {
+        $query = "(SELECT 'Income' AS type, date, name, description, category, subcategory, amount FROM income 
+                   UNION ALL 
+                   SELECT 'Expenditure' AS type, date, name, description, category, subcategory, amount FROM expenditures) AS combined";
+    }
+
+    $conditions = [];
+    if ($from_date) {
+        $conditions[] = "date >= '$from_date'";
+    }
+    if ($to_date) {
+        $conditions[] = "date <= '$to_date'";
+    }
+
+    if (!empty($conditions)) {
+        $query .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $query .= " ORDER BY date ASC";
+
+    $result = $conn->query($query);
+    if ($result) {
+        $reports = $result->fetch_all(MYSQLI_ASSOC);
+    } else {
+        $message = "<div class='alert alert-danger'>Error generating report: " . $conn->error . "</div>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,18 +153,21 @@
     </div>
 
     <div class="p-4">
-      <form class="row g-3 mb-4">
+      <?php if (!empty($message)): ?>
+        <?php echo $message; ?>
+      <?php endif; ?>
+      <form class="row g-3 mb-4" method="POST">
         <div class="col-md-3">
           <label for="from_date" class="form-label">From Date</label>
-          <input type="date" class="form-control" id="from_date">
+          <input type="date" class="form-control" id="from_date" name="from_date">
         </div>
         <div class="col-md-3">
           <label for="to_date" class="form-label">To Date</label>
-          <input type="date" class="form-control" id="to_date">
+          <input type="date" class="form-control" id="to_date" name="to_date">
         </div>
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
-          <select id="type" class="form-select">
+          <select id="type" name="type" class="form-select">
             <option selected value="all">All</option>
             <option value="income">Income</option>
             <option value="expenditure">Expenditure</option>
@@ -142,26 +193,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>2024-04-01</td>
-              <td>Income</td>
-              <td>John Doe</td>
-              <td>Consulting Fee</td>
-              <td>Services</td>
-              <td>IT</td>
-              <td>₹15,000</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>2024-04-02</td>
-              <td>Expenditure</td>
-              <td>Jane Smith</td>
-              <td>Office Supplies</td>
-              <td>Operations</td>
-              <td>Stationery</td>
-              <td>₹5,000</td>
-            </tr>
+            <?php if (!empty($reports)): ?>
+              <?php $sl = 1; ?>
+              <?php foreach ($reports as $report): ?>
+                <tr>
+                  <td><?php echo $sl++; ?></td>
+                  <td><?php echo htmlspecialchars($report['date']); ?></td>
+                  <td><?php echo htmlspecialchars($report['type'] ?? ($type === 'income' ? 'Income' : 'Expenditure')); ?></td>
+                  <td><?php echo htmlspecialchars($report['name']); ?></td>
+                  <td><?php echo htmlspecialchars($report['description'] ?? 'N/A'); ?></td>
+                  <td><?php echo htmlspecialchars($report['category']); ?></td>
+                  <td><?php echo htmlspecialchars($report['subcategory']); ?></td>
+                  <td>₹<?php echo number_format($report['amount'], 2); ?></td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="8" class="text-center">No records found.</td>
+              </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
