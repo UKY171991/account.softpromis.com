@@ -1,3 +1,34 @@
+<?php
+// Database connection
+include 'inc/config.php'; // Include the database connection file
+
+$message = '';
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $date = $_POST['date'];
+    $name = ucfirst(trim($_POST['name']));
+    $category = $_POST['category'];
+    $subcategory = $_POST['subcategory'];
+    $amount = floatval($_POST['total_amount']);
+    $paid = floatval($_POST['paid_amount']);
+    $balance = $amount - $paid;
+
+    // Insert into database
+    $stmt = $conn->prepare("INSERT INTO expenditures (date, name, category, subcategory, amount, paid, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $paid, $balance);
+
+    if ($stmt->execute()) {
+        // Redirect back to the expenditure page with a success message
+        header("Location: expenditure.php?message=Expenditure entry added successfully");
+        exit();
+    } else {
+        // Redirect back to the expenditure page with an error message
+        $message = "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +64,7 @@
       <h4 class="text-white">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <li><a href="dashboard.php" class="nav-link "><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
         <li><a href="income.php" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
         <li><a href="expenditure.php" class="nav-link active"><i class="bi bi-wallet2"></i> Expenditure</a></li>
         <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
@@ -45,7 +76,10 @@
     <!-- Main content -->
     <div class="main-content w-100">
       <h3 class="mb-4">Add New Expenditure</h3>
-      <form action="#" method="POST">
+      <?php if (!empty($message)): ?>
+        <?php echo $message; ?>
+      <?php endif; ?>
+      <form action="" method="POST">
         <div class="row g-3">
           <div class="col-md-4">
             <label for="date" class="form-label">Date</label>
@@ -56,15 +90,6 @@
             <input type="text" class="form-control" id="name" name="name" required>
           </div>
           <div class="col-md-4">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control" id="description" name="description" required>
-          </div>
-          <div class="col-md-3">
             <label for="category" class="form-label">Category</label>
             <select id="category" name="category" class="form-select" required>
               <option selected disabled>Choose...</option>
@@ -73,7 +98,7 @@
               <option>Salaries</option>
             </select>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <label for="subcategory" class="form-label">Sub-category</label>
             <select id="subcategory" name="subcategory" class="form-select" required>
               <option selected disabled>Choose...</option>
@@ -82,7 +107,6 @@
               <option>Stationery</option>
             </select>
           </div>
-
           <div class="col-md-4">
             <label for="total_amount" class="form-label">Total Amount (₹)</label>
             <input type="number" class="form-control" id="total_amount" name="total_amount" required>
