@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
           <select id="type" name="type" class="form-select">
-            <option selected value="all">All</option>
+            <!-- <option selected value="all">All</option> -->
             <option value="income">Income</option>
             <option value="expenditure">Expenditure</option>
           </select>
