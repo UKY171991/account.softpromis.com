@@ -83,6 +83,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-navbar h4 {
+      margin: 0;
+      font-weight: bold;
+    }
+    .top-navbar .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .top-navbar .user-menu i {
+      font-size: 1.5rem;
+      color: #6c757d;
+    }
+    .top-navbar .user-menu .dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #343a40;
+      font-weight: 500;
+    }
+    .top-navbar .user-menu .dropdown-toggle:hover {
+      color: #007bff;
     }
   </style>
 </head>
@@ -105,13 +132,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Main content -->
     <div class="main-content w-100">
       <!-- Top Navbar -->
-      <div class="top-navbar d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Add Expenditure</h4>
-        <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-bell fs-5"></i>
+      <div class="top-navbar">
+        <h4>Add Expenditure</h4>
+        <div class="user-menu">
+          <i class="bi bi-bell"></i>
           <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+            <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Admin
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" href="#">Profile</a></li>
