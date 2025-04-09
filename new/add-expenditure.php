@@ -131,23 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Main content -->
     <div class="main-content w-100">
-      <!-- Top Navbar -->
-      <div class="top-navbar">
-        <h4>Add Expenditure</h4>
-        <div class="user-menu">
-          <i class="bi bi-bell"></i>
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle"></i> Admin
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="#">Profile</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
+      
       <div class="form-container w-100">
         <h3>Add New Expenditure</h3>
         <?php if (!empty($message)): ?>
