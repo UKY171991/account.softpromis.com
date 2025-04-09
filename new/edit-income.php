@@ -80,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     .form-container {
       margin: 2rem auto;
-      max-width: 800px;
       background: white;
       padding: 2rem;
       border-radius: 0.5rem;
@@ -123,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    <div class="form-container">
+    <div class="form-container w-100">
       <?php if (isset($error)): ?>
         <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
       <?php endif; ?>
