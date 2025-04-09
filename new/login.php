@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "<div class='alert alert-danger'>User not found or inactive. Please contact the administrator.</div>";
     }
 }
-
+/*
 // Hash the password
 $password = password_hash('admin@12345', PASSWORD_DEFAULT);
 
@@ -59,6 +59,7 @@ if ($stmt->execute()) {
 } else {
     echo "Error: " . $stmt->error;
 }
+*/
 
 $conn->close();
 ?>
