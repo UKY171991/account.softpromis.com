@@ -186,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <th>Date</th>
               <th>Type</th>
               <th>Name</th>
+              <th>Description</th>
               <th>Category</th>
               <th>Sub-category</th>
               <th>Amount</th>
@@ -200,6 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   <td><?php echo htmlspecialchars($report['date']); ?></td>
                   <td><?php echo htmlspecialchars($report['type'] ?? ($type === 'income' ? 'Income' : 'Expenditure')); ?></td>
                   <td><?php echo htmlspecialchars($report['name']); ?></td>
+                  <td><?php echo htmlspecialchars($report['description'] ?? 'N/A'); ?></td>
                   <td><?php echo htmlspecialchars($report['category']); ?></td>
                   <td><?php echo htmlspecialchars($report['subcategory']); ?></td>
                   <td>₹<?php echo number_format($report['amount'], 2); ?></td>
