@@ -1,3 +1,12 @@
+<?php
+// Database connection
+include 'inc/config.php'; // Include the database connection file
+
+// Fetch clients from the database
+$sql = "SELECT id, name, email, phone, address, created_at FROM clients ORDER BY id ASC";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +53,7 @@
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
-      font-size: 0.875rem; /* Smaller font size for the entire table */
+      font-size: 0.875rem;
     }
     .table th {
       background-color: #f8f9fa;
@@ -52,7 +61,7 @@
       font-weight: bold;
       color: #495057;
       padding: 0.75rem;
-      font-size: 0.85rem; /* Slightly larger font size for headers */
+      font-size: 0.85rem;
       border-bottom: 2px solid #dee2e6;
     }
     .table td {
@@ -81,7 +90,7 @@
     }
     .table td .btn-primary:hover {
       background-color: #0b5ed7;
-      transform: scale(1.05); /* Slight zoom effect */
+      transform: scale(1.05);
     }
     .table td .btn-danger {
       background-color: #dc3545;
@@ -91,7 +100,7 @@
     }
     .table td .btn-danger:hover {
       background-color: #bb2d3b;
-      transform: scale(1.05); /* Slight zoom effect */
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -150,31 +159,27 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Sample Data Row -->
-            <tr>
-              <td>1</td>
-              <td>Jane Smith</td>
-              <td>jane@example.com</td>
-              <td>9876543210</td>
-              <td>Chennai, India</td>
-              <td>2024-04-01</td>
-              <td>
-                <a href="#" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Edit</a>
-                <a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Delete</a>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>John Doe</td>
-              <td>john@example.com</td>
-              <td>9876543211</td>
-              <td>Mumbai, India</td>
-              <td>2024-04-02</td>
-              <td>
-                <a href="#" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Edit</a>
-                <a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Delete</a>
-              </td>
-            </tr>
+            <?php if ($result->num_rows > 0): ?>
+              <?php $sl = 1; ?>
+              <?php while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                  <td><?php echo $sl++; ?></td>
+                  <td><?php echo htmlspecialchars($row['name']); ?></td>
+                  <td><?php echo htmlspecialchars($row['email']); ?></td>
+                  <td><?php echo htmlspecialchars($row['phone']); ?></td>
+                  <td><?php echo htmlspecialchars($row['address']); ?></td>
+                  <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                  <td>
+                    <a href="edit-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Edit</a>
+                    <a href="delete-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this client?');"><i class="bi bi-trash"></i> Delete</a>
+                  </td>
+                </tr>
+              <?php endwhile; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="7" class="text-center">No clients found.</td>
+              </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
