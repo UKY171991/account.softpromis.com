@@ -13,11 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $type = $_POST['type'] ?? 'all';
 
     // Build the query dynamically based on filters
-    $query = "SELECT * FROM ";
     if ($type === 'income') {
-        $query .= "income";
+        $query = "SELECT 'Income' AS type, date, name, description, category, subcategory, amount FROM income";
     } elseif ($type === 'expenditure') {
-        $query .= "expenditures";
+        $query = "SELECT 'Expenditure' AS type, date, name, description, category, subcategory, amount FROM expenditures";
     } else {
         $query = "(SELECT 'Income' AS type, date, name, description, category, subcategory, amount FROM income 
                    UNION ALL 
@@ -199,8 +198,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <?php foreach ($reports as $report): ?>
                 <tr>
                   <td><?php echo $sl++; ?></td>
-                  <td><?php echo htmlspecialchars($report['date']); ?></td>
-                  <td><?php echo htmlspecialchars($report['type'] ?? ($type === 'income' ? 'Income' : 'Expenditure')); ?></td>
+                  <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td> <!-- Date formatted -->
+                  <td><?php echo htmlspecialchars($report['type']); ?></td>
                   <td><?php echo htmlspecialchars($report['name']); ?></td>
                   <td><?php echo htmlspecialchars($report['description'] ?? 'N/A'); ?></td>
                   <td><?php echo htmlspecialchars($report['category']); ?></td>
