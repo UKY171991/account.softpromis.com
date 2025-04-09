@@ -180,7 +180,7 @@ $result = $conn->query($sql);
                   <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                   <td>
                     <a href="edit-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Edit</a>
-                    <a href="delete-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this client?');"><i class="bi bi-trash"></i> Delete</a>
+                    <a href="include/delete-client.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this client?');"><i class="bi bi-trash"></i> Delete</a>
                   </td>
                 </tr>
               <?php endwhile; ?>
