@@ -252,7 +252,7 @@ if (!$result) {
                       echo "<td>" . $status . "</td>";
                       echo "<td>
                               <a href='edit-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                              <a href='delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
+                              <a href='include/delete-expenditure.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
                             </td>";
                       echo "</tr>";
                   }
