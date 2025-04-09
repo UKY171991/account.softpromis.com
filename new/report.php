@@ -1,5 +1,4 @@
 <?php
-include 'inc/auth.php'; // Include the authentication file to check user login status
 // Database connection
 include 'inc/config.php';
 
