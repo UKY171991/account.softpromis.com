@@ -7,7 +7,8 @@ $message = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $date = $_POST['date'];
+    // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
+    $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
     $name = ucfirst(trim($_POST['name']));
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
@@ -142,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="row g-4">
             <div class="col-md-6">
               <label for="date" class="form-label">Date</label>
-              <input type="date" class="form-control" id="date" name="date" required>
+              <input type="text" class="form-control date-picker" id="date" name="date" placeholder="dd-mm-yyyy" required>
             </div>
             <div class="col-md-6">
               <label for="name" class="form-label">Name</label>
@@ -190,7 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
+    // Initialize Flatpickr for date picker
+    flatpickr('.date-picker', {
+      dateFormat: "d-m-Y"
+    });
+
+    // Update balance amount dynamically
     document.getElementById('paid_amount').addEventListener('input', updateBalance);
     document.getElementById('total_amount').addEventListener('input', updateBalance);
 
