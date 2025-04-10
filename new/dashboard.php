@@ -3,6 +3,24 @@ include 'inc/auth.php'; // Include the authentication file to check user login s
 // Database connection
 include 'inc/config.php';
 
+// Generate financial years (last 5 years including the current financial year)
+$currentYear = date('Y');
+$currentMonth = date('n');
+$startYear = ($currentMonth >= 4) ? $currentYear : $currentYear - 1; // Financial year starts in April
+$financialYears = [];
+for ($i = 0; $i < 5; $i++) {
+    $endYear = $startYear + 1;
+    $financialYears[] = "$startYear-$endYear";
+    $startYear--;
+}
+
+// Determine the default financial year
+$defaultFinancialYear = ($currentMonth >= 4) ? date('Y') . '-' . (date('Y') + 1) : (date('Y') - 1) . '-' . date('Y');
+
+// Get the selected financial year from the query parameter or use the default
+$selectedFinancialYear = $_GET['financial_year'] ?? $defaultFinancialYear;
+list($startYear, $endYear) = explode('-', $selectedFinancialYear);
+
 // Fetch total income
 $totalIncomeQuery = "SELECT SUM(amount) AS total_income FROM income";
 $totalIncomeResult = $conn->query($totalIncomeQuery);
@@ -40,8 +58,8 @@ $monthlyIncomeQuery = "
     SUM(amount) AS total 
   FROM income 
   WHERE 
-    (MONTH(date) >= 4 AND YEAR(date) = YEAR(CURDATE())) OR 
-    (MONTH(date) < 4 AND YEAR(date) = YEAR(CURDATE()) - 1)
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
   GROUP BY MONTH(date)";
 $monthlyIncomeResult = $conn->query($monthlyIncomeQuery);
 $monthlyIncomeData = [];
@@ -56,8 +74,8 @@ $monthlyExpenditureQuery = "
     SUM(amount) AS total 
   FROM expenditures 
   WHERE 
-    (MONTH(date) >= 4 AND YEAR(date) = YEAR(CURDATE())) OR 
-    (MONTH(date) < 4 AND YEAR(date) = YEAR(CURDATE()) - 1)
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
   GROUP BY MONTH(date)";
 $monthlyExpenditureResult = $conn->query($monthlyExpenditureQuery);
 $monthlyExpenditureData = [];
@@ -222,6 +240,22 @@ $distributionPieData = [
           </ul>
         </div>
       </nav>
+
+      <!-- Financial Year Dropdown -->
+      <div class="dropdown me-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="financialYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <?php echo $selectedFinancialYear; ?>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="financialYearDropdown">
+          <?php foreach ($financialYears as $year): ?>
+            <li>
+              <a class="dropdown-item financial-year-option" href="#" data-year="<?php echo $year; ?>">
+                <?php echo $year; ?>
+              </a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
 
       <!-- Dashboard Cards -->
        <!----
@@ -659,6 +693,16 @@ $distributionPieData = [
           }
         }
       }
+    });
+
+    // Financial Year Selection
+    document.querySelectorAll('.financial-year-option').forEach(item => {
+      item.addEventListener('click', function (e) {
+        e.preventDefault();
+        const selectedYear = this.getAttribute('data-year');
+        // Reload the page with the selected financial year as a query parameter
+        window.location.href = `dashboard.php?financial_year=${selectedYear}`;
+      });
     });
   </script>
 </body>
