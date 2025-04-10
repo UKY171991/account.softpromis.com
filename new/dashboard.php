@@ -340,7 +340,7 @@ $distributionPieData = [
         <div class="col-md-3">
           <div class="card dashboard-card p-3">
             <div class="card-body">
-              <h5 class="card-title">Total Income (This Year)</h5>
+              <h5 class="card-title">Income (This Year)</h5>
               <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
             </div>
           </div>
