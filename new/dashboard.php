@@ -53,26 +53,6 @@ $pendingPaymentsQuery = "
 $pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
 
-// Fetch pending expenditure for the selected financial year
-$pendingExpenditureQuery = "
-  SELECT SUM(balance) AS pending_expenditure 
-  FROM expenditures 
-  WHERE 
-    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
-    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
-$pendingExpenditureResult = $conn->query($pendingExpenditureQuery);
-$pendingExpenditure = $pendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
-
-// Fetch pending income for the selected financial year
-$pendingIncomeQuery = "
-  SELECT SUM(balance) AS pending_income 
-  FROM income 
-  WHERE 
-    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
-    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
-$pendingIncomeResult = $conn->query($pendingIncomeQuery);
-$pendingIncome = $pendingIncomeResult->fetch_assoc()['pending_income'] ?? 0;
-
 // Fetch monthly income for the selected financial year
 $monthlyIncomeQuery = "
   SELECT 
@@ -175,8 +155,6 @@ $distributionPieData = [
     'Income' => $totalIncomeForPie,
     'Expenditure' => $totalExpenditureForPie
 ];
-
-$pendingIncome = ($monthlyIncomeData[date('n')] ?? 0) - ($monthlyExpenditureData[date('n')] ?? 0);
 ?>
 
 <!DOCTYPE html>
@@ -371,25 +349,6 @@ $pendingIncome = ($monthlyIncomeData[date('n')] ?? 0) - ($monthlyExpenditureData
             <div class="card-body">
               <h5 class="card-title">Pending (This Month)</h5>
               <h3 class="text-warning">₹<?php echo number_format(($monthlyIncomeData[date('n')] ?? 0) - ($monthlyExpenditureData[date('n')] ?? 0), 2); ?></h3>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Income (This Year)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($pendingIncome, 2); ?></h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Expenditure (This Year)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($pendingExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
