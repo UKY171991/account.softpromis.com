@@ -388,11 +388,10 @@ $distributionPieData = [
     const incomeChart = new Chart(document.getElementById('incomeChart'), {
       type: 'line',
       data: {
-        labels: <?php echo json_encode($financialYearLabels); ?>, // Financial year labels
+        labels: <?php echo json_encode($financialYearLabels); ?>,
         datasets: [{
           label: 'Income',
           data: <?php
-            // Map income data to financial year order
             $incomeDataForGraph = [];
             for ($i = 4; $i <= 12; $i++) {
                 $incomeDataForGraph[] = $monthlyIncomeData[$i] ?? 0;
