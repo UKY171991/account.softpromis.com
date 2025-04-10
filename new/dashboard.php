@@ -371,7 +371,10 @@ $distributionPieData = [
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Expenditure (This Year)</h5>
@@ -387,9 +390,7 @@ $distributionPieData = [
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="row g-4 mb-4">
+      
         
         <div class="col-md-4">
           <div class="card dashboard-card p-3">
