@@ -348,6 +348,14 @@ $distributionPieData = [
         <div class="col-md-4">
           <div class="card dashboard-card p-3">
             <div class="card-body">
+              <h5 class="card-title">Income (This Month)</h5>
+              <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
               <h5 class="card-title">Total Expenditure (This Year)</h5>
               <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
             </div>
@@ -364,14 +372,7 @@ $distributionPieData = [
       </div>
 
       <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Income (This Month)</h5>
-              <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
-            </div>
-          </div>
-        </div>
+        
         <div class="col-md-4">
           <div class="card dashboard-card p-3">
             <div class="card-body">
