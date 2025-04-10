@@ -251,8 +251,6 @@ $result = $conn->query($sql);
                 <th>Received</th>
                 <th>Balance</th>
                 <th>Status</th>
-                <th>Created At</th>
-                <th>Updated At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -281,8 +279,6 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['received'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . $status . "</td>";
-                      echo "<td>" . htmlspecialchars($formatted_created_at) . "</td>";
-                      echo "<td>" . htmlspecialchars($formatted_updated_at) . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
                               <a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
