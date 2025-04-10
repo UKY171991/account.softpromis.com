@@ -2,7 +2,7 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
-$sql = "SELECT id, date, name, category, subcategory, amount, received, balance FROM income";
+$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income";
 $result = $conn->query($sql);
 ?>
 
@@ -243,12 +243,16 @@ $result = $conn->query($sql);
                 <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
+                <th>Phone</th>
+                <th>Description</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
                 <th>Received</th>
                 <th>Balance</th>
                 <th>Status</th>
+                <th>Created At</th>
+                <th>Updated At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -258,6 +262,8 @@ $result = $conn->query($sql);
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
+                      $formatted_created_at = date("d-m-Y H:i:s", strtotime($row['created_at']));
+                      $formatted_updated_at = date("d-m-Y H:i:s", strtotime($row['updated_at']));
                       $status = ($row['balance'] == 0) 
                           ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
@@ -267,12 +273,16 @@ $result = $conn->query($sql);
                       echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['received'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . $status . "</td>";
+                      echo "<td>" . htmlspecialchars($formatted_created_at) . "</td>";
+                      echo "<td>" . htmlspecialchars($formatted_updated_at) . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
                               <a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
@@ -281,7 +291,7 @@ $result = $conn->query($sql);
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
+                  echo "<tr><td colspan='15' class='text-center'>No records found</td></tr>";
               }
               ?>
             </tbody>
