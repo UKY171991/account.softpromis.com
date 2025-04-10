@@ -89,6 +89,30 @@ $expenditureDistributionData = [];
 while ($row = $expenditureDistributionResult->fetch_assoc()) {
     $expenditureDistributionData[] = ['category' => $row['category'], 'total' => $row['total']];
 }
+
+// Prepare data for Income vs Expenditure Distribution
+$categories = [];
+$incomeDistribution = [];
+$expenditureDistribution = [];
+
+// Combine income and expenditure categories
+foreach ($incomeDistributionData as $income) {
+    $categories[$income['category']] = true;
+    $incomeDistribution[$income['category']] = $income['total'];
+}
+foreach ($expenditureDistributionData as $expenditure) {
+    $categories[$expenditure['category']] = true;
+    $expenditureDistribution[$expenditure['category']] = $expenditure['total'];
+}
+
+// Ensure all categories are present in both datasets
+$categories = array_keys($categories);
+$incomeDataForChart = [];
+$expenditureDataForChart = [];
+foreach ($categories as $category) {
+    $incomeDataForChart[] = $incomeDistribution[$category] ?? 0;
+    $expenditureDataForChart[] = $expenditureDistribution[$category] ?? 0;
+}
 ?>
 
 <!DOCTYPE html>
@@ -289,9 +313,6 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           <h5 class="mb-3">Monthly Expenditure Trend</h5>
           <canvas id="expenditureChart" height="300"></canvas>
         </div>
-
-
-        
       </div>
 
       <div class="row g-4 mt-4">
@@ -305,7 +326,12 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
         </div>
       </div>
 
-      
+      <div class="row g-4 mt-4">
+        <div class="col-md-12">
+          <h5 class="mb-3">Income Distribution vs Expenditure Distribution</h5>
+          <canvas id="distributionComparisonChart" height="300"></canvas>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -535,6 +561,54 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
               display: true,
               text: 'Amount (₹)'
             }
+          }
+        }
+      }
+    });
+
+    // Income Distribution vs Expenditure Distribution Chart
+    const distributionComparisonChart = new Chart(document.getElementById('distributionComparisonChart'), {
+      type: 'bar',
+      data: {
+        labels: <?php echo json_encode($categories); ?>, // Categories
+        datasets: [
+          {
+            label: 'Income',
+            data: <?php echo json_encode($incomeDataForChart); ?>,
+            backgroundColor: 'rgba(0, 128, 0, 0.7)', // Green for income
+            borderColor: 'rgba(0, 128, 0, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Expenditure',
+            data: <?php echo json_encode($expenditureDataForChart); ?>,
+            backgroundColor: 'rgba(255, 0, 0, 0.7)', // Red for expenditure
+            borderColor: 'rgba(255, 0, 0, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Categories'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Amount (₹)'
+            },
+            beginAtZero: true
           }
         }
       }
