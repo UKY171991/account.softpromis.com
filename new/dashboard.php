@@ -53,6 +53,42 @@ $pendingPaymentsQuery = "
 $pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
 
+// Fetch pending income for the current month
+$currentMonthPendingIncomeQuery = "
+  SELECT SUM(balance) AS pending_income 
+  FROM income 
+  WHERE MONTH(date) = $currentMonth AND YEAR(date) = $currentYear";
+$currentMonthPendingIncomeResult = $conn->query($currentMonthPendingIncomeQuery);
+$currentMonthPendingIncome = $currentMonthPendingIncomeResult->fetch_assoc()['pending_income'] ?? 0;
+
+// Fetch pending expenditure for the current month
+$currentMonthPendingExpenditureQuery = "
+  SELECT SUM(balance) AS pending_expenditure 
+  FROM expenditures 
+  WHERE MONTH(date) = $currentMonth AND YEAR(date) = $currentYear";
+$currentMonthPendingExpenditureResult = $conn->query($currentMonthPendingExpenditureQuery);
+$currentMonthPendingExpenditure = $currentMonthPendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
+
+// Fetch pending income for the current financial year
+$currentYearPendingIncomeQuery = "
+  SELECT SUM(balance) AS pending_income 
+  FROM income 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
+$currentYearPendingIncomeResult = $conn->query($currentYearPendingIncomeQuery);
+$currentYearPendingIncome = $currentYearPendingIncomeResult->fetch_assoc()['pending_income'] ?? 0;
+
+// Fetch pending expenditure for the current financial year
+$currentYearPendingExpenditureQuery = "
+  SELECT SUM(balance) AS pending_expenditure 
+  FROM expenditures 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
+$currentYearPendingExpenditureResult = $conn->query($currentYearPendingExpenditureQuery);
+$currentYearPendingExpenditure = $currentYearPendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
+
 // Fetch monthly income for the selected financial year
 $monthlyIncomeQuery = "
   SELECT 
@@ -349,6 +385,48 @@ $distributionPieData = [
             <div class="card-body">
               <h5 class="card-title">Pending (This Month)</h5>
               <h3 class="text-warning">₹<?php echo number_format(($monthlyIncomeData[date('n')] ?? 0) - ($monthlyExpenditureData[date('n')] ?? 0), 2); ?></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <!-- Pending Income (Current Month) -->
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Income (This Month)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Expenditure (Current Month) -->
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Expenditure (This Month)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Income (Current Year) -->
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Income (This Year)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Expenditure (Current Year) -->
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Expenditure (This Year)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
