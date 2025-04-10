@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
     $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
     $name = ucfirst(trim($_POST['name']));
+    $phone = $_POST['phone'];
+    $description = $_POST['description'];
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
     $amount = floatval($_POST['total_amount']);
@@ -17,8 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $balance = $amount - $paid;
 
     // Insert into database
-    $stmt = $conn->prepare("INSERT INTO expenditures (date, name, category, subcategory, amount, paid, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $paid, $balance);
+    $stmt = $conn->prepare("
+        INSERT INTO expenditures (date, name, phone, description, category, subcategory, amount, paid, balance) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
 
     if ($stmt->execute()) {
         // Redirect back to the expenditure page with a success message
@@ -141,15 +146,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
         <form action="" method="POST">
           <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label for="date" class="form-label">Date</label>
               <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label for="name" class="form-label">Name</label>
               <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+            </div>
+            <div class="col-md-4">
+              <label for="description" class="form-label">Description</label>
+              <input type="text" class="form-control" id="description" name="description" placeholder="Enter description" required>
+            </div>
+            <div class="col-md-4">
               <label for="category" class="form-label">Category</label>
               <select id="category" name="category" class="form-select" required>
                 <option selected disabled>Choose...</option>
@@ -158,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <option>Salaries</option>
               </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label for="subcategory" class="form-label">Sub-category</label>
               <select id="subcategory" name="subcategory" class="form-select" required>
                 <option selected disabled>Choose...</option>
