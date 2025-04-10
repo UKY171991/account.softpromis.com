@@ -33,19 +33,45 @@ $currentYearPendingPaymentsQuery = "SELECT SUM(balance) AS pending_payments FROM
 $currentYearPendingPaymentsResult = $conn->query($currentYearPendingPaymentsQuery);
 $currentYearPendingPayments = $currentYearPendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
 
-// Fetch monthly income and expenditure
-$monthlyIncomeQuery = "SELECT MONTH(date) AS month, SUM(amount) AS total FROM income GROUP BY MONTH(date)";
+// Fetch monthly income for the financial year (April to March)
+$monthlyIncomeQuery = "
+  SELECT 
+    MONTH(date) AS month, 
+    SUM(amount) AS total 
+  FROM income 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = YEAR(CURDATE())) OR 
+    (MONTH(date) < 4 AND YEAR(date) = YEAR(CURDATE()) - 1)
+  GROUP BY MONTH(date)";
 $monthlyIncomeResult = $conn->query($monthlyIncomeQuery);
 $monthlyIncomeData = [];
 while ($row = $monthlyIncomeResult->fetch_assoc()) {
     $monthlyIncomeData[$row['month']] = $row['total'];
 }
 
-$monthlyExpenditureQuery = "SELECT MONTH(date) AS month, SUM(amount) AS total FROM expenditures GROUP BY MONTH(date)";
+// Fetch monthly expenditure for the financial year (April to March)
+$monthlyExpenditureQuery = "
+  SELECT 
+    MONTH(date) AS month, 
+    SUM(amount) AS total 
+  FROM expenditures 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = YEAR(CURDATE())) OR 
+    (MONTH(date) < 4 AND YEAR(date) = YEAR(CURDATE()) - 1)
+  GROUP BY MONTH(date)";
 $monthlyExpenditureResult = $conn->query($monthlyExpenditureQuery);
 $monthlyExpenditureData = [];
 while ($row = $monthlyExpenditureResult->fetch_assoc()) {
     $monthlyExpenditureData[$row['month']] = $row['total'];
+}
+
+// Generate labels for the financial year (April to March)
+$financialYearLabels = [];
+for ($i = 4; $i <= 12; $i++) {
+    $financialYearLabels[] = date('F', mktime(0, 0, 0, $i, 1));
+}
+for ($i = 1; $i <= 3; $i++) {
+    $financialYearLabels[] = date('F', mktime(0, 0, 0, $i, 1));
 }
 
 // Fetch income distribution
@@ -288,10 +314,20 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
     const incomeChart = new Chart(document.getElementById('incomeChart'), {
       type: 'line',
       data: {
-        labels: <?php echo json_encode(array_keys($monthlyIncomeData)); ?>,
+        labels: <?php echo json_encode($financialYearLabels); ?>, // Financial year labels
         datasets: [{
           label: 'Income',
-          data: <?php echo json_encode(array_values($monthlyIncomeData)); ?>,
+          data: <?php
+            // Map income data to financial year order
+            $incomeDataForGraph = [];
+            for ($i = 4; $i <= 12; $i++) {
+                $incomeDataForGraph[] = $monthlyIncomeData[$i] ?? 0;
+            }
+            for ($i = 1; $i <= 3; $i++) {
+                $incomeDataForGraph[] = $monthlyIncomeData[$i] ?? 0;
+            }
+            echo json_encode($incomeDataForGraph);
+          ?>,
           borderColor: 'green',
           backgroundColor: 'rgba(0, 128, 0, 0.1)',
           tension: 0.3,
@@ -325,16 +361,26 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
 
     // Monthly Expenditure Trend
     const expenditureChart = new Chart(document.getElementById('expenditureChart'), {
-      type: 'line', // Change to 'line' chart
+      type: 'line',
       data: {
-        labels: <?php echo json_encode(array_keys($monthlyExpenditureData)); ?>,
+        labels: <?php echo json_encode($financialYearLabels); ?>, // Financial year labels
         datasets: [{
           label: 'Expenditure',
-          data: <?php echo json_encode(array_values($monthlyExpenditureData)); ?>,
-          borderColor: 'red', // Line color
-          backgroundColor: 'rgba(255, 0, 0, 0.1)', // Fill color
-          tension: 0.3, // Smooth curve
-          fill: true // Enable area fill
+          data: <?php
+            // Map expenditure data to financial year order
+            $expenditureDataForGraph = [];
+            for ($i = 4; $i <= 12; $i++) {
+                $expenditureDataForGraph[] = $monthlyExpenditureData[$i] ?? 0;
+            }
+            for ($i = 1; $i <= 3; $i++) {
+                $expenditureDataForGraph[] = $monthlyExpenditureData[$i] ?? 0;
+            }
+            echo json_encode($expenditureDataForGraph);
+          ?>,
+          borderColor: 'red',
+          backgroundColor: 'rgba(255, 0, 0, 0.1)',
+          tension: 0.3,
+          fill: true
         }]
       },
       options: {
@@ -444,25 +490,25 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
 
     // Combined Income vs Expenditure Graph
     const combinedChart = new Chart(document.getElementById('combinedChart'), {
-      type: 'line', // Change to 'line' chart
+      type: 'line',
       data: {
-        labels: <?php echo json_encode(array_keys($monthlyIncomeData)); ?>, // Use months as labels
+        labels: <?php echo json_encode($financialYearLabels); ?>,
         datasets: [
           {
             label: 'Income',
-            data: <?php echo json_encode(array_values($monthlyIncomeData)); ?>,
-            borderColor: 'green', // Line color for income
-            backgroundColor: 'rgba(0, 128, 0, 0.1)', // Fill color for income
-            tension: 0.3, // Smooth curve
-            fill: true // Enable area fill
+            data: <?php echo json_encode($incomeDataForGraph); ?>,
+            borderColor: 'green',
+            backgroundColor: 'rgba(0, 128, 0, 0.1)',
+            tension: 0.3,
+            fill: true
           },
           {
             label: 'Expenditure',
-            data: <?php echo json_encode(array_values($monthlyExpenditureData)); ?>,
-            borderColor: 'red', // Line color for expenditure
-            backgroundColor: 'rgba(255, 0, 0, 0.1)', // Fill color for expenditure
-            tension: 0.3, // Smooth curve
-            fill: true // Enable area fill
+            data: <?php echo json_encode($expenditureDataForGraph); ?>,
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            tension: 0.3,
+            fill: true
           }
         ]
       },
