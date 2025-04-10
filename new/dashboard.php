@@ -337,7 +337,7 @@ $distributionPieData = [
       --->
 
       <div class="row g-4 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Income (This Year)</h5>
@@ -345,11 +345,29 @@ $distributionPieData = [
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Income (This Month)</h5>
               <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+        <!-- Pending Income (Current Month) -->
+        <div class="col-md-3">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Income (This Month)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+        <!-- Pending Income (Current Year) -->
+        <div class="col-md-3">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Income (This Year)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -392,15 +410,7 @@ $distributionPieData = [
       </div>
 
       <div class="row g-4 mb-4">
-        <!-- Pending Income (Current Month) -->
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Income (This Month)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
-            </div>
-          </div>
-        </div>
+        
 
         <!-- Pending Expenditure (Current Month) -->
         <div class="col-md-4">
@@ -412,15 +422,7 @@ $distributionPieData = [
           </div>
         </div>
 
-        <!-- Pending Income (Current Year) -->
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Income (This Year)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
-            </div>
-          </div>
-        </div>
+        
 
         <!-- Pending Expenditure (Current Year) -->
         <div class="col-md-4">
