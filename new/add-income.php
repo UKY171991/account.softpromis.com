@@ -184,10 +184,14 @@ $conn->close();
       document.getElementById('balance_amount').value = balance;
     }
 
-    // Capitalize the first letter of the name field
+    // Capitalize the first letter of each word in the name field
     document.getElementById('name').addEventListener('input', function () {
       const value = this.value;
-      this.value = value.charAt(0).toUpperCase() + value.slice(1);
+      this.value = value
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
     });
   </script>
 </body>
