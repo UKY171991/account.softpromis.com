@@ -1,4 +1,5 @@
 <?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 include 'inc/auth.php'; // Include the authentication file to check user session
 // Database connection
 include 'inc/config.php'; // Include the database connection file
@@ -19,7 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $balance = $amount - $received;
 
     // Insert into database
-    $stmt = $conn->prepare("INSERT INTO income (date, name, phone, description, category, subcategory, amount, received, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("
+        INSERT INTO income (date, name, phone, description, category, subcategory, amount, received, balance) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
     $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance);
 
     if ($stmt->execute()) {
