@@ -88,7 +88,7 @@ $conn->close();
         <div class="row g-3">
           <div class="col-md-4">
             <label for="date" class="form-label">Date</label>
-            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="dd-mm-yyyy" required>
+            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
           </div>
           <div class="col-md-4">
             <label for="name" class="form-label">Name</label>
