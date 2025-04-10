@@ -65,7 +65,7 @@ $currentMonthPendingIncome = $currentMonthPendingIncomeResult->fetch_assoc()['pe
 $currentMonthPendingExpenditureQuery = "
   SELECT SUM(balance) AS pending_expenditure 
   FROM expenditures 
-  WHERE MONTH(date) = $currentMonth AND YEAR(date) = $currentYear";
+  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
 $currentMonthPendingExpenditureResult = $conn->query($currentMonthPendingExpenditureQuery);
 $currentMonthPendingExpenditure = $currentMonthPendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
 
