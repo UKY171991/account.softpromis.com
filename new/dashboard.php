@@ -332,10 +332,10 @@ $distributionPieData = [
         </div>
 
         <div class="col-md-4">
-          <h5 class="mb-3 text-center">Income Distribution vs Expenditure Distribution</h5>
+          <h5 class="mb-3 text-center">Income vs Expenditure</h5>
           <canvas id="distributionPieChart" height="300"></canvas>
         </div>
-        
+
         <div class="col-md-4">
           <h5 class="mb-3">Expenditure Distribution</h5>
           <canvas id="expenditurePieChart" height="200" width="200"></canvas>
