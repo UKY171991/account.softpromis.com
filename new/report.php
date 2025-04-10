@@ -181,11 +181,11 @@ if ($result) {
       <form class="row g-3 mb-4" method="POST">
         <div class="col-md-3">
           <label for="from_date" class="form-label">From Date</label>
-          <input type="text" class="form-control date-picker" id="from_date" name="from_date" placeholder="dd-mm-yyyy" value="<?php echo isset($_POST['from_date']) ? htmlspecialchars($_POST['from_date']) : ''; ?>">
+          <input type="text" class="form-control date-picker" id="from_date" name="from_date" placeholder="DD-MM-YYYY" value="<?php echo isset($_POST['from_date']) ? htmlspecialchars($_POST['from_date']) : ''; ?>">
         </div>
         <div class="col-md-3">
           <label for="to_date" class="form-label">To Date</label>
-          <input type="text" class="form-control date-picker" id="to_date" name="to_date" placeholder="dd-mm-yyyy" value="<?php echo isset($_POST['to_date']) ? htmlspecialchars($_POST['to_date']) : ''; ?>">
+          <input type="text" class="form-control date-picker" id="to_date" name="to_date" placeholder="DD-MM-YYYY" value="<?php echo isset($_POST['to_date']) ? htmlspecialchars($_POST['to_date']) : ''; ?>">
         </div>
         <div class="col-md-3">
           <label for="type" class="form-label">Type</label>
