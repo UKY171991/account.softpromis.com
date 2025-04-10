@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="col-md-4">
               <label for="phone" class="form-label">Phone</label>
-              <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+              <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits" required>
             </div>
             <div class="col-md-4">
               <label for="description" class="form-label">Description</label>
@@ -221,6 +221,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       const balance = total - paid;
       document.getElementById('balance_amount').value = balance;
     }
+
+    // Capitalize the first letter of each word in the name field
+    document.getElementById('name').addEventListener('input', function () {
+      const value = this.value;
+      this.value = value
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    });
+
+    // Validate phone number (10 digits only)
+    document.getElementById('phone').addEventListener('input', function () {
+      const phoneField = this;
+      const phoneValue = phoneField.value;
+
+      // Allow only digits and limit to 10 characters
+      phoneField.value = phoneValue.replace(/\D/g, '').slice(0, 10);
+
+      // Check if the phone number is exactly 10 digits
+      if (phoneField.value.length === 10) {
+        phoneField.setCustomValidity(''); // Valid input
+      } else {
+        phoneField.setCustomValidity('Phone number must be exactly 10 digits'); // Invalid input
+      }
+    });
   </script>
 </body>
 </html>
