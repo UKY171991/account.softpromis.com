@@ -94,16 +94,28 @@ for ($i = 1; $i <= 3; $i++) {
     $financialYearLabels[] = date('F', mktime(0, 0, 0, $i, 1));
 }
 
-// Fetch income distribution
-$incomeDistributionQuery = "SELECT category, SUM(amount) AS total FROM income GROUP BY category";
+// Fetch income distribution for the selected financial year
+$incomeDistributionQuery = "
+  SELECT category, SUM(amount) AS total 
+  FROM income 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
+  GROUP BY category";
 $incomeDistributionResult = $conn->query($incomeDistributionQuery);
 $incomeDistributionData = [];
 while ($row = $incomeDistributionResult->fetch_assoc()) {
     $incomeDistributionData[] = ['category' => $row['category'], 'total' => $row['total']];
 }
 
-// Fetch expenditure distribution
-$expenditureDistributionQuery = "SELECT category, SUM(amount) AS total FROM expenditures GROUP BY category";
+// Fetch expenditure distribution for the selected financial year
+$expenditureDistributionQuery = "
+  SELECT category, SUM(amount) AS total 
+  FROM expenditures 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
+  GROUP BY category";
 $expenditureDistributionResult = $conn->query($expenditureDistributionQuery);
 $expenditureDistributionData = [];
 while ($row = $expenditureDistributionResult->fetch_assoc()) {
@@ -488,7 +500,7 @@ $distributionPieData = [
         labels: <?php echo json_encode(array_column($incomeDistributionData, 'category')); ?>,
         datasets: [{
           data: <?php echo json_encode(array_column($incomeDistributionData, 'total')); ?>,
-          backgroundColor: ['#4caf50', '#2196f3', '#ff9800'],
+          backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#e91e63'],
           borderColor: '#ffffff',
           borderWidth: 2,
           hoverOffset: 6
@@ -512,9 +524,6 @@ $distributionPieData = [
                 const percentage = ((value / total) * 100).toFixed(2);
                 return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
               }
-            },
-            bodyFont: {
-              size: 10
             }
           }
         }
@@ -528,7 +537,7 @@ $distributionPieData = [
         labels: <?php echo json_encode(array_column($expenditureDistributionData, 'category')); ?>,
         datasets: [{
           data: <?php echo json_encode(array_column($expenditureDistributionData, 'total')); ?>,
-          backgroundColor: ['#e91e63', '#ff5722', '#9c27b0'],
+          backgroundColor: ['#e91e63', '#ff5722', '#9c27b0', '#03a9f4', '#8bc34a'],
           borderColor: '#ffffff',
           borderWidth: 2,
           hoverOffset: 6
@@ -552,9 +561,6 @@ $distributionPieData = [
                 const percentage = ((value / total) * 100).toFixed(2);
                 return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
               }
-            },
-            bodyFont: {
-              size: 10
             }
           }
         }
