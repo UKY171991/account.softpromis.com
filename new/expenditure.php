@@ -2,7 +2,19 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
-$sql = "SELECT id, date, name, category, subcategory, amount, paid, balance, created_at FROM expenditures";
+$sql = "
+SELECT 
+    id, 
+    date, 
+    name, 
+    category, 
+    subcategory, 
+    amount, 
+    paid, 
+    balance, 
+    created_at 
+FROM 
+    expenditures";
 $result = $conn->query($sql);
 if (!$result) {
     die("Error executing query: " . $conn->error);
