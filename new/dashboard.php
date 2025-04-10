@@ -21,37 +21,39 @@ $defaultFinancialYear = ($currentMonth >= 4) ? date('Y') . '-' . (date('Y') + 1)
 $selectedFinancialYear = $_GET['financial_year'] ?? $defaultFinancialYear;
 list($startYear, $endYear) = explode('-', $selectedFinancialYear);
 
-// Fetch total income
-$totalIncomeQuery = "SELECT SUM(amount) AS total_income FROM income";
+// Update SQL queries to filter data based on the selected financial year
+
+// Fetch total income for the selected financial year
+$totalIncomeQuery = "
+  SELECT SUM(amount) AS total_income 
+  FROM income 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $totalIncomeResult = $conn->query($totalIncomeQuery);
 $totalIncome = $totalIncomeResult->fetch_assoc()['total_income'] ?? 0;
 
-// Fetch total expenditure
-$totalExpenditureQuery = "SELECT SUM(amount) AS total_expenditure FROM expenditures";
+// Fetch total expenditure for the selected financial year
+$totalExpenditureQuery = "
+  SELECT SUM(amount) AS total_expenditure 
+  FROM expenditures 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $totalExpenditureResult = $conn->query($totalExpenditureQuery);
 $totalExpenditure = $totalExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
 
-// Fetch pending payments
-$pendingPaymentsQuery = "SELECT SUM(balance) AS pending_payments FROM expenditures";
+// Fetch pending payments for the selected financial year
+$pendingPaymentsQuery = "
+  SELECT SUM(balance) AS pending_payments 
+  FROM expenditures 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
 
-// Fetch current year's total income
-$currentYearIncomeQuery = "SELECT SUM(amount) AS total_income FROM income WHERE YEAR(date) = YEAR(CURDATE())";
-$currentYearIncomeResult = $conn->query($currentYearIncomeQuery);
-$currentYearIncome = $currentYearIncomeResult->fetch_assoc()['total_income'] ?? 0;
-
-// Fetch current year's total expenditure
-$currentYearExpenditureQuery = "SELECT SUM(amount) AS total_expenditure FROM expenditures WHERE YEAR(date) = YEAR(CURDATE())";
-$currentYearExpenditureResult = $conn->query($currentYearExpenditureQuery);
-$currentYearExpenditure = $currentYearExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
-
-// Fetch current year's pending payments
-$currentYearPendingPaymentsQuery = "SELECT SUM(balance) AS pending_payments FROM expenditures WHERE YEAR(date) = YEAR(CURDATE())";
-$currentYearPendingPaymentsResult = $conn->query($currentYearPendingPaymentsQuery);
-$currentYearPendingPayments = $currentYearPendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
-
-// Fetch monthly income for the financial year (April to March)
+// Fetch monthly income for the selected financial year
 $monthlyIncomeQuery = "
   SELECT 
     MONTH(date) AS month, 
@@ -67,7 +69,7 @@ while ($row = $monthlyIncomeResult->fetch_assoc()) {
     $monthlyIncomeData[$row['month']] = $row['total'];
 }
 
-// Fetch monthly expenditure for the financial year (April to March)
+// Fetch monthly expenditure for the selected financial year
 $monthlyExpenditureQuery = "
   SELECT 
     MONTH(date) AS month, 
@@ -291,7 +293,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Income (This Year)</h5>
-              <h3 class="text-success">₹<?php echo number_format($currentYearIncome, 2); ?></h3>
+              <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -299,7 +301,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Expenditure (This Year)</h5>
-              <h3 class="text-danger">₹<?php echo number_format($currentYearExpenditure, 2); ?></h3>
+              <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -307,7 +309,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Pending Payments (This Year)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingPayments, 2); ?></h3>
+              <h3 class="text-warning">₹<?php echo number_format($pendingPayments, 2); ?></h3>
             </div>
           </div>
         </div>
