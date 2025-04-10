@@ -117,7 +117,7 @@ $conn->close();
           </div>
           <div class="col-md-4">
             <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" required>
+            <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits" required>
           </div>
 
           <div class="col-md-4">
@@ -192,6 +192,22 @@ $conn->close();
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
+    });
+
+    // Validate phone number input
+    document.getElementById('phone').addEventListener('input', function () {
+      const phoneField = this;
+      const phoneValue = phoneField.value;
+
+      // Allow only digits and limit to 10 characters
+      phoneField.value = phoneValue.replace(/\D/g, '').slice(0, 10);
+
+      // Check if the phone number is exactly 10 digits
+      if (phoneField.value.length === 10) {
+        phoneField.setCustomValidity(''); // Valid input
+      } else {
+        phoneField.setCustomValidity('Phone number must be exactly 10 digits'); // Invalid input
+      }
     });
   </script>
 </body>
