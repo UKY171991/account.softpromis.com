@@ -113,6 +113,16 @@ foreach ($categories as $category) {
     $incomeDataForChart[] = $incomeDistribution[$category] ?? 0;
     $expenditureDataForChart[] = $expenditureDistribution[$category] ?? 0;
 }
+
+// Calculate total income and total expenditure for the pie chart
+$totalIncomeForPie = array_sum(array_column($incomeDistributionData, 'total'));
+$totalExpenditureForPie = array_sum(array_column($expenditureDistributionData, 'total'));
+
+// Prepare data for the pie chart
+$distributionPieData = [
+    'Income' => $totalIncomeForPie,
+    'Expenditure' => $totalExpenditureForPie
+];
 ?>
 
 <!DOCTYPE html>
@@ -327,6 +337,13 @@ foreach ($categories as $category) {
         <div class="col-md-4">
           <h5 class="mb-3">Income Distribution vs Expenditure Distribution</h5>
           <canvas id="distributionComparisonChart" height="300"></canvas>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-4">
+        <div class="col-md-6 offset-md-3">
+          <h5 class="mb-3 text-center">Income Distribution vs Expenditure Distribution</h5>
+          <canvas id="distributionPieChart" height="300"></canvas>
         </div>
       </div>
 
@@ -606,6 +623,43 @@ foreach ($categories as $category) {
               text: 'Amount (₹)'
             },
             beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Income Distribution vs Expenditure Distribution Pie Chart
+    const distributionPieChart = new Chart(document.getElementById('distributionPieChart'), {
+      type: 'pie',
+      data: {
+        labels: <?php echo json_encode(array_keys($distributionPieData)); ?>, // Labels: Income, Expenditure
+        datasets: [{
+          data: <?php echo json_encode(array_values($distributionPieData)); ?>, // Data: Total income and expenditure
+          backgroundColor: ['#4caf50', '#f44336'], // Green for income, red for expenditure
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              font: {
+                size: 12
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function (tooltipItem) {
+                const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                const value = tooltipItem.raw;
+                const percentage = ((value / total) * 100).toFixed(2);
+                return `${tooltipItem.label}: ₹${value} (${percentage}%)`;
+              }
+            }
           }
         }
       }
