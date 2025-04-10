@@ -127,8 +127,8 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           <span class="navbar-brand mb-0 h1">Dashboard</span>
 
           <div class="d-flex align-items-center gap-2">
-            <a href="#" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Add Income</a>
-            <a href="#" class="btn btn-sm btn-danger"><i class="bi bi-dash-circle"></i> Add Expenditure</a>
+            <a href="add-income.php" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Add Income</a>
+            <a href="add-expenditure.php" class="btn btn-sm btn-danger"><i class="bi bi-dash-circle"></i> Add Expenditure</a>
           </div>
 
           <ul class="navbar-nav ms-auto">
