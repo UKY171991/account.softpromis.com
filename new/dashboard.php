@@ -164,12 +164,13 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
       </nav>
 
       <!-- Dashboard Cards -->
+       <!----
       <div class="row g-4 mb-4">
         <div class="col-md-4">
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Income</h5>
-              <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
+              <h3 class="text-success">₹<?php // echo number_format($totalIncome, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -177,7 +178,7 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Expenditure</h5>
-              <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
+              <h3 class="text-danger">₹<?php // echo number_format($totalExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -185,11 +186,12 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Total Pending Payments</h5>
-              <h3 class="text-warning">₹<?php echo number_format($pendingPayments, 2); ?></h3>
+              <h3 class="text-warning">₹<?php // echo number_format($pendingPayments, 2); ?></h3>
             </div>
           </div>
         </div>
       </div>
+      --->
 
       <div class="row g-4 mb-4">
         <div class="col-md-4">
