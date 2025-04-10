@@ -31,10 +31,10 @@ if ($type === 'income') {
 } elseif ($type === 'expenditure') {
     $query = "SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures";
 } else {
-    // Wrap the combined query in parentheses
+    // Wrap the combined query in parentheses and alias it as `combined`
     $query = "(SELECT 'Income' AS type, date, name, category, subcategory, amount, received AS paid_received, balance FROM income 
                UNION ALL 
-               SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures)";
+               SELECT 'Expenditure' AS type, date, name, category, subcategory, amount, paid AS paid_received, balance FROM expenditures) AS combined";
 }
 
 // Add conditions dynamically
@@ -49,12 +49,7 @@ if ($to_date) {
 // Append conditions to the query
 if (!empty($conditions)) {
     $where_clause = " WHERE " . implode(" AND ", $conditions);
-    if ($type === 'all') {
-        // Apply the WHERE clause outside the combined query
-        $query = "$query AS combined $where_clause";
-    } else {
-        $query .= $where_clause;
-    }
+    $query .= $where_clause;
 }
 
 // Add ordering
