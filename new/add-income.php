@@ -99,11 +99,11 @@ $conn->close();
             <input type="text" class="form-control" id="phone" name="phone" required>
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label for="description" class="form-label">Description</label>
             <input type="text" class="form-control" id="description" name="description" required>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <label for="category" class="form-label">Category</label>
             <select id="category" name="category" class="form-select" required>
               <option selected disabled>Choose...</option>
@@ -112,7 +112,7 @@ $conn->close();
               <option>Products</option>
             </select>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <label for="subcategory" class="form-label">Sub-category</label>
             <select id="subcategory" name="subcategory" class="form-select" required>
               <option selected disabled>Choose...</option>
