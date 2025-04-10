@@ -279,16 +279,19 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           <h5 class="mb-3">Monthly Income Trend</h5>
           <canvas id="incomeChart" height="300"></canvas>
         </div>
+
+        <div class="col-md-4">
+          <h5 class="mb-3">Income vs Expenditure (Line Chart)</h5>
+          <canvas id="combinedChart" height="300"></canvas>
+        </div>
+        
         <div class="col-md-4">
           <h5 class="mb-3">Monthly Expenditure Trend</h5>
           <canvas id="expenditureChart" height="300"></canvas>
         </div>
 
 
-        <div class="col-md-4">
-          <h5 class="mb-3">Income vs Expenditure (Line Chart)</h5>
-          <canvas id="combinedChart" height="300"></canvas>
-        </div>
+        
       </div>
 
       <div class="row g-4 mt-4">
