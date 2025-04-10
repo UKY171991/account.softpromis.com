@@ -324,9 +324,6 @@ foreach ($categories as $category) {
           <h5 class="mb-3">Expenditure Distribution</h5>
           <canvas id="expenditurePieChart" height="200" width="200"></canvas>
         </div>
-      </div>
-
-      <div class="row g-4 mt-4">
         <div class="col-md-12">
           <h5 class="mb-3">Income Distribution vs Expenditure Distribution</h5>
           <canvas id="distributionComparisonChart" height="300"></canvas>
