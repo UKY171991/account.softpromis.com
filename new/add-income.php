@@ -183,6 +183,12 @@ $conn->close();
       const balance = total - received;
       document.getElementById('balance_amount').value = balance;
     }
+
+    // Capitalize the first letter of the name field
+    document.getElementById('name').addEventListener('input', function () {
+      const value = this.value;
+      this.value = value.charAt(0).toUpperCase() + value.slice(1);
+    });
   </script>
 </body>
 </html>
