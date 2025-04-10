@@ -225,15 +225,18 @@ $distributionPieData = [
           </div>
 
           <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-              
+            <li class="nav-item dropdown">
               <a class="btn btn-secondary dropdown-toggle" type="button" id="financialYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                       <?php echo $selectedFinancialYear; ?>
               </a>
-
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
+              <ul class="dropdown-menu" aria-labelledby="financialYearDropdown">
+                <?php foreach ($financialYears as $year): ?>
+                  <li>
+                    <a class="dropdown-item financial-year-option" href="#" data-year="<?php echo $year; ?>">
+                      <?php echo $year; ?>
+                    </a>
+                  </li>
+                <?php endforeach; ?>
               </ul>
             </li>
 
