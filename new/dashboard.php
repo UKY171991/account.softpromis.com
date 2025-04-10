@@ -276,6 +276,7 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // Monthly Income Trend
     const incomeChart = new Chart(document.getElementById('incomeChart'), {
       type: 'line',
       data: {
@@ -284,22 +285,72 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           label: 'Income',
           data: <?php echo json_encode(array_values($monthlyIncomeData)); ?>,
           borderColor: 'green',
-          backgroundColor: 'rgba(0,128,0,0.1)',
+          backgroundColor: 'rgba(0, 128, 0, 0.1)',
           tension: 0.3,
           fill: true
         }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Month'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Income (₹)'
+            }
+          }
+        }
       }
     });
 
+    // Monthly Expenditure Trend
     const expenditureChart = new Chart(document.getElementById('expenditureChart'), {
-      type: 'bar',
+      type: 'line', // Change to 'line' chart
       data: {
         labels: <?php echo json_encode(array_keys($monthlyExpenditureData)); ?>,
         datasets: [{
           label: 'Expenditure',
           data: <?php echo json_encode(array_values($monthlyExpenditureData)); ?>,
-          backgroundColor: 'rgba(220,53,69,0.7)'
+          borderColor: 'red', // Line color
+          backgroundColor: 'rgba(255, 0, 0, 0.1)', // Fill color
+          tension: 0.3, // Smooth curve
+          fill: true // Enable area fill
         }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Month'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Expenditure (₹)'
+            }
+          }
+        }
       }
     });
 
