@@ -18,6 +18,21 @@ $pendingPaymentsQuery = "SELECT SUM(balance) AS pending_payments FROM expenditur
 $pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
 
+// Fetch current year's total income
+$currentYearIncomeQuery = "SELECT SUM(amount) AS total_income FROM income WHERE YEAR(date) = YEAR(CURDATE())";
+$currentYearIncomeResult = $conn->query($currentYearIncomeQuery);
+$currentYearIncome = $currentYearIncomeResult->fetch_assoc()['total_income'] ?? 0;
+
+// Fetch current year's total expenditure
+$currentYearExpenditureQuery = "SELECT SUM(amount) AS total_expenditure FROM expenditures WHERE YEAR(date) = YEAR(CURDATE())";
+$currentYearExpenditureResult = $conn->query($currentYearExpenditureQuery);
+$currentYearExpenditure = $currentYearExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
+
+// Fetch current year's pending payments
+$currentYearPendingPaymentsQuery = "SELECT SUM(balance) AS pending_payments FROM expenditures WHERE YEAR(date) = YEAR(CURDATE())";
+$currentYearPendingPaymentsResult = $conn->query($currentYearPendingPaymentsQuery);
+$currentYearPendingPayments = $currentYearPendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
+
 // Fetch monthly income and expenditure
 $monthlyIncomeQuery = "SELECT MONTH(date) AS month, SUM(amount) AS total FROM income GROUP BY MONTH(date)";
 $monthlyIncomeResult = $conn->query($monthlyIncomeQuery);
@@ -174,7 +189,36 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
             </div>
           </div>
         </div>
+      </div>
 
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Total Income (This Year)</h5>
+              <h3 class="text-success">₹<?php echo number_format($currentYearIncome, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Total Expenditure (This Year)</h5>
+              <h3 class="text-danger">₹<?php echo number_format($currentYearExpenditure, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Payments (This Year)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingPayments, 2); ?></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
         <div class="col-md-4">
           <div class="card dashboard-card p-3">
             <div class="card-body">
