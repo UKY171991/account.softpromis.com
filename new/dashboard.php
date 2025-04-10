@@ -84,8 +84,8 @@ $currentYearPendingExpenditureQuery = "
   SELECT SUM(balance) AS pending_expenditure 
   FROM expenditures 
   WHERE 
-    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
-    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
+    (MONTH(date) >= 4 AND YEAR(date) = YEAR(CURRENT_DATE())) OR 
+    (MONTH(date) < 4 AND YEAR(date) = YEAR(CURRENT_DATE()) + 1)";
 $currentYearPendingExpenditureResult = $conn->query($currentYearPendingExpenditureQuery);
 $currentYearPendingExpenditure = $currentYearPendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
 
