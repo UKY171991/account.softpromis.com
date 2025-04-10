@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
     $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
     $name = ucfirst(trim($_POST['name']));
+    $phone = $_POST['phone'];
+    $description = $_POST['description'];
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
     $amount = floatval($_POST['amount']);
@@ -37,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $balance = $amount - $received;
 
     // Update income record in the database
-    $sql = "UPDATE income SET date = ?, name = ?, category = ?, subcategory = ?, amount = ?, received = ?, balance = ? WHERE id = ?";
+    $sql = "UPDATE income SET date = ?, name = ?, phone = ?, description = ?, category = ?, subcategory = ?, amount = ?, received = ?, balance = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssdddi", $date, $name, $category, $subcategory, $amount, $received, $balance, $id);
+    $stmt->bind_param("ssssssdddi", $date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance, $id);
 
     if ($stmt->execute()) {
         header("Location: income.php?message=Income record updated successfully");
@@ -109,15 +111,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
     <form action="" method="POST" class="form-container">
       <div class="row g-3">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="date" class="form-label">Date</label>
           <input type="text" class="form-control date-picker" id="date" name="date" value="<?php echo htmlspecialchars($income['date']); ?>" required>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="name" class="form-label">Name</label>
           <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($income['name']); ?>" required>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($income['phone']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="description" name="description" value="<?php echo htmlspecialchars($income['description']); ?>" required>
+        </div>
+        <div class="col-md-4">
           <label for="category" class="form-label">Category</label>
           <select id="category" name="category" class="form-select" required>
             <option value="Consulting" <?php echo $income['category'] === 'Consulting' ? 'selected' : ''; ?>>Consulting</option>
@@ -125,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="Products" <?php echo $income['category'] === 'Products' ? 'selected' : ''; ?>>Products</option>
           </select>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label for="subcategory" class="form-label">Sub-category</label>
           <select id="subcategory" name="subcategory" class="form-select" required>
             <option value="IT Services" <?php echo $income['subcategory'] === 'IT Services' ? 'selected' : ''; ?>>IT Services</option>
