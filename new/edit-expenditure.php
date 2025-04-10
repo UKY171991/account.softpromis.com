@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
     $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
     $name = ucfirst(trim($_POST['name']));
+    $phone = $_POST['phone'];
+    $description = $_POST['description'];
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
     $amount = floatval($_POST['amount']);
@@ -37,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $balance = $amount - $paid;
 
     // Update expenditure record in the database
-    $sql = "UPDATE expenditures SET date = ?, name = ?, category = ?, subcategory = ?, amount = ?, paid = ?, balance = ? WHERE id = ?";
+    $sql = "UPDATE expenditures SET date = ?, name = ?, phone = ?, description = ?, category = ?, subcategory = ?, amount = ?, paid = ?, balance = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssdddi", $date, $name, $category, $subcategory, $amount, $paid, $balance, $id);
+    $stmt->bind_param("ssssssdddi", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance, $id);
 
     if ($stmt->execute()) {
         header("Location: expenditure.php?message=Expenditure record updated successfully");
@@ -116,6 +118,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-md-4">
           <label for="name" class="form-label">Name</label>
           <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($expenditure['name']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($expenditure['phone']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="description" name="description" value="<?php echo htmlspecialchars($expenditure['description']); ?>" required>
         </div>
         <div class="col-md-4">
           <label for="category" class="form-label">Category</label>
