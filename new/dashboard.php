@@ -270,6 +270,13 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
         </div>
       </div>
 
+      <div class="row g-4 mt-4">
+        <div class="col-md-12">
+          <h5 class="mb-3">Income vs Expenditure (Scatter Plot)</h5>
+          <canvas id="combinedChart" height="300"></canvas>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -429,6 +436,53 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
             bodyFont: {
               size: 10
             }
+          }
+        }
+      }
+    });
+
+    // Combined Income vs Expenditure Graph
+    const combinedChart = new Chart(document.getElementById('combinedChart'), {
+      type: 'scatter', // Scatter plot
+      data: {
+        datasets: [{
+          label: 'Income vs Expenditure',
+          data: <?php
+            // Prepare data for scatter plot
+            $combinedData = [];
+            foreach ($monthlyIncomeData as $month => $income) {
+                $expenditure = $monthlyExpenditureData[$month] ?? 0; // Match expenditure for the same month
+                $combinedData[] = ['x' => $income, 'y' => $expenditure];
+            }
+            echo json_encode($combinedData);
+          ?>,
+          backgroundColor: 'rgba(0, 123, 255, 0.5)', // Point color
+          borderColor: 'rgba(0, 123, 255, 1)', // Border color
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Income (₹)'
+            },
+            beginAtZero: true
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Expenditure (₹)'
+            },
+            beginAtZero: true
           }
         }
       }
