@@ -260,7 +260,7 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
 
 
         <div class="col-md-4">
-          <h5 class="mb-3">Income vs Expenditure (Scatter Plot)</h5>
+          <h5 class="mb-3">Income vs Expenditure (Line Chart)</h5>
           <canvas id="combinedChart" height="300"></canvas>
         </div>
       </div>
@@ -444,23 +444,27 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
 
     // Combined Income vs Expenditure Graph
     const combinedChart = new Chart(document.getElementById('combinedChart'), {
-      type: 'scatter', // Scatter plot
+      type: 'line', // Change to 'line' chart
       data: {
-        datasets: [{
-          label: 'Income vs Expenditure',
-          data: <?php
-            // Prepare data for scatter plot
-            $combinedData = [];
-            foreach ($monthlyIncomeData as $month => $income) {
-                $expenditure = $monthlyExpenditureData[$month] ?? 0; // Match expenditure for the same month
-                $combinedData[] = ['x' => $income, 'y' => $expenditure];
-            }
-            echo json_encode($combinedData);
-          ?>,
-          backgroundColor: 'rgba(0, 123, 255, 0.5)', // Point color
-          borderColor: 'rgba(0, 123, 255, 1)', // Border color
-          borderWidth: 1
-        }]
+        labels: <?php echo json_encode(array_keys($monthlyIncomeData)); ?>, // Use months as labels
+        datasets: [
+          {
+            label: 'Income',
+            data: <?php echo json_encode(array_values($monthlyIncomeData)); ?>,
+            borderColor: 'green', // Line color for income
+            backgroundColor: 'rgba(0, 128, 0, 0.1)', // Fill color for income
+            tension: 0.3, // Smooth curve
+            fill: true // Enable area fill
+          },
+          {
+            label: 'Expenditure',
+            data: <?php echo json_encode(array_values($monthlyExpenditureData)); ?>,
+            borderColor: 'red', // Line color for expenditure
+            backgroundColor: 'rgba(255, 0, 0, 0.1)', // Fill color for expenditure
+            tension: 0.3, // Smooth curve
+            fill: true // Enable area fill
+          }
+        ]
       },
       options: {
         responsive: true,
@@ -474,16 +478,14 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           x: {
             title: {
               display: true,
-              text: 'Income (₹)'
-            },
-            beginAtZero: true
+              text: 'Month'
+            }
           },
           y: {
             title: {
               display: true,
-              text: 'Expenditure (₹)'
-            },
-            beginAtZero: true
+              text: 'Amount (₹)'
+            }
           }
         }
       }
