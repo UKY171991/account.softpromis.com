@@ -249,14 +249,21 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
 
       <!-- Graphs Section -->
       <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <h5 class="mb-3">Monthly Income Trend</h5>
           <canvas id="incomeChart" height="300"></canvas>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <h5 class="mb-3">Monthly Expenditure Trend</h5>
           <canvas id="expenditureChart" height="300"></canvas>
         </div>
+
+        <div class="row g-4 mt-4">
+        <div class="col-md-4">
+          <h5 class="mb-3">Income vs Expenditure (Scatter Plot)</h5>
+          <canvas id="combinedChart" height="300"></canvas>
+        </div>
+      </div>
       </div>
 
       <div class="row g-4 mt-4">
@@ -270,12 +277,7 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
         </div>
       </div>
 
-      <div class="row g-4 mt-4">
-        <div class="col-md-4">
-          <h5 class="mb-3">Income vs Expenditure (Scatter Plot)</h5>
-          <canvas id="combinedChart" height="300"></canvas>
-        </div>
-      </div>
+      
 
     </div>
   </div>
