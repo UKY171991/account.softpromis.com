@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
     $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
     $name = ucfirst(trim($_POST['name']));
+    $phone = $_POST['phone'];
+    $description = $_POST['description'];
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
     $amount = floatval($_POST['total_amount']);
@@ -17,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $balance = $amount - $received;
 
     // Insert into database
-    $stmt = $conn->prepare("INSERT INTO income (date, name, category, subcategory, amount, received, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $received, $balance);
+    $stmt = $conn->prepare("INSERT INTO income (date, name, phone, description, category, subcategory, amount, received, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance);
 
     if ($stmt->execute()) {
         // Redirect back to the income page with a success message
