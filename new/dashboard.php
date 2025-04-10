@@ -258,12 +258,11 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
           <canvas id="expenditureChart" height="300"></canvas>
         </div>
 
-        <div class="row g-4 mt-4">
+
         <div class="col-md-4">
           <h5 class="mb-3">Income vs Expenditure (Scatter Plot)</h5>
           <canvas id="combinedChart" height="300"></canvas>
         </div>
-      </div>
       </div>
 
       <div class="row g-4 mt-4">
