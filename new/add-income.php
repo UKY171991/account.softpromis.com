@@ -1,15 +1,21 @@
 <?php
-//mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include 'inc/auth.php'; // Include the authentication file to check user session
-// Database connection
 include 'inc/config.php'; // Include the database connection file
 
 $message = '';
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
-    $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
+    $date = DateTime::createFromFormat('d-m-Y', $_POST['date']);
+    if (!$date) {
+        die("Invalid date format. Please use DD-MM-YYYY.");
+    }
+    $date = $date->format('Y-m-d');
+
     $name = ucfirst(trim($_POST['name']));
     $phone = $_POST['phone'];
     $description = $_POST['description'];
@@ -19,11 +25,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $received = floatval($_POST['received_amount']);
     $balance = $amount - $received;
 
+    // Debugging: Check all variables
+    // Uncomment the following lines to debug
+    // var_dump($date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance);
+    // exit;
+
     // Insert into database
     $stmt = $conn->prepare("
         INSERT INTO income (date, name, phone, description, category, subcategory, amount, received, balance) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+
     $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance);
 
     if ($stmt->execute()) {
@@ -31,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: income.php?message=Income entry added successfully");
         exit();
     } else {
-        // Redirect back to the income page with an error message
+        // Display error message
         $message = "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
     }
 
