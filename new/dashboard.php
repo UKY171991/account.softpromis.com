@@ -264,6 +264,14 @@ $distributionPieData = [
 
     <!-- Main content -->
     <div class="main-content w-100">
+      <?php if (isset($_GET['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <?php echo htmlspecialchars($_GET['error']); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <?php endif; ?>
+      
+      <h2>Dashboard</h2>
       <!-- Top Navbar -->
       <nav class="navbar top-navbar navbar-expand-lg navbar-light bg-light mb-4">
         <div class="container-fluid">

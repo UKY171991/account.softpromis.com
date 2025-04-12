@@ -2,6 +2,13 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
+// Check if user is manager and redirect if true
+if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
+    // Redirect to dashboard with error message
+    header("Location: dashboard.php?error=You do not have permission to access this page");
+    exit();
+}
+
 $sql = "
 SELECT 
     id, 
