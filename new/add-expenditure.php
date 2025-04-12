@@ -3,6 +3,16 @@ include 'inc/auth.php'; // Include the authentication file to check user session
 // Database connection
 include 'inc/config.php'; // Include the database connection file
 
+// Fetch all categories
+$categories_query = "SELECT id, category_name FROM expenditure_categories";
+$categories_result = $conn->query($categories_query);
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+
 $message = '';
 
 // Handle form submission
@@ -12,8 +22,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = ucfirst(trim($_POST['name']));
     $phone = $_POST['phone'];
     $description = $_POST['description'];
-    $category = $_POST['category'];
-    $subcategory = $_POST['subcategory'];
+    
+    // Get category and subcategory names from their IDs
+    $category_id = intval($_POST['category']);
+    $subcategory_id = intval($_POST['subcategory']);
+    
+    // Get category name
+    $cat_stmt = $conn->prepare("SELECT category_name FROM expenditure_categories WHERE id = ?");
+    $cat_stmt->bind_param("i", $category_id);
+    $cat_stmt->execute();
+    $category_result = $cat_stmt->get_result();
+    $category = $category_result->fetch_assoc()['category_name'];
+    
+    // Get subcategory name
+    $subcat_stmt = $conn->prepare("SELECT subcategory_name FROM expenditure_subcategories WHERE id = ?");
+    $subcat_stmt->bind_param("i", $subcategory_id);
+    $subcat_stmt->execute();
+    $subcategory_result = $subcat_stmt->get_result();
+    $subcategory = $subcategory_result->fetch_assoc()['subcategory_name'];
+    
     $amount = floatval($_POST['total_amount']);
     $paid = floatval($_POST['paid_amount']);
     $balance = $amount - $paid;
@@ -23,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INSERT INTO expenditures (date, name, phone, description, category, subcategory, amount, paid, balance) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category_id, $subcategory_id, $amount, $paid, $balance);
 
     if ($stmt->execute()) {
         // Redirect back to the expenditure page with a success message
@@ -165,19 +192,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-md-4">
               <label for="category" class="form-label">Category</label>
               <select id="category" name="category" class="form-select" required>
-                <option selected disabled>Choose...</option>
-                <option>Utilities</option>
-                <option>Maintenance</option>
-                <option>Salaries</option>
+                <option value="" selected disabled>Choose...</option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                        <?php echo htmlspecialchars($category['category_name']); ?>
+                    </option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="col-md-4">
               <label for="subcategory" class="form-label">Sub-category</label>
               <select id="subcategory" name="subcategory" class="form-select" required>
-                <option selected disabled>Choose...</option>
-                <option>Electricity</option>
-                <option>Water</option>
-                <option>Stationery</option>
+                <option value="" selected disabled>Choose category first</option>
               </select>
             </div>
             <div class="col-md-4">
@@ -246,6 +272,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       } else {
         phoneField.setCustomValidity('Phone number must be exactly 10 digits'); // Invalid input
       }
+    });
+
+    // Dynamic subcategory loading
+    document.getElementById('category').addEventListener('change', function() {
+        const categoryId = this.value;
+        const subcategorySelect = document.getElementById('subcategory');
+        
+        // Clear current options
+        subcategorySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+        
+        // Fetch subcategories for selected category
+        fetch(`get_subcategories.php?category_id=${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                subcategorySelect.innerHTML = '<option value="" selected disabled>Choose subcategory...</option>';
+                data.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.id;
+                    option.textContent = subcategory.subcategory_name;
+                    subcategorySelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                subcategorySelect.innerHTML = '<option value="" selected disabled>Error loading subcategories</option>';
+            });
     });
   </script>
 </body>
