@@ -15,6 +15,7 @@ if (isset($_POST['category_id'])) {
     while ($row = $result->fetch_assoc()) {
         echo "<option value='{$row['id']}'>{$row['subcategory_name']}</option>";
     }
+    exit;
 }
 ?>
 
@@ -170,7 +171,7 @@ if (isset($_POST['category_id'])) {
 
                 if (categoryId !== "") {
                     $.ajax({
-                        url: "fetch-expenditure-subcategories.php",
+                        url: "add-expenditure.php",
                         type: "POST",
                         data: { category_id: categoryId },
                         success: function(response) {
