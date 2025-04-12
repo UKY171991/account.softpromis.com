@@ -3,6 +3,13 @@ include 'inc/auth.php'; // Include the authentication file to check user login s
 // Database connection
 include 'inc/config.php';
 
+// Check if user is manager and redirect if true
+if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
+    // Redirect to income page with error message since managers can't access dashboard
+    header("Location: income.php?error=You do not have permission to access the dashboard");
+    exit();
+}
+
 // Generate financial years (last 5 years including the current financial year)
 $currentYear = date('Y');
 $currentMonth = date('n');
@@ -253,9 +260,13 @@ $distributionPieData = [
       <h4 class="text-white">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
+        <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'manager'): ?>
         <li><a href="dashboard.php" class="nav-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <?php endif; ?>
         <li><a href="income.php" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
+        <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'manager'): ?>
         <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
+        <?php endif; ?>
         <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
         <li><a href="client.php" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
         <li><a href="users.php" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
