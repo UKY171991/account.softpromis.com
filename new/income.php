@@ -27,6 +27,7 @@ $result = $conn->query($sql);
       position: fixed;
       left: 0;
       top: 0;
+      z-index: 1040;
     }
     .sidebar .nav-link {
       color: #ffffff;
@@ -38,6 +39,7 @@ $result = $conn->query($sql);
     .main-content {
       margin-left: 250px;
       min-height: 100vh;
+      background-color: #f8f9fa;
     }
     .top-navbar {
       position: sticky;
@@ -46,56 +48,77 @@ $result = $conn->query($sql);
       background: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
-      width: 100%;
+      width: calc(100% - 250px);
+      margin-left: 250px;
     }
     .table-responsive {
-      border-radius: 0.5rem;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
-      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       margin-top: 1rem;
     }
     .table {
       margin: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-      font-size: 0.875rem;
+      width: 100%;
     }
     .table th {
       background-color: #f8f9fa;
       text-transform: uppercase;
-      font-weight: bold;
+      font-weight: 600;
       color: #495057;
-      padding: 0.75rem;
-      font-size: 0.85rem;
+      padding: 1rem;
+      white-space: nowrap;
       border-bottom: 2px solid #dee2e6;
     }
     .table td {
-      padding: 0.75rem;
-      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
       vertical-align: middle;
       border-bottom: 1px solid #dee2e6;
     }
     .table tbody tr:hover {
-      background-color: #f9f9f9;
-      transition: background-color 0.3s ease;
+      background-color: #f8f9fa;
     }
-    .table td .btn {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.75rem;
-      border-radius: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
+    .action-column {
+      white-space: nowrap;
+      width: 100px;
+    }
+    .action-column .btn {
+      padding: 0.25rem 0.5rem;
+      margin: 0 0.125rem;
     }
     .badge {
-      font-size: 0.75rem;
-      padding: 0.3rem 0.5rem;
-      border-radius: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
+      padding: 0.35rem 0.65rem;
+      font-weight: 500;
+    }
+    .dataTables_wrapper .dataTables_length select {
+      padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+      border-radius: 0.25rem;
+      border: 1px solid #dee2e6;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.25rem;
+      border: 1px solid #dee2e6;
+      margin-left: 0.5rem;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      padding: 0.375rem 0.75rem;
+      margin: 0 0.125rem;
+      border-radius: 0.25rem;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: #0d6efd;
+      border-color: #0d6efd;
+      color: white !important;
+    }
+    .btn-success {
+      background-color: #198754;
+      border-color: #198754;
+      color: white;
+    }
+    .btn-success:hover {
+      background-color: #157347;
+      border-color: #146c43;
     }
   </style>
 </head>
