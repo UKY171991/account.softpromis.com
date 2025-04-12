@@ -16,6 +16,7 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
     body {
       background-color: #f8f9fa;
@@ -185,27 +186,10 @@ $result = $conn->query($sql);
   </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script>
-  $(document).ready(function () {
-    $('#clientTable').DataTable({
-      responsive: true,
-      pageLength: 10,
-      lengthMenu: [5, 10, 25, 50, 100],
-      language: {
-        search: "Search:",
-        lengthMenu: "Show _MENU_ entries",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        paginate: {
-          next: "Next",
-          previous: "Previous"
-        }
-      }
-    });
-  });
-</script>
+<script src="assets/js/responsive.js"></script>
 </body>
 </html>
