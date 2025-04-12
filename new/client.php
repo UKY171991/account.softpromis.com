@@ -18,22 +18,34 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
+    html, body {
+      height: 100%;
+      overflow: auto;
+    }
+
     body {
       background-color: #f8f9fa;
     }
+
     .sidebar {
       height: 100vh;
       background-color: #343a40;
     }
+
     .sidebar .nav-link {
       color: #ffffff;
     }
+
     .sidebar .nav-link.active {
       background-color: #495057;
     }
+
     .main-content {
       margin-left: 250px;
+      overflow-y: auto;
+      height: 100vh;
     }
+
     .top-navbar {
       position: sticky;
       top: 0;
@@ -42,66 +54,92 @@ $result = $conn->query($sql);
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
     }
+
     .table-responsive {
       border-radius: 0.5rem;
-      overflow: hidden;
+      overflow-x: auto;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #dee2e6 #f8f9fa;
     }
+
+    .table-responsive::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+      background-color: #dee2e6;
+      border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+      background-color: #f8f9fa;
+    }
+
     .table {
+      white-space: nowrap;
       margin: 0;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.875rem;
     }
+
+    .table th, .table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 0.75rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+
     .table th {
       background-color: #f8f9fa;
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      border-bottom: 2px solid #dee2e6;
+      font-size: 0.8rem;
     }
-    .table td {
-      padding: 0.75rem;
-      font-size: 0.85rem;
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6; 
-    }
+
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
     }
+
     .table td .btn {
-      padding: 0.4rem 0.8rem;
+      padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
       border-radius: 0.3rem;
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
     }
+
     .table td .btn-primary {
       background-color: #0d6efd;
       border: none;
       color: white;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.3s ease;
     }
+
     .table td .btn-primary:hover {
       background-color: #0b5ed7;
-      transform: scale(1.05);
     }
+
     .table td .btn-danger {
       background-color: #dc3545;
       border: none;
       color: white;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      transition: background-color 0.3s ease;
     }
+
     .table td .btn-danger:hover {
       background-color: #bb2d3b;
-      transform: scale(1.05);
+    }
+
+    .dataTables_wrapper {
+      overflow-x: auto;
     }
   </style>
 </head>
