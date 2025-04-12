@@ -17,170 +17,77 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
   <style>
     body {
-      background: linear-gradient(135deg, #f9f9f9, #e9ecef);
-      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
     }
     .sidebar {
       height: 100vh;
-      width: 250px;
       background-color: #343a40;
-      color: white;
-      position: fixed;
-      top: 0;
-      left: 0;
-      padding: 1.5rem 1rem;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-    }
-    .sidebar h4 {
-      font-weight: bold;
-    }
-    .sidebar hr {
-      border-color: rgba(255, 255, 255, 0.2);
     }
     .sidebar .nav-link {
       color: #ffffff;
     }
-    .sidebar .nav-link.active,
-    .sidebar .nav-link:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-      color: #f8f9fa;
-    }
-    .top-navbar {
-      margin-left: 250px;
-      background: linear-gradient(135deg, #ffffff, #f8f9fa);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 0.5rem 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .top-navbar h4 {
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: #495057;
-      margin: 0;
-    }
-    .top-navbar .dropdown a {
-      color: #495057;
-      text-decoration: none;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: color 0.3s ease;
-    }
-    .top-navbar .dropdown a:hover,
-    .top-navbar .bi-bell:hover {
-      color: #0d6efd;
-    }
-    .top-navbar .bi-bell {
-      font-size: 1.3rem;
-      color: #495057;
-      cursor: pointer;
+    .sidebar .nav-link.active {
+      background-color: #495057;
     }
     .main-content {
       margin-left: 250px;
-      margin-top: 1rem;
-      padding: 2rem;
+    }
+    .top-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1030;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 1rem 2rem;
     }
     .table-responsive {
       border-radius: 0.5rem;
-      overflow-x: auto;
+      overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       background-color: white;
       padding: 1.5rem;
       margin-top: 1rem;
     }
     .table {
-      white-space: nowrap;
+      margin: 0;
+      border-collapse: separate;
+      border-spacing: 0;
       font-size: 0.875rem;
-    }
-    .table th, .table td {
-      text-align: center;
-      vertical-align: middle;
-      padding: 0.75rem;
-      border-bottom: 1px solid #dee2e6;
     }
     .table th {
       background-color: #f8f9fa;
       text-transform: uppercase;
       font-weight: bold;
       color: #495057;
-      font-size: 0.8rem;
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #dee2e6;
+    }
+    .table td {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #dee2e6;
     }
     .table tbody tr:hover {
       background-color: #f9f9f9;
       transition: background-color 0.3s ease;
     }
-    .action-column {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .action-column .btn {
-      padding: 0.3rem 0.6rem;
+    .table td .btn {
+      padding: 0.4rem 0.8rem;
       font-size: 0.75rem;
       border-radius: 0.3rem;
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
-      transition: all 0.3s ease;
-    }
-    .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background-color: #0b5ed7;
-      transform: scale(1.05);
-    }
-    .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      color: #fff;
-    }
-    .btn-danger:hover {
-      background-color: #bb2d3b;
-      transform: scale(1.05);
-    }
-    .btn-success {
-      background-color: #198754;
-      border: none;
-    }
-    .btn-success:hover {
-      background-color: #157347;
     }
     .badge {
       font-size: 0.75rem;
-      padding: 0.2rem 0.4rem;
+      padding: 0.3rem 0.5rem;
       border-radius: 0.3rem;
       display: inline-flex;
       align-items: center;
       gap: 0.2rem;
-    }
-    .badge.bg-success {
-      background-color: #198754;
-    }
-    .badge.bg-danger {
-      background-color: #dc3545;
-    }
-    @media (max-width: 768px) {
-      .sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-      }
-      .top-navbar,
-      .main-content {
-        margin-left: 0;
-      }
     }
   </style>
 </head>
