@@ -33,7 +33,7 @@ if (isset($_POST['category_id'])) {
 <body>
     <main>
         <div class="container">
-            <h4>Add Expenditure</h4>
+            <h4>Add Expenditure1</h4>
             <form action="process-expenditure.php" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Category</label>
