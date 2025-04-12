@@ -18,19 +18,26 @@ $result = $conn->query($sql);
   <style>
     body {
       background-color: #f8f9fa;
+      min-height: 100vh;
     }
     .sidebar {
-      height: 100vh;
+      width: 250px;
+      min-height: 100vh;
       background-color: #343a40;
+      position: fixed;
+      left: 0;
+      top: 0;
     }
     .sidebar .nav-link {
       color: #ffffff;
+      padding: 0.75rem 1rem;
     }
     .sidebar .nav-link.active {
       background-color: #495057;
     }
     .main-content {
       margin-left: 250px;
+      min-height: 100vh;
     }
     .top-navbar {
       position: sticky;
@@ -39,6 +46,7 @@ $result = $conn->query($sql);
       background: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
+      width: 100%;
     }
     .table-responsive {
       border-radius: 0.5rem;
@@ -99,12 +107,12 @@ $result = $conn->query($sql);
     <!-- Main Content -->
     <div class="main-content w-100">
       <!-- Top Navbar -->
-      <div class="top-navbar">
+      <div class="top-navbar d-flex justify-content-between align-items-center">
         <h4>Income Records</h4>
         <div class="d-flex align-items-center gap-3">
           <i class="bi bi-bell" title="Notifications"></i>
           <div class="dropdown">
-            <a href="#" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="#" class="dropdown-toggle text-decoration-none text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i> Admin
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -116,20 +124,19 @@ $result = $conn->query($sql);
       </div>
 
       <!-- Content -->
-      <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5>Income Records</h5>
-          <a href="add-income.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Income</a>
+      <div class="p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <a href="add-income.php" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i> Add New Income</a>
         </div>
 
         <?php
-      if (isset($_GET['message']))  { 
-          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
-      }
-      if (isset($_GET['error'])) {
-          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
-      }
-      ?>
+        if (isset($_GET['message']))  { 
+            echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+        }
+        if (isset($_GET['error'])) {
+            echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+        }
+        ?>
 
         <div class="table-responsive">
           <table id="incomeTable" class="table table-hover">
