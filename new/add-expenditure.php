@@ -3,6 +3,16 @@ include 'inc/auth.php'; // Include the authentication file to check user session
 // Database connection
 include 'inc/config.php'; // Include the database connection file
 
+// Fetch all categories
+$categories_query = "SELECT id, category_name FROM expenditure_categories";
+$categories_result = $conn->query($categories_query);
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+
 $message = '';
 
 // Handle form submission
@@ -12,8 +22,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = ucfirst(trim($_POST['name']));
     $phone = $_POST['phone'];
     $description = $_POST['description'];
-    $category = $_POST['category'];
-    $subcategory = $_POST['subcategory'];
+    
+    // Get category and subcategory names from their IDs
+    $category_id = intval($_POST['category']);
+    $subcategory_id = intval($_POST['subcategory']);
+    
+    // Get category name
+    $cat_stmt = $conn->prepare("SELECT category_name FROM expenditure_categories WHERE id = ?");
+    $cat_stmt->bind_param("i", $category_id);
+    $cat_stmt->execute();
+    $category_result = $cat_stmt->get_result();
+    $category = $category_result->fetch_assoc()['category_name'];
+    
+    // Get subcategory name
+    $subcat_stmt = $conn->prepare("SELECT subcategory_name FROM expenditure_subcategories WHERE id = ?");
+    $subcat_stmt->bind_param("i", $subcategory_id);
+    $subcat_stmt->execute();
+    $subcategory_result = $subcat_stmt->get_result();
+    $subcategory = $subcategory_result->fetch_assoc()['subcategory_name'];
+    
     $amount = floatval($_POST['total_amount']);
     $paid = floatval($_POST['paid_amount']);
     $balance = $amount - $paid;
@@ -23,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INSERT INTO expenditures (date, name, phone, description, category, subcategory, amount, paid, balance) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category_id, $subcategory_id, $amount, $paid, $balance);
 
     if ($stmt->execute()) {
         // Redirect back to the expenditure page with a success message
@@ -164,21 +191,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="col-md-4">
               <label for="category" class="form-label">Category</label>
-              <select id="category" name="category" class="form-select" required>
-                <option selected disabled>Choose...</option>
-                <option>Utilities</option>
-                <option>Maintenance</option>
-                <option>Salaries</option>
-              </select>
+              <div class="input-group">
+                <select id="category" name="category" class="form-select" required>
+                  <option value="" selected disabled>Choose...</option>
+                  <?php foreach ($categories as $category): ?>
+                    <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                      <?php echo htmlspecialchars($category['category_name']); ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
             </div>
             <div class="col-md-4">
               <label for="subcategory" class="form-label">Sub-category</label>
-              <select id="subcategory" name="subcategory" class="form-select" required>
-                <option selected disabled>Choose...</option>
-                <option>Electricity</option>
-                <option>Water</option>
-                <option>Stationery</option>
-              </select>
+              <div class="input-group">
+                <select id="subcategory" name="subcategory" class="form-select" required>
+                  <option value="" selected disabled>Choose category first</option>
+                </select>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
             </div>
             <div class="col-md-4">
               <label for="total_amount" class="form-label">Total Amount (₹)</label>
@@ -197,6 +233,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="mt-4 d-flex justify-content-end gap-3">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="expenditure.php" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Category Modal -->
+  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addCategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="newCategoryName" class="form-label">Category Name</label>
+              <input type="text" class="form-control" id="newCategoryName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Subcategory Modal -->
+  <div class="modal fade" id="addSubcategoryModal" tabindex="-1" aria-labelledby="addSubcategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSubcategoryModalLabel">Add New Subcategory</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addSubcategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="subcategoryCategory" class="form-label">Category</label>
+              <select id="subcategoryCategory" class="form-select" required>
+                <?php foreach ($categories as $category): ?>
+                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                    <?php echo htmlspecialchars($category['category_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="newSubcategoryName" class="form-label">Subcategory Name</label>
+              <input type="text" class="form-control" id="newSubcategoryName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Subcategory</button>
           </div>
         </form>
       </div>
@@ -246,6 +340,107 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       } else {
         phoneField.setCustomValidity('Phone number must be exactly 10 digits'); // Invalid input
       }
+    });
+
+    // Dynamic subcategory loading
+    document.getElementById('category').addEventListener('change', function() {
+        const categoryId = this.value;
+        const subcategorySelect = document.getElementById('subcategory');
+        
+        // Clear current options
+        subcategorySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+        
+        // Fetch subcategories for selected category
+        fetch(`get_subcategories.php?category_id=${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                subcategorySelect.innerHTML = '<option value="" selected disabled>Choose subcategory...</option>';
+                data.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.id;
+                    option.textContent = subcategory.subcategory_name;
+                    subcategorySelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                subcategorySelect.innerHTML = '<option value="" selected disabled>Error loading subcategories</option>';
+            });
+    });
+
+    // Add Category Form Handler
+    document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoryName = document.getElementById('newCategoryName').value;
+      
+      fetch('add_expenditure_category.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category_name: categoryName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Add new category to the dropdowns
+          const categorySelect = document.getElementById('category');
+          const subcategoryCategorySelect = document.getElementById('subcategoryCategory');
+          const option = new Option(categoryName, data.id);
+          categorySelect.add(option);
+          subcategoryCategorySelect.add(option.cloneNode(true));
+          
+          // Close modal and reset form
+          bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
+          document.getElementById('addCategoryForm').reset();
+        } else {
+          alert('Error adding category: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding category');
+      });
+    });
+
+    // Add Subcategory Form Handler
+    document.getElementById('addSubcategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoryId = document.getElementById('subcategoryCategory').value;
+      const subcategoryName = document.getElementById('newSubcategoryName').value;
+      
+      fetch('add_expenditure_subcategory.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category_id: categoryId,
+          subcategory_name: subcategoryName
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // If the parent category is currently selected, add the new subcategory to the dropdown
+          const currentCategoryId = document.getElementById('category').value;
+          if (currentCategoryId === categoryId) {
+            const subcategorySelect = document.getElementById('subcategory');
+            const option = new Option(subcategoryName, data.id);
+            subcategorySelect.add(option);
+          }
+          
+          // Close modal and reset form
+          bootstrap.Modal.getInstance(document.getElementById('addSubcategoryModal')).hide();
+          document.getElementById('addSubcategoryForm').reset();
+        } else {
+          alert('Error adding subcategory: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding subcategory');
+      });
     });
   </script>
 </body>

@@ -6,6 +6,16 @@ error_reporting(E_ALL);
 include 'inc/auth.php'; // Include the authentication file to check user session
 include 'inc/config.php'; // Include the database connection file
 
+// Fetch all categories
+$categories_query = "SELECT id, category_name FROM income_categories";
+$categories_result = $conn->query($categories_query);
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -19,8 +29,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = ucfirst(trim($_POST['name']));
     $phone = $_POST['phone'];
     $description = $_POST['description'];
-    $category = $_POST['category'];
-    $subcategory = $_POST['subcategory'];
+    
+    // Get category and subcategory names from their IDs
+    $category_id = intval($_POST['category']);
+    $subcategory_id = intval($_POST['subcategory']);
+    
+    // Get category name
+    $cat_stmt = $conn->prepare("SELECT category_name FROM income_categories WHERE id = ?");
+    $cat_stmt->bind_param("i", $category_id);
+    $cat_stmt->execute();
+    $category_result = $cat_stmt->get_result();
+    $category = $category_result->fetch_assoc()['category_name'];
+    
+    // Get subcategory name
+    $subcat_stmt = $conn->prepare("SELECT subcategory_name FROM income_subcategories WHERE id = ?");
+    $subcat_stmt->bind_param("i", $subcategory_id);
+    $subcat_stmt->execute();
+    $subcategory_result = $subcat_stmt->get_result();
+    $subcategory = $subcategory_result->fetch_assoc()['subcategory_name'];
+    
     $amount = floatval($_POST['total_amount']);
     $received = floatval($_POST['received_amount']);
     $balance = $amount - $received;
@@ -126,21 +153,30 @@ $conn->close();
           </div>
           <div class="col-md-4">
             <label for="category" class="form-label">Category</label>
-            <select id="category" name="category" class="form-select" required>
-              <option selected disabled>Choose...</option>
-              <option>Consulting</option>
-              <option>Services</option>
-              <option>Products</option>
-            </select>
+            <div class="input-group">
+              <select id="category" name="category" class="form-select" required>
+                <option value="" selected disabled>Choose...</option>
+                <?php foreach ($categories as $category): ?>
+                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                    <?php echo htmlspecialchars($category['category_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+            </div>
           </div>
           <div class="col-md-4">
             <label for="subcategory" class="form-label">Sub-category</label>
-            <select id="subcategory" name="subcategory" class="form-select" required>
-              <option selected disabled>Choose...</option>
-              <option>IT</option>
-              <option>Marketing</option>
-              <option>Sales</option>
-            </select>
+            <div class="input-group">
+              <select id="subcategory" name="subcategory" class="form-select" required>
+                <option value="" selected disabled>Choose category first</option>
+              </select>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+            </div>
           </div>
 
           <div class="col-md-4">
@@ -165,6 +201,64 @@ $conn->close();
     </div>
   </div>
 
+  <!-- Add Category Modal -->
+  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addCategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="newCategoryName" class="form-label">Category Name</label>
+              <input type="text" class="form-control" id="newCategoryName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Subcategory Modal -->
+  <div class="modal fade" id="addSubcategoryModal" tabindex="-1" aria-labelledby="addSubcategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSubcategoryModalLabel">Add New Subcategory</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addSubcategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="subcategoryCategory" class="form-label">Category</label>
+              <select id="subcategoryCategory" class="form-select" required>
+                <?php foreach ($categories as $category): ?>
+                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                    <?php echo htmlspecialchars($category['category_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="newSubcategoryName" class="form-label">Subcategory Name</label>
+              <input type="text" class="form-control" id="newSubcategoryName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Subcategory</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
@@ -183,6 +277,32 @@ $conn->close();
       const balance = total - received;
       document.getElementById('balance_amount').value = balance;
     }
+
+    // Dynamic subcategory loading
+    document.getElementById('category').addEventListener('change', function() {
+      const categoryId = this.value;
+      const subcategorySelect = document.getElementById('subcategory');
+      
+      // Clear current options
+      subcategorySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+      
+      // Fetch subcategories for selected category
+      fetch(`get_income_subcategories.php?category_id=${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+          subcategorySelect.innerHTML = '<option value="" selected disabled>Choose subcategory...</option>';
+          data.forEach(subcategory => {
+            const option = document.createElement('option');
+            option.value = subcategory.id;
+            option.textContent = subcategory.subcategory_name;
+            subcategorySelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          subcategorySelect.innerHTML = '<option value="" selected disabled>Error loading subcategories</option>';
+        });
+    });
 
     // Capitalize the first letter of each word in the name field
     document.getElementById('name').addEventListener('input', function () {
@@ -208,6 +328,81 @@ $conn->close();
       } else {
         phoneField.setCustomValidity('Phone number must be exactly 10 digits'); // Invalid input
       }
+    });
+
+    // Add Category Form Handler
+    document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoryName = document.getElementById('newCategoryName').value;
+      
+      fetch('add_income_category.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category_name: categoryName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Add new category to the dropdowns
+          const categorySelect = document.getElementById('category');
+          const subcategoryCategorySelect = document.getElementById('subcategoryCategory');
+          const option = new Option(categoryName, data.id);
+          categorySelect.add(option);
+          subcategoryCategorySelect.add(option.cloneNode(true));
+          
+          // Close modal and reset form
+          bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
+          document.getElementById('addCategoryForm').reset();
+        } else {
+          alert('Error adding category: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding category');
+      });
+    });
+
+    // Add Subcategory Form Handler
+    document.getElementById('addSubcategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoryId = document.getElementById('subcategoryCategory').value;
+      const subcategoryName = document.getElementById('newSubcategoryName').value;
+      
+      fetch('add_income_subcategory.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category_id: categoryId,
+          subcategory_name: subcategoryName
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // If the parent category is currently selected, add the new subcategory to the dropdown
+          const currentCategoryId = document.getElementById('category').value;
+          if (currentCategoryId === categoryId) {
+            const subcategorySelect = document.getElementById('subcategory');
+            const option = new Option(subcategoryName, data.id);
+            subcategorySelect.add(option);
+          }
+          
+          // Close modal and reset form
+          bootstrap.Modal.getInstance(document.getElementById('addSubcategoryModal')).hide();
+          document.getElementById('addSubcategoryForm').reset();
+        } else {
+          alert('Error adding subcategory: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding subcategory');
+      });
     });
   </script>
 </body>
