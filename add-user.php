@@ -46,7 +46,7 @@ include 'inc/config.php';
 
                     <div class="card shadow-lg">
                         <div class="card-header bg-gradient-dark text-white">
-                            <h6 class="mb-0">Add New User</h6>
+                            <h6 class="mb-0">Add New User1</h6>
                         </div>
                         <div class="card-body">
                             <form action="process-add-user.php" method="POST">
