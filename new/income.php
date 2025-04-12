@@ -16,31 +16,34 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
   <style>
+    html, body {
+      height: 100%;
+      overflow: auto;
+    }
+
     body {
       background-color: #f8f9fa;
-      min-height: 100vh;
     }
+
     .sidebar {
-      width: 250px;
-      min-height: 100vh;
+      height: 100vh;
       background-color: #343a40;
-      position: fixed;
-      left: 0;
-      top: 0;
-      z-index: 1040;
     }
+
     .sidebar .nav-link {
       color: #ffffff;
-      padding: 0.75rem 1rem;
     }
+
     .sidebar .nav-link.active {
       background-color: #495057;
     }
+
     .main-content {
       margin-left: 250px;
-      min-height: 100vh;
-      background-color: #f8f9fa;
+      overflow-y: auto;
+      height: 100vh;
     }
+
     .top-navbar {
       position: sticky;
       top: 0;
@@ -48,77 +51,110 @@ $result = $conn->query($sql);
       background: white;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       padding: 1rem 2rem;
-      width: calc(100% - 250px);
-      margin-left: 250px;
     }
+
     .table-responsive {
-      background-color: white;
       border-radius: 0.5rem;
+      overflow-x: auto;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      padding: 1.5rem;
       margin-top: 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #dee2e6 #f8f9fa;
     }
+
+    .table-responsive::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+      background-color: #dee2e6;
+      border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+      background-color: #f8f9fa;
+    }
+
     .table {
+      white-space: nowrap;
       margin: 0;
-      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.875rem;
     }
+
+    .table th, .table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 0.75rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+
     .table th {
       background-color: #f8f9fa;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: bold;
       color: #495057;
-      padding: 1rem;
-      white-space: nowrap;
-      border-bottom: 2px solid #dee2e6;
+      font-size: 0.8rem;
     }
-    .table td {
-      padding: 0.75rem 1rem;
-      vertical-align: middle;
-      border-bottom: 1px solid #dee2e6;
-    }
+
     .table tbody tr:hover {
-      background-color: #f8f9fa;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
     }
-    .action-column {
-      white-space: nowrap;
-      width: 100px;
+
+    .table td .btn {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
-    .action-column .btn {
-      padding: 0.25rem 0.5rem;
-      margin: 0 0.125rem;
+
+    .table td .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      transition: background-color 0.3s ease;
     }
+
+    .table td .btn-primary:hover {
+      background-color: #0b5ed7;
+    }
+
+    .table td .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .table td .btn-danger:hover {
+      background-color: #bb2d3b;
+    }
+
     .badge {
-      padding: 0.35rem 0.65rem;
-      font-weight: 500;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
     }
-    .dataTables_wrapper .dataTables_length select {
-      padding: 0.375rem 2.25rem 0.375rem 0.75rem;
-      border-radius: 0.25rem;
-      border: 1px solid #dee2e6;
-    }
-    .dataTables_wrapper .dataTables_filter input {
-      padding: 0.375rem 0.75rem;
-      border-radius: 0.25rem;
-      border: 1px solid #dee2e6;
-      margin-left: 0.5rem;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      padding: 0.375rem 0.75rem;
-      margin: 0 0.125rem;
-      border-radius: 0.25rem;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-      background: #0d6efd;
-      border-color: #0d6efd;
-      color: white !important;
-    }
-    .btn-success {
+
+    .badge.bg-success {
       background-color: #198754;
-      border-color: #198754;
-      color: white;
+      color: #ffffff;
     }
-    .btn-success:hover {
-      background-color: #157347;
-      border-color: #146c43;
+
+    .badge.bg-danger {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
+
+    .dataTables_wrapper {
+      overflow-x: auto;
     }
   </style>
 </head>
@@ -131,12 +167,12 @@ $result = $conn->query($sql);
     <div class="main-content w-100">
       <!-- Top Navbar -->
       <div class="top-navbar d-flex justify-content-between align-items-center">
-        <h4>Income Records</h4>
+        <h4 class="mb-0">Income Records</h4>
         <div class="d-flex align-items-center gap-3">
-          <i class="bi bi-bell" title="Notifications"></i>
+          <i class="bi bi-bell fs-5"></i>
           <div class="dropdown">
-            <a href="#" class="dropdown-toggle text-decoration-none text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle"></i> Admin
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5 me-1"></i> Admin
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -149,7 +185,8 @@ $result = $conn->query($sql);
       <!-- Content -->
       <div class="p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <a href="add-income.php" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i> Add New Income</a>
+          <h5>Income Records</h5>
+          <a href="add-income.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Income</a>
         </div>
 
         <?php
@@ -162,8 +199,8 @@ $result = $conn->query($sql);
         ?>
 
         <div class="table-responsive">
-          <table id="incomeTable" class="table table-hover">
-            <thead>
+          <table id="incomeTable" class="table table-bordered table-hover">
+            <thead class="table-light">
               <tr>
                 <th>SL No.</th>
                 <th>Invoice Number</th>
