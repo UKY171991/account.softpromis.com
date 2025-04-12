@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="main-content w-100">
       
       <div class="form-container w-100">
-        <h3>Add New Expenditure</h3>
+        <h3>Add New Expenditure1</h3>
         <?php if (!empty($message)): ?>
           <?php echo $message; ?>
         <?php endif; ?>
