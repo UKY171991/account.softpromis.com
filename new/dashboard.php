@@ -4,7 +4,7 @@ include 'inc/auth.php'; // Include the authentication file to check user login s
 include 'inc/config.php';
 
 // Check if user is manager and redirect if true
-if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
+if (isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'manager') {
     // Redirect to income page with error message since managers can't access dashboard
     header("Location: income.php?error=You do not have permission to access the dashboard");
     exit();
