@@ -1,0 +1,88 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF'], '.php');
+$page_titles = [
+    'dashboard' => 'Dashboard',
+    'income' => 'Income Records',
+    'expenditure' => 'Expenditure Records',
+    'report' => 'Reports',
+    'client' => 'Client List',
+    'users' => 'User Management',
+    'add-income' => 'Add Income',
+    'edit-income' => 'Edit Income',
+    'add-expenditure' => 'Add Expenditure',
+    'edit-expenditure' => 'Edit Expenditure',
+    'add-client' => 'Add Client',
+    'edit-client' => 'Edit Client',
+    'add-user' => 'Add User',
+    'edit-user' => 'Edit User'
+];
+
+$page_title = $page_titles[$current_page] ?? 'Dashboard';
+?>
+
+<div class="top-navbar">
+    <div class="d-flex justify-content-between align-items-center w-100">
+        <!-- Left side: Toggle & Title -->
+        <div class="d-flex align-items-center">
+            <button class="mobile-toggle btn btn-link d-lg-none me-3">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+            <h4 class="mb-0 page-title"><?php echo $page_title; ?></h4>
+        </div>
+
+        <!-- Right side: Actions & User Menu -->
+        <div class="d-flex align-items-center gap-3">
+            <!-- Quick Actions -->
+            <?php if (in_array($current_page, ['dashboard', 'income', 'expenditure'])): ?>
+            <div class="quick-actions d-none d-md-flex">
+                <a href="add-income.php" class="btn btn-sm btn-success me-2">
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="d-none d-lg-inline">Add Income</span>
+                </a>
+                <a href="add-expenditure.php" class="btn btn-sm btn-danger">
+                    <i class="bi bi-dash-circle"></i>
+                    <span class="d-none d-lg-inline">Add Expenditure</span>
+                </a>
+            </div>
+            <?php endif; ?>
+
+            <!-- Notifications -->
+            <div class="notifications dropdown">
+                <button class="btn btn-link text-dark position-relative" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                        <span class="visually-hidden">unread notifications</span>
+                    </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                    <li><h6 class="dropdown-header">Notifications</h6></li>
+                    <li><a class="dropdown-item" href="#">New income recorded</a></li>
+                    <li><a class="dropdown-item" href="#">Payment reminder</a></li>
+                    <li><a class="dropdown-item" href="#">System update</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                </ul>
+            </div>
+
+            <!-- User Menu -->
+            <div class="user-menu dropdown">
+                <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                    <div class="user-avatar me-2">
+                        <i class="bi bi-person-circle fs-5"></i>
+                    </div>
+                    <div class="user-info d-none d-md-block">
+                        <div class="fw-bold"><?php echo $_SESSION['username'] ?? 'Admin'; ?></div>
+                        <div class="small text-muted"><?php echo $_SESSION['role'] ?? 'Administrator'; ?></div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> 
