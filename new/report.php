@@ -1,5 +1,5 @@
 <?php
-include 'auth.php'; // Include authentication check
+include 'inc/auth.php'; // Include authentication check
 include 'inc/config.php'; // Database connection
 
 $message = '';
