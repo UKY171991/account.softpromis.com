@@ -184,7 +184,7 @@ include 'inc/config.php'; // Include the database connection file
     <div class="p-4">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5>Users</h5>
-        <a href="add-user.php" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add User</a>
+        <a href="add-user.php" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add User1</a>
       </div>
 
       <?php
