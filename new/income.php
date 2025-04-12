@@ -11,13 +11,11 @@ $result = $conn->query($sql);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Income Records - Account Management</title>
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/topbar.css" rel="stylesheet">
-  <link href="assets/css/sidebar.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <title>Income Records</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
     html, body {
       height: 100%;
@@ -168,96 +166,103 @@ $result = $conn->query($sql);
 
     <!-- Main Content -->
     <div class="main-content w-100">
-      <?php include 'topbar.php'; ?>
-
-      <div class="container-fluid p-4">
-        <?php if(isset($_GET['success'])): ?>
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php echo $_GET['success']; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <!-- Top Navbar -->
+      <div class="top-navbar d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Income Records</h4>
+        <div class="d-flex align-items-center gap-3">
+          <i class="bi bi-bell fs-5"></i>
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5 me-1"></i> Admin
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
           </div>
-        <?php endif; ?>
+        </div>
+      </div>
 
-        <?php if(isset($_GET['error'])): ?>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $_GET['error']; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        <?php endif; ?>
+      <!-- Content -->
+      <div class="p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5>Income Records</h5>
+          <a href="add-income.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Income</a>
+        </div>
 
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h5>Income Records</h5>
-              <a href="add-income.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Income</a>
-            </div>
+        <?php
+        if (isset($_GET['message']))  { 
+            echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+        }
+        if (isset($_GET['error'])) {
+            echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+        }
+        ?>
 
-            <div class="table-responsive">
-              <table id="incomeTable" class="table table-bordered table-hover">
-                <thead class="table-light">
-                  <tr>
-                    <th>SL No.</th>
-                    <th>Invoice Number</th>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Sub-category</th>
-                    <th>Total Amount</th>
-                    <th>Received</th>
-                    <th>Balance</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  if ($result->num_rows > 0) {
-                      $sl_no = 1;
-                      while ($row = $result->fetch_assoc()) {
-                          $formatted_date = date("d-m-Y", strtotime($row['date']));
-                          $formatted_created_at = date("d-m-Y H:i:s", strtotime($row['created_at']));
-                          $formatted_updated_at = date("d-m-Y H:i:s", strtotime($row['updated_at']));
-                          $status = ($row['balance'] == 0) 
-                              ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
-                              : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
+        <div class="table-responsive">
+          <table id="incomeTable" class="table table-bordered table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>SL No.</th>
+                <th>Invoice Number</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Sub-category</th>
+                <th>Total Amount</th>
+                <th>Received</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              if ($result->num_rows > 0) {
+                  $sl_no = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      $formatted_date = date("d-m-Y", strtotime($row['date']));
+                      $formatted_created_at = date("d-m-Y H:i:s", strtotime($row['created_at']));
+                      $formatted_updated_at = date("d-m-Y H:i:s", strtotime($row['updated_at']));
+                      $status = ($row['balance'] == 0) 
+                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
+                          : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
-                          echo "<tr>";
-                          echo "<td>{$sl_no}</td>";
-                          echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
-                          echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
-                          echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                          echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
-                          echo "<td>" . htmlspecialchars($row['description']) . "</td>";
-                          echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                          echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
-                          echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
-                          echo "<td>₹" . number_format($row['received'], 2) . "</td>";
-                          echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                          echo "<td>" . $status . "</td>";
-                          echo "<td class='action-column'>
-                                  <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
-                                  <a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
-                                </td>";
-                          echo "</tr>";
-                          $sl_no++;
-                      }
-                  } else {
-                      echo "<tr><td colspan='15' class='text-center'>No records found</td></tr>";
+                      echo "<tr>";
+                      echo "<td>{$sl_no}</td>";
+                      echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
+                      echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['received'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td>" . $status . "</td>";
+                      echo "<td class='action-column'>
+                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
+                              <a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                            </td>";
+                      echo "</tr>";
+                      $sl_no++;
                   }
-                  ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
+              } else {
+                  echo "<tr><td colspan='15' class='text-center'>No records found</td></tr>";
+              }
+              ?>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/jquery-3.7.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
