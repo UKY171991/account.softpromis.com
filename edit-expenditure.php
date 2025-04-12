@@ -1,234 +1,195 @@
 <?php
-include 'inc/auth.php';
-include 'inc/config.php';
+include 'inc/auth.php'; // Include the authentication file to check user login status
+// Database connection
+include 'inc/config.php'; // Include the database connection file
 
-
+// Fetch expenditure details for editing
 if (isset($_GET['id'])) {
-    $expenditure_id = intval($_GET['id']);
-    
-    $query = "SELECT * FROM expenditure WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $expenditure_id);
+    $id = intval($_GET['id']); // Sanitize input
+    $sql = "SELECT * FROM expenditures WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $expenditure = $result->fetch_assoc();
-    } else {
-        $_SESSION['error_msg'] = "Expenditure not found.";
-        header("Location: expenditure-list.php");
+    $expenditure = $result->fetch_assoc();
+
+    if (!$expenditure) {
+        header("Location: expenditure.php?error=Expenditure record not found");
         exit();
     }
+
+    // Convert the date to dd-mm-yyyy format for display
+    $expenditure['date'] = date('d-m-Y', strtotime($expenditure['date']));
 } else {
-    header("Location: expenditure-list.php");
+    header("Location: expenditure.php?error=No expenditure ID provided");
     exit();
 }
 
+// Handle form submission for updating expenditure
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
+    $date = DateTime::createFromFormat('d-m-Y', $_POST['date'])->format('Y-m-d');
+    $name = ucfirst(trim($_POST['name']));
+    $phone = $_POST['phone'];
+    $description = $_POST['description'];
+    $category = $_POST['category'];
+    $subcategory = $_POST['subcategory'];
+    $amount = floatval($_POST['amount']);
+    $paid = floatval($_POST['paid']);
+    $balance = $amount - $paid;
 
-if (isset($_POST['category_id'])) {
-    $category_id = intval($_POST['category_id']);
+    // Update expenditure record in the database
+    $sql = "UPDATE expenditures SET date = ?, name = ?, phone = ?, description = ?, category = ?, subcategory = ?, amount = ?, paid = ?, balance = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssdddi", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance, $id);
 
-    $query = "SELECT * FROM expenditure_subcategories WHERE category_id = ? ORDER BY subcategory_name ASC";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $category_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    echo '<option value="">-- Select Sub-Category --</option>';
-    while ($row = $result->fetch_assoc()) {
-        echo "<option value='{$row['id']}'>{$row['subcategory_name']}</option>";
+    if ($stmt->execute()) {
+        header("Location: expenditure.php?message=Expenditure record updated successfully");
+        exit();
+    } else {
+        $error = "Error: " . $stmt->error;
     }
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Edit Expenditure</title>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-    <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link href="assets/css/style.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Expenditure</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      height: 100vh;
+      background-color: #343a40;
+    }
+    .sidebar .nav-link {
+      color: #ffffff;
+    }
+    .sidebar .nav-link.active {
+      background-color: #495057;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 2rem;
+    }
+    .form-container {
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
+<body>
+<div class="d-flex">
+  <!-- Sidebar -->
+  <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
+    <h4 class="text-white">Account Panel</h4>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
+      <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      <?php endif; ?>
+      <li><a href="income.php" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
+      <li><a href="expenditure.php" class="nav-link active"><i class="bi bi-wallet2"></i> Expenditure</a></li>
+      <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
+      <li><a href="client.php" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
+      <li><a href="users.php" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
+    </ul>
+  </nav>
 
-<body class="g-sidenav-show bg-gray-100">
-    <?php include 'inc/sidebar.php'; ?>
-
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
-        <?php include 'inc/topbar.php'; ?>
-
-        <div class="container-fluid py-4">
-            <div class="row">
-                <div class="col-12">
-                    <h4 class="text-dark">Edit Expenditure</h4>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 mx-auto">
-                    <?php if (isset($_SESSION['success_msg'])): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= $_SESSION['success_msg']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        <?php unset($_SESSION['success_msg']); ?>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['error_msg'])): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= $_SESSION['error_msg']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        <?php unset($_SESSION['error_msg']); ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <div class="row mt-4 d-flex justify-content-center">
-                <div class="col-md-12">
-                    <div class="card shadow-lg">
-                        <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
-                            <h6 class="mb-0 text-white">Edit Expenditure</h6>
-                        </div>
-                        <div class="card-body">
-                            <form action="update-expenditure.php" method="POST">
-                            	<input type="hidden" name="id" value="<?= $expenditure['id']; ?>">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" class="form-control border" value="<?= $expenditure['name']; ?>" name="name" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control border"  value="<?= $expenditure['phone']; ?>" name="phone" pattern="[0-9]{10}" maxlength="10" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Category</label>
-                                        <select class="form-control border" name="category_id" id="categorySelect" required>
-                                            <option value="">-- Select Category --</option>
-                                            <?php
-                                            $query = "SELECT * FROM expenditure_categories ORDER BY category_name ASC";
-                                            $result = $conn->query($query);
-                                            while ($row = $result->fetch_assoc()) {
-                                                $selected = ($row['id'] == $expenditure['category_id']) ? 'selected' : '';
-                        						echo "<option value='{$row['id']}' $selected>{$row['category_name']}</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Sub-Category</label>
-                                        <select class="form-control border" name="subcategory_id" id="subcategorySelect" required>
-                                            <option value="">-- Select Sub-Category --</option>
-                                            <?php
-                                                $subcategory_query = "SELECT * FROM expenditure_subcategories WHERE category_id = {$expenditure['category_id']} ORDER BY subcategory_name ASC";
-                                                $subcategory_result = mysqli_query($conn, $subcategory_query);
-                                                while ($row = mysqli_fetch_assoc($subcategory_result)) {
-                                                    $selected = ($row['id'] == $expenditure['subcategory_id']) ? 'selected' : '';
-                                                    echo "<option value='{$row['id']}' $selected>{$row['subcategory_name']}</option>";
-                                                }
-                                                ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Total Amount</label>
-                                            <input type="number" class="form-control border" name="total_amount" value="<?= $expenditure['actual_amount']; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Paid Amount</label>
-                                            <input type="number" class="form-control border" name="paid_amount" value="<?= $expenditure['paid_amount']; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Date of Entry</label>
-                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" value="<?= $expenditure['entry_date']; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <textarea class="form-control border" name="description" required><?= $expenditure['description']; ?></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="text-end">
-                                    <button type="submit" class="btn bg-gradient-dark">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- Main Content -->
+  <div class="main-content w-100">
+    <h3 class="mb-4">Edit Expenditure</h3>
+    <?php if (isset($error)): ?>
+      <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
+    <form action="" method="POST" class="form-container">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="date" class="form-label">Date</label>
+          <input type="text" class="form-control date-picker" id="date" name="date" value="<?php echo htmlspecialchars($expenditure['date']); ?>" required>
         </div>
-    </main>
+        <div class="col-md-4">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($expenditure['name']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($expenditure['phone']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="description" name="description" value="<?php echo htmlspecialchars($expenditure['description']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" name="category" class="form-select" required>
+            <option value="Utilities" <?php echo $expenditure['category'] === 'Utilities' ? 'selected' : ''; ?>>Utilities</option>
+            <option value="Maintenance" <?php echo $expenditure['category'] === 'Maintenance' ? 'selected' : ''; ?>>Maintenance</option>
+            <option value="Salaries" <?php echo $expenditure['category'] === 'Salaries' ? 'selected' : ''; ?>>Salaries</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="subcategory" class="form-label">Sub-category</label>
+          <select id="subcategory" name="subcategory" class="form-select" required>
+            <option value="Electricity" <?php echo $expenditure['subcategory'] === 'Electricity' ? 'selected' : ''; ?>>Electricity</option>
+            <option value="Water" <?php echo $expenditure['subcategory'] === 'Water' ? 'selected' : ''; ?>>Water</option>
+            <option value="Stationery" <?php echo $expenditure['subcategory'] === 'Stationery' ? 'selected' : ''; ?>>Stationery</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="amount" class="form-label">Total Amount (₹)</label>
+          <input type="number" class="form-control" id="amount" name="amount" value="<?php echo htmlspecialchars($expenditure['amount']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="paid" class="form-label">Paid Amount (₹)</label>
+          <input type="number" class="form-control" id="paid" name="paid" value="<?php echo htmlspecialchars($expenditure['paid']); ?>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="balance" class="form-label">Balance Amount (₹)</label>
+          <input type="number" class="form-control" id="balance" name="balance" value="<?php echo htmlspecialchars($expenditure['balance']); ?>" readonly>
+        </div>
+      </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="assets/js/core/popper.min.js"></script>
-    <script src="assets/js/core/bootstrap.min.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+      <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Update Expenditure</button>
+        <a href="expenditure.php" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
 
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/responsive.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  // Initialize Flatpickr for date picker
+  flatpickr('.date-picker', {
+    dateFormat: "d-m-Y"
+  });
 
-    <script>
-    $(document).ready(function() {
-        $("#datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+  // Update balance amount dynamically
+  document.getElementById('paid').addEventListener('input', updateBalance);
+  document.getElementById('amount').addEventListener('input', updateBalance);
 
-            // Fetch subcategories when category is selected
-            $("#categorySelect").change(function() {
-                let categoryId = $(this).val();
-                $("#subcategorySelect").html('<option value="">Loading...</option>');
-
-                if (categoryId !== "") {
-                    $.ajax({
-                        url: "fetch-expenditure-subcategories.php",
-                        type: "POST",
-                        data: { category_id: categoryId },
-                        success: function(response) {
-                            $("#subcategorySelect").html(response);
-                        },
-                        error: function() {
-                            $("#subcategorySelect").html('<option value="">Error loading subcategories</option>');
-                        }
-                    });
-                } else {
-                    $("#subcategorySelect").html('<option value="">-- Select Sub-Category --</option>');
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $("#datepicker").datepicker({
-                dateFormat: "dd-mm-yy", // Set format to dd-mm-yyyy
-                changeMonth: true,  // Allows month selection
-                changeYear: true,   // Allows year selection
-                yearRange: "1900:+10" // Allows selection from 1900 to 10 years ahead
-            });
-        });
-    </script>
+  function updateBalance() {
+    const total = parseFloat(document.getElementById('amount').value) || 0;
+    const paid = parseFloat(document.getElementById('paid').value) || 0;
+    const balance = total - paid;
+    document.getElementById('balance').value = balance;
+  }
+</script>
 </body>
 </html>

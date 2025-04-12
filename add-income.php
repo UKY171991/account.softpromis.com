@@ -1,235 +1,413 @@
 <?php
-include 'inc/auth.php';
-include 'inc/config.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+include 'inc/auth.php'; // Include the authentication file to check user session
+include 'inc/config.php'; // Include the database connection file
+
+// Fetch all categories
+$categories_query = "SELECT id, category_name FROM income_categories";
+$categories_result = $conn->query($categories_query);
+$categories = [];
+if ($categories_result) {
+    while ($row = $categories_result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+}
+
+$message = '';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Convert date from dd-mm-yyyy to yyyy-mm-dd for database storage
+    $date = DateTime::createFromFormat('d-m-Y', $_POST['date']);
+    if (!$date) {
+        die("Invalid date format. Please use DD-MM-YYYY.");
+    }
+    $date = $date->format('Y-m-d');
+
+    $name = ucfirst(trim($_POST['name']));
+    $phone = $_POST['phone'];
+    $description = $_POST['description'];
+    
+    // Get category and subcategory names from their IDs
+    $category_id = intval($_POST['category']);
+    $subcategory_id = intval($_POST['subcategory']);
+    
+    // Get category name
+    $cat_stmt = $conn->prepare("SELECT category_name FROM income_categories WHERE id = ?");
+    $cat_stmt->bind_param("i", $category_id);
+    $cat_stmt->execute();
+    $category_result = $cat_stmt->get_result();
+    $category = $category_result->fetch_assoc()['category_name'];
+    
+    // Get subcategory name
+    $subcat_stmt = $conn->prepare("SELECT subcategory_name FROM income_subcategories WHERE id = ?");
+    $subcat_stmt->bind_param("i", $subcategory_id);
+    $subcat_stmt->execute();
+    $subcategory_result = $subcat_stmt->get_result();
+    $subcategory = $subcategory_result->fetch_assoc()['subcategory_name'];
+    
+    $amount = floatval($_POST['total_amount']);
+    $received = floatval($_POST['received_amount']);
+    $balance = $amount - $received;
+
+    // Debugging: Check all variables
+    // Uncomment the following lines to debug
+    // var_dump($date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance);
+    // exit;
+
+    // Insert into database
+    $stmt = $conn->prepare("
+        INSERT INTO income (date, name, phone, description, category, subcategory, amount, received, balance) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $received, $balance);
+
+    if ($stmt->execute()) {
+        // Redirect back to the income page with a success message
+        header("Location: income.php?message=Income entry added successfully");
+        exit();
+    } else {
+        // Display error message
+        $message = "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Income</title>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-  	<link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-  	<link href="assets/css/nucleo-svg.css" rel="stylesheet" />
-  	<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-  	<link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link  href="assets/css/style.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Income</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      height: 100vh;
+      background-color: #343a40;
+    }
+    .sidebar .nav-link {
+      color: #ffffff;
+    }
+    .sidebar .nav-link.active {
+      background-color: #495057;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 2rem;
+    }
+  </style>
 </head>
+<body>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
+      <h4 class="text-white">Account Panel</h4>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+      <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
+        <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <?php endif; ?>
+        <li><a href="income.php" class="nav-link active"><i class="bi bi-currency-rupee"></i> Income</a></li>
+        <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
+        <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
+        <li><a href="client.php" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
+        <li><a href="users.php" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
+      </ul>
+    </nav>
 
-<body class="g-sidenav-show bg-gray-100">
-    <?php include 'inc/sidebar.php'; ?>
+    <!-- Main content -->
+    <div class="main-content w-100">
+      <h3 class="mb-4">Add New Income</h3>
 
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
-        <?php include 'inc/topbar.php'; ?>
+      <?php echo $message; ?>
+      <form action="" method="POST">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="date" class="form-label">Date</label>
+            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
+          </div>
+          <div class="col-md-4">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="col-md-4">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits" required>
+          </div>
 
-        <div class="container-fluid py-4">
-            <div class="row">
-                <div class="col-12">
-                    <h4 class="text-dark">Add Income</h4>
-                </div>
+          <div class="col-md-4">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" required>
+          </div>
+          <div class="col-md-4">
+            <label for="category" class="form-label">Category</label>
+            <div class="input-group">
+              <select id="category" name="category" class="form-select" required>
+                <option value="" selected disabled>Choose...</option>
+                <?php foreach ($categories as $category): ?>
+                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                    <?php echo htmlspecialchars($category['category_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                <i class="bi bi-plus-lg"></i>
+              </button>
             </div>
-
-            <!-- Display Messages -->
-            <div class="row">
-                <div class="col-md-12 mx-auto">
-                    <?php if (isset($_SESSION['success_msg'])): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= $_SESSION['success_msg']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        <?php unset($_SESSION['success_msg']); ?>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['error_msg'])): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= $_SESSION['error_msg']; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        <?php unset($_SESSION['error_msg']); ?>
-                    <?php endif; ?>
-                </div>
+          </div>
+          <div class="col-md-4">
+            <label for="subcategory" class="form-label">Sub-category</label>
+            <div class="input-group">
+              <select id="subcategory" name="subcategory" class="form-select" required>
+                <option value="" selected disabled>Choose category first</option>
+              </select>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
+                <i class="bi bi-plus-lg"></i>
+              </button>
             </div>
+          </div>
 
-            <!-- Add Income Form -->
-            <div class="row mt-4 d-flex justify-content-center">
-                <div class="col-md-12">
-                    <div class="card shadow-lg">
-                        <div class="card-header bg-gradient-dark text-white d-flex align-items-center">
-                            <!-- <i class="material-symbols-rounded me-2">attach_money</i> -->
-                            <h6 class="mb-0 text-white">Add New Income</h6>
-                        </div>
-                        <div class="card-body">
-                            <form action="process-income.php" method="POST">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" class="form-control border" name="name" id="name" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control border" name="phone" id="phone" pattern="[0-9]{10}" maxlength="10" required>
-                                            <small class="text-danger" id="phoneError" style="display: none;">Phone number must be exactly 10 digits.</small>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Category</label>
-                                            <select class="form-control border" name="category_id" id="category" required>
-                                                <option value="">-- Select Category --</option>
-                                                <?php
-                                                $query = "SELECT * FROM income_categories ORDER BY category_name ASC";
-                                                $result = mysqli_query($conn, $query);
-                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                    echo "<option value='{$row['id']}'>{$row['category_name']}</option>";
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Sub-Category</label>
-                                            <select class="form-control border" name="subcategory_id" id="subcategory" required>
-                                                <option value="">-- Select Sub-Category --</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Actual Amount</label>
-                                            <input type="number" class="form-control border no-spinner" name="actual_amount" id="actualAmount" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Received Amount</label>
-                                            <input type="number" class="form-control border no-spinner" name="received_amount" id="receivedAmount" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Balance Amount</label>
-                                            <input type="text" class="form-control border" id="balanceAmount" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Date of Entry</label>
-                                            <input type="text" class="form-control border" name="date_of_entry" id="datepicker" required autocomplete="off">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Revenue</label>
-                                            <input type="number" class="form-control border no-spinner" name="revenue" id="revenue" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <textarea class="form-control border" name="description" required></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                                
-                                <div class="text-end">
-                                    <button type="submit" class="btn bg-gradient-dark">
-                                         Submit
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div class="col-md-4">
+            <label for="total_amount" class="form-label">Total Amount (₹)</label>
+            <input type="number" class="form-control" id="total_amount" name="total_amount" required>
+          </div>
+          <div class="col-md-4">
+            <label for="received_amount" class="form-label">Received Amount (₹)</label>
+            <input type="number" class="form-control" id="received_amount" name="received_amount" required>
+          </div>
+          <div class="col-md-4">
+            <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
+            <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
+          </div>
         </div>
-    </main>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <a href="income.php" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
 
+  <!-- Add Category Modal -->
+  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addCategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="newCategoryName" class="form-label">Category Name</label>
+              <input type="text" class="form-control" id="newCategoryName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    <script src="assets/js/core/popper.min.js"></script>
-  	<script src="assets/js/core/bootstrap.min.js"></script>
-  	<script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-  	<script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-  	<script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
+  <!-- Add Subcategory Modal -->
+  <div class="modal fade" id="addSubcategoryModal" tabindex="-1" aria-labelledby="addSubcategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSubcategoryModalLabel">Add New Subcategory</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addSubcategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="subcategoryCategory" class="form-label">Category</label>
+              <select id="subcategoryCategory" class="form-select" required>
+                <?php foreach ($categories as $category): ?>
+                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                    <?php echo htmlspecialchars($category['category_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="newSubcategoryName" class="form-label">Subcategory Name</label>
+              <input type="text" class="form-control" id="newSubcategoryName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Subcategory</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        document.getElementById("category").addEventListener("change", function () {
-            let categoryId = this.value;
-            let subcategoryDropdown = document.getElementById("subcategory");
-            subcategoryDropdown.innerHTML = "<option>Loading...</option>";
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/responsive.js"></script>
+  <script>
+    // Initialize Flatpickr for date picker
+    flatpickr('.date-picker', {
+      dateFormat: "d-m-Y"
+    });
 
-            fetch("fetch-subcategories.php?category_id=" + categoryId)
-                .then(response => response.text())
-                .then(data => {
-                    subcategoryDropdown.innerHTML = data;
-                });
+    // Update balance amount dynamically
+    document.getElementById('received_amount').addEventListener('input', updateBalance);
+    document.getElementById('total_amount').addEventListener('input', updateBalance);
+
+    function updateBalance() {
+      const total = parseFloat(document.getElementById('total_amount').value) || 0;
+      const received = parseFloat(document.getElementById('received_amount').value) || 0;
+      const balance = total - received;
+      document.getElementById('balance_amount').value = balance;
+    }
+
+    // Dynamic subcategory loading
+    document.getElementById('category').addEventListener('change', function() {
+      const categoryId = this.value;
+      const subcategorySelect = document.getElementById('subcategory');
+      
+      // Clear current options
+      subcategorySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+      
+      // Fetch subcategories for selected category
+      fetch(`get_income_subcategories.php?category_id=${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+          subcategorySelect.innerHTML = '<option value="" selected disabled>Choose subcategory...</option>';
+          data.forEach(subcategory => {
+            const option = document.createElement('option');
+            option.value = subcategory.id;
+            option.textContent = subcategory.subcategory_name;
+            subcategorySelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          subcategorySelect.innerHTML = '<option value="" selected disabled>Error loading subcategories</option>';
         });
+    });
 
-        document.getElementById("receivedAmount").addEventListener("input", function () {
-            let actualAmount = parseFloat(document.getElementById("actualAmount").value) || 0;
-            let receivedAmount = parseFloat(this.value) || 0;
-            document.getElementById("balanceAmount").value = actualAmount - receivedAmount;
-        });
-    </script>
+    // Capitalize the first letter of each word in the name field
+    document.getElementById('name').addEventListener('input', function () {
+      const value = this.value;
+      this.value = value
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    });
 
-    <script>
-        document.getElementById("phone").addEventListener("input", function () {
-            let phoneField = this;
-            let phoneError = document.getElementById("phoneError");
-            let phoneValue = phoneField.value.replace(/\D/g, ''); // Remove non-numeric characters
+    // Validate phone number input
+    document.getElementById('phone').addEventListener('input', function () {
+      const phoneField = this;
+      const phoneValue = phoneField.value;
 
-            if (phoneValue.length > 10) {
-                phoneValue = phoneValue.substring(0, 10); // Restrict input to 10 digits
-            }
+      // Allow only digits and limit to 10 characters
+      phoneField.value = phoneValue.replace(/\D/g, '').slice(0, 10);
 
-            phoneField.value = phoneValue; // Update field with numeric-only value
+      // Check if the phone number is exactly 10 digits
+      if (phoneField.value.length === 10) {
+        phoneField.setCustomValidity(''); // Valid input
+      } else {
+        phoneField.setCustomValidity('Phone number must be exactly 10 digits'); // Invalid input
+      }
+    });
 
-            // Show error if the length is not exactly 10
-            if (phoneValue.length === 10) {
-                phoneError.style.display = "none";
-            } else {
-                phoneError.style.display = "block";
-            }
-        });
-    </script>
+    // Add Category Form Handler
+    document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoryName = document.getElementById('newCategoryName').value;
+      
+      fetch('add_income_category.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category_name: categoryName })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Add new category to the dropdowns
+          const categorySelect = document.getElementById('category');
+          const subcategoryCategorySelect = document.getElementById('subcategoryCategory');
+          const option = new Option(categoryName, data.id);
+          categorySelect.add(option);
+          subcategoryCategorySelect.add(option.cloneNode(true));
+          
+          // Close modal and reset form
+          bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
+          document.getElementById('addCategoryForm').reset();
+        } else {
+          alert('Error adding category: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding category');
+      });
+    });
 
-    <script>
-        document.getElementById("name").addEventListener("input", function () {
-            let words = this.value.split(" ");
-            for (let i = 0; i < words.length; i++) {
-                if (words[i].length > 0) {
-                    words[i] = words[i][0].toUpperCase() + words[i].substr(1).toLowerCase();
-                }
-            }
-            this.value = words.join(" "); // Update input with capitalized first letters
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $("#datepicker").datepicker({
-                dateFormat: "dd-mm-yy", // Set format to dd-mm-yyyy
-                changeMonth: true,  // Allows month selection
-                changeYear: true,   // Allows year selection
-                yearRange: "1900:+10" // Allows selection from 1900 to 10 years ahead
-            });
-        });
-    </script>
-
-
-
+    // Add Subcategory Form Handler
+    document.getElementById('addSubcategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const categoryId = document.getElementById('subcategoryCategory').value;
+      const subcategoryName = document.getElementById('newSubcategoryName').value;
+      
+      fetch('add_income_subcategory.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category_id: categoryId,
+          subcategory_name: subcategoryName
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // If the parent category is currently selected, add the new subcategory to the dropdown
+          const currentCategoryId = document.getElementById('category').value;
+          if (currentCategoryId === categoryId) {
+            const subcategorySelect = document.getElementById('subcategory');
+            const option = new Option(subcategoryName, data.id);
+            subcategorySelect.add(option);
+          }
+          
+          // Close modal and reset form
+          bootstrap.Modal.getInstance(document.getElementById('addSubcategoryModal')).hide();
+          document.getElementById('addSubcategoryForm').reset();
+        } else {
+          alert('Error adding subcategory: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding subcategory');
+      });
+    });
+  </script>
 </body>
 </html>
