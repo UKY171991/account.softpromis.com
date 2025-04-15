@@ -17,8 +17,8 @@ $restricted_pages = ['dashboard.php'];
 
 // Check if user is manager and trying to access restricted pages
 if (isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'manager' && in_array($current_page, $restricted_pages)) {
-    // Redirect to income page with error message
-    header("Location: income.php?error=You do not have permission to access this page");
+    // Redirect to income page without error message
+    header("Location: income.php");
     exit();
 }
 
@@ -27,8 +27,8 @@ $admin_only_pages = ['users.php', 'add-user.php', 'edit-user.php'];
 
 // Check if non-admin user is trying to access admin-only pages
 if (isset($_SESSION['role']) && strtolower($_SESSION['role']) !== 'admin' && in_array($current_page, $admin_only_pages)) {
-    // Redirect to dashboard or another appropriate page with error message
-    header("Location: dashboard.php?error=Only administrators can access user management");
+    // Redirect to dashboard without error message
+    header("Location: dashboard.php");
     exit();
 }
 ?>
