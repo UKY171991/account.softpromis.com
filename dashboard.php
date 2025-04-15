@@ -359,7 +359,15 @@ $distributionPieData = [
             </div>
           </div>
         </div>
-        
+        <!-- Pending Income (Current Month) -->
+        <div class="col-md-3">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending (This Month)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
+            </div>
+          </div>
+        </div>
         <!-- Pending Income (Current Year) -->
         <div class="col-md-3">
           <div class="card dashboard-card p-3">
@@ -369,16 +377,6 @@ $distributionPieData = [
             </div>
           </div>
         </div>
-        </div>
-
-        <!-- Pending Income (Current Month) -->
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending (This Month)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
-            </div>
-          </div>
         </div>
 
       <div class="row g-4 mb-4">
@@ -402,7 +400,15 @@ $distributionPieData = [
       
       
 
-        
+        <!-- Pending Expenditure (Current Month) -->
+        <div class="col-md-3">
+          <div class="card dashboard-card p-3">
+            <div class="card-body">
+              <h5 class="card-title">Pending Expenditure (This Month)</h5>
+              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
+            </div>
+          </div>
+        </div>
 
         
 
@@ -416,16 +422,6 @@ $distributionPieData = [
           </div>
         </div>
       </div>
-
-      <!-- Pending Expenditure (Current Month) -->
-      <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Expenditure (This Month)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
-            </div>
-          </div>
-        </div>
 
       <!-- Graphs Section -->
       <div class="row g-4">
