@@ -216,21 +216,7 @@ if ($result) {
   <!-- Main Content -->
   <div class="main-content w-100">
     <!-- Top Navbar -->
-    <div class="top-navbar d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">Reports</h4>
-      <div class="d-flex align-items-center gap-3">
-        <i class="bi bi-bell fs-5"></i>
-        <div class="dropdown">
-          <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-5 me-1"></i> Admin
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <?php include 'topbar.php'; ?>
 
     <div class="p-4">
       <?php if (!empty($message)): ?>

@@ -262,208 +262,213 @@ $distributionPieData = [
 
     <!-- Main Content -->
     <div class="main-content w-100">
-      <?php if (isset($_GET['error'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <?php echo htmlspecialchars($_GET['error']); ?>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <?php endif; ?>
-      
-      <h2>Dashboard</h2>
       <!-- Top Navbar -->
-      <nav class="navbar top-navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <div class="container-fluid">
-          <span class="navbar-brand mb-0 h1">Dashboard</span>
+      <?php include 'topbar.php'; ?>
 
-          <div class="d-flex align-items-center gap-2">
-            <a href="add-income.php" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Add Income</a>
-            <a href="add-expenditure.php" class="btn btn-sm btn-danger"><i class="bi bi-dash-circle"></i> Add Expenditure</a>
+      <div class="p-4">
+        <?php if (isset($_GET['error'])): ?>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php echo htmlspecialchars($_GET['error']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item dropdown">
-              <a class="btn btn-secondary dropdown-toggle" type="button" id="financialYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                      <?php echo $selectedFinancialYear; ?>
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="financialYearDropdown">
-                <?php foreach ($financialYears as $year): ?>
-                  <li>
-                    <a class="dropdown-item financial-year-option" href="#" data-year="<?php echo $year; ?>">
-                      <?php echo $year; ?>
-                    </a>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="bi bi-bell"></i></a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle"></i> Admin
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-      <!-- Dashboard Cards -->
-       <!----
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Total Income</h5>
-              <h3 class="text-success">₹<?php // echo number_format($totalIncome, 2); ?></h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Total Expenditure</h5>
-              <h3 class="text-danger">₹<?php // echo number_format($totalExpenditure, 2); ?></h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Total Pending Payments</h5>
-              <h3 class="text-warning">₹<?php // echo number_format($pendingPayments, 2); ?></h3>
-            </div>
-          </div>
-        </div>
-      </div>
-      --->
-
-      <div class="row g-4 mb-4">
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Income (This Year)</h5>
-              <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Income (This Month)</h5>
-              <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
-            </div>
-          </div>
-        </div>
+        <?php endif; ?>
         
-        <!-- Pending Income (Current Year) -->
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending (This Year)</h5>
-              <h3 class="text-success">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
+        <h2>Dashboard</h2>
+        <!-- Top Navbar -->
+        <nav class="navbar top-navbar navbar-expand-lg navbar-light bg-light mb-4">
+          <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Dashboard</span>
+
+            <div class="d-flex align-items-center gap-2">
+              <a href="add-income.php" class="btn btn-sm btn-success"><i class="bi bi-plus-circle"></i> Add Income</a>
+              <a href="add-expenditure.php" class="btn btn-sm btn-danger"><i class="bi bi-dash-circle"></i> Add Expenditure</a>
+            </div>
+
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item dropdown">
+                <a class="btn btn-secondary dropdown-toggle" type="button" id="financialYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php echo $selectedFinancialYear; ?>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="financialYearDropdown">
+                  <?php foreach ($financialYears as $year): ?>
+                    <li>
+                      <a class="dropdown-item financial-year-option" href="#" data-year="<?php echo $year; ?>">
+                        <?php echo $year; ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-bell"></i></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle"></i> Admin
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Dashboard Cards -->
+         <!----
+        <div class="row g-4 mb-4">
+          <div class="col-md-4">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Total Income</h5>
+                <h3 class="text-success">₹<?php // echo number_format($totalIncome, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Total Expenditure</h5>
+                <h3 class="text-danger">₹<?php // echo number_format($totalExpenditure, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Total Pending Payments</h5>
+                <h3 class="text-warning">₹<?php // echo number_format($pendingPayments, 2); ?></h3>
+              </div>
             </div>
           </div>
         </div>
+        --->
 
-
-        <!-- Pending Income (Current Month) -->
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending (This Month)</h5>
-              <h3 class="text-success">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
+        <div class="row g-4 mb-4">
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Income (This Year)</h5>
+                <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
+              </div>
             </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Income (This Month)</h5>
+                <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Pending Income (Current Year) -->
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Pending (This Year)</h5>
+                <h3 class="text-success">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Pending Income (Current Month) -->
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Pending (This Month)</h5>
+                <h3 class="text-success">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+
+
+          </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Expenditure (This Year)</h5>
+                <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Expenditure (This Month)</h5>
+                <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+
+          
+
+          <!-- Pending Expenditure (Current Year) -->
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Pending Expenditure (This Year)</h5>
+                <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Pending Expenditure (Current Month) -->
+          <div class="col-md-3">
+            <div class="card dashboard-card p-3">
+              <div class="card-body">
+                <h5 class="card-title">Pending Expenditure (This Month)</h5>
+                <h3 class="text-danger">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- Graphs Section -->
+        <div class="row g-4">
+          <div class="col-md-4">
+            <h5 class="mb-3">Monthly Income Trend</h5>
+            <canvas id="incomeChart" height="300"></canvas>
+          </div>
+
+          <div class="col-md-4">
+            <h5 class="mb-3">Income vs Expenditure (Line Chart)</h5>
+            <canvas id="combinedChart" height="300"></canvas>
+          </div>
+          
+          <div class="col-md-4">
+            <h5 class="mb-3">Monthly Expenditure Trend</h5>
+            <canvas id="expenditureChart" height="300"></canvas>
           </div>
         </div>
 
-
-        </div>
-
-      <div class="row g-4 mb-4">
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Expenditure (This Year)</h5>
-              <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
-            </div>
+        <div class="row g-4 mt-4">
+          <div class="col-md-4">
+            <h5 class="mb-3">Income Distribution</h5>
+            <canvas id="incomePieChart" height="200" width="200"></canvas>
           </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Expenditure (This Month)</h5>
-              <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
-            </div>
+
+          <div class="col-md-4">
+            <h5 class="mb-3 text-center">Income vs Expenditure</h5>
+            <canvas id="distributionPieChart" height="300"></canvas>
           </div>
-        </div>
 
-        
-
-        <!-- Pending Expenditure (Current Year) -->
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Expenditure (This Year)</h5>
-              <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
-            </div>
+          <div class="col-md-4">
+            <h5 class="mb-3">Expenditure Distribution</h5>
+            <canvas id="expenditurePieChart" height="200" width="200"></canvas>
           </div>
+          
         </div>
-
-
-        <!-- Pending Expenditure (Current Month) -->
-        <div class="col-md-3">
-          <div class="card dashboard-card p-3">
-            <div class="card-body">
-              <h5 class="card-title">Pending Expenditure (This Month)</h5>
-              <h3 class="text-danger">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
-            </div>
-          </div>
-        </div>
-
 
       </div>
-
-      <!-- Graphs Section -->
-      <div class="row g-4">
-        <div class="col-md-4">
-          <h5 class="mb-3">Monthly Income Trend</h5>
-          <canvas id="incomeChart" height="300"></canvas>
-        </div>
-
-        <div class="col-md-4">
-          <h5 class="mb-3">Income vs Expenditure (Line Chart)</h5>
-          <canvas id="combinedChart" height="300"></canvas>
-        </div>
-        
-        <div class="col-md-4">
-          <h5 class="mb-3">Monthly Expenditure Trend</h5>
-          <canvas id="expenditureChart" height="300"></canvas>
-        </div>
-      </div>
-
-      <div class="row g-4 mt-4">
-        <div class="col-md-4">
-          <h5 class="mb-3">Income Distribution</h5>
-          <canvas id="incomePieChart" height="200" width="200"></canvas>
-        </div>
-
-        <div class="col-md-4">
-          <h5 class="mb-3 text-center">Income vs Expenditure</h5>
-          <canvas id="distributionPieChart" height="300"></canvas>
-        </div>
-
-        <div class="col-md-4">
-          <h5 class="mb-3">Expenditure Distribution</h5>
-          <canvas id="expenditurePieChart" height="200" width="200"></canvas>
-        </div>
-        
-      </div>
-
     </div>
   </div>
 
