@@ -23,4 +23,8 @@ while ($row = $result->fetch_assoc()) {
     ];
 }
 
-echo json_encode($subcategories); 
+echo json_encode($subcategories);
+
+$stmt->close();
+$conn->close();
+?> 

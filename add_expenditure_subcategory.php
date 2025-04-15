@@ -22,8 +22,11 @@ $result = $check_stmt->get_result();
 
 if ($result->num_rows > 0) {
     echo json_encode(['success' => false, 'message' => 'Subcategory already exists for this category']);
+    $check_stmt->close(); // Close check statement
+    $conn->close();       // Close connection
     exit;
 }
+$check_stmt->close(); // Close check statement here too
 
 // Insert new subcategory
 $stmt = $conn->prepare("INSERT INTO expenditure_subcategories (category_id, subcategory_name) VALUES (?, ?)");
@@ -41,4 +44,7 @@ if ($stmt->execute()) {
         'message' => 'Error adding subcategory: ' . $stmt->error
     ]);
 }
+
+$stmt->close(); // Close insert statement
+$conn->close(); // Close connection
 ?> 

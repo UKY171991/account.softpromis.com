@@ -21,8 +21,11 @@ $result = $check_stmt->get_result();
 
 if ($result->num_rows > 0) {
     echo json_encode(['success' => false, 'message' => 'Category already exists']);
+    $check_stmt->close(); // Close the check statement
+    $conn->close();       // Close the connection
     exit;
 }
+$check_stmt->close(); // Close the check statement here too
 
 // Insert new category
 $stmt = $conn->prepare("INSERT INTO expenditure_categories (category_name) VALUES (?)");
