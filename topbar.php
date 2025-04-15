@@ -66,25 +66,6 @@ $page_title = $page_titles[$current_page] ?? 'Dashboard';
             </div>
             <?php endif; ?>
 
-            <!-- Notifications -->
-            <div class="notifications dropdown">
-                <button class="btn btn-link text-dark position-relative" type="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-bell fs-5"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        3
-                        <span class="visually-hidden">unread notifications</span>
-                    </span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
-                    <li><h6 class="dropdown-header">Notifications</h6></li>
-                    <li><a class="dropdown-item" href="#">New income recorded</a></li>
-                    <li><a class="dropdown-item" href="#">Payment reminder</a></li>
-                    <li><a class="dropdown-item" href="#">System update</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                </ul>
-            </div>
-
             <!-- User Menu -->
             <div class="user-menu dropdown">
                 <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
