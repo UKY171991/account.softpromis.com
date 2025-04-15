@@ -234,7 +234,10 @@ if ($result) {
 
     <div class="p-4">
       <?php if (!empty($message)): ?>
-        <div class="alert alert-danger"><?php echo $message; ?></div>
+        <div class="alert alert-danger alert-dismissible fade show">
+          <?php echo $message; ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       <?php endif; ?>
       <form class="row g-3 mb-4" method="POST">
         <div class="col-md-3">
@@ -267,7 +270,7 @@ if ($result) {
               <th>Type</th>
               <th>Name</th>
               <th>Category</th>
-              <th>Sub-category</th>
+              <th>Sub-Category</th>
               <th>Amount</th>
               <th>Paid/Received</th>
               <th>Balance</th>
@@ -275,12 +278,12 @@ if ($result) {
           </thead>
           <tbody>
             <?php if (!empty($reports)): ?>
-              <?php $sl = 1; ?>
+              <?php $sl_no = 1; ?>
               <?php foreach ($reports as $report): ?>
-                <tr>
-                  <td><?php echo $sl++; ?></td>
+                <tr class="<?php echo strtolower($report['type']) === 'income' ? 'table-success' : 'table-danger'; ?>">
+                  <td><?php echo $sl_no++; ?></td>
                   <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td>
-                  <td><?php echo htmlspecialchars($report['type']); ?></td>
+                  <td><?php echo $report['type']; ?></td>
                   <td><?php echo htmlspecialchars($report['name']); ?></td>
                   <td><?php echo htmlspecialchars($report['category']); ?></td>
                   <td><?php echo htmlspecialchars($report['subcategory']); ?></td>
@@ -301,35 +304,56 @@ if ($result) {
   </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="assets/js/responsive.js"></script>
 <script>
-  $(document).ready(function () {
-    // Initialize Flatpickr for date pickers
-    $('.date-picker').flatpickr({
-      dateFormat: "d-m-Y"
+  // Prevent DataTables warning messages from showing in the console
+  $.fn.dataTable.ext.errMode = 'none';
+  
+  $(document).ready(function() {
+    // Initialize date pickers
+    flatpickr('.date-picker', {
+      dateFormat: "d-m-Y",
+      allowInput: true
     });
-
-    // Initialize DataTable
-    $('#reportTable').DataTable({
-      responsive: true,
-      pageLength: 10,
-      lengthMenu: [5, 10, 25, 50, 100],
-      language: {
-        search: "Search:",
-        lengthMenu: "Show _MENU_ entries",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        paginate: {
-          next: "Next",
-          previous: "Previous"
-        }
+    
+    try {
+      // Destroy the table if it's already initialized
+      if ($.fn.DataTable.isDataTable('#reportTable')) {
+        $('#reportTable').DataTable().destroy();
       }
-    });
+      
+      // Initialize the table
+      $('#reportTable').DataTable({
+        responsive: true,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        columnDefs: [
+          { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: 'text-center' }
+        ],
+        language: {
+          emptyTable: "No records found",
+          zeroRecords: "No matching records found"
+        },
+        destroy: true, // Allow the table to be reinitialized
+        order: [[1, 'asc']] // Sort by date column by default
+      });
+    } catch (error) {
+      console.log("DataTable initialization error:", error);
+    }
+    
+    // Auto-hide alerts after 5 seconds
+    setTimeout(function() {
+      $('.alert').alert('close');
+    }, 5000);
   });
 </script>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>
