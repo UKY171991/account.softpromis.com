@@ -13,6 +13,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <li><a href="expenditure.php" class="nav-link <?php echo $current_page === 'expenditure.php' ? 'active' : ''; ?>"><i class="bi bi-wallet2"></i> Expenditure</a></li>
     <li><a href="report.php" class="nav-link <?php echo $current_page === 'report.php' ? 'active' : ''; ?>"><i class="bi bi-bar-chart"></i> Reports</a></li>
     <li><a href="client.php" class="nav-link <?php echo $current_page === 'client.php' ? 'active' : ''; ?>"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
+    <?php if (isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'admin'): ?>
     <li><a href="users.php" class="nav-link <?php echo $current_page === 'users.php' ? 'active' : ''; ?>"><i class="bi bi-people"></i> Users</a></li>
+    <?php endif; ?>
   </ul>
 </nav> 
