@@ -389,7 +389,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Expenditure (This Year)</h5>
-              <h3 class="text-success">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
+              <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -397,7 +397,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Expenditure (This Month)</h5>
-              <h3 class="text-success">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
+              <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -409,7 +409,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Pending Expenditure (This Year)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
+              <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
@@ -420,7 +420,7 @@ $distributionPieData = [
           <div class="card dashboard-card p-3">
             <div class="card-body">
               <h5 class="card-title">Pending Expenditure (This Month)</h5>
-              <h3 class="text-warning">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
+              <h3 class="text-danger">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
             </div>
           </div>
         </div>
