@@ -282,6 +282,21 @@ if (!$result) {
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#expenditureTable').DataTable({
+        responsive: true,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        columnDefs: [
+          { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: 'text-center' }
+        ],
+        language: {
+          emptyTable: "No expenditure records found",
+          zeroRecords: "No matching records found"
+        }
+      });
+    });
+  </script>
 </body>
 </html>
 
