@@ -39,25 +39,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cat_stmt->bind_param("i", $category_id);
     $cat_stmt->execute();
     $category_result = $cat_stmt->get_result();
-    $category = $category_result->fetch_assoc()['category_name'];
+    $category_name = $category_result->fetch_assoc()['category_name'];
+    $cat_stmt->close();
     
     // Get subcategory name
     $subcat_stmt = $conn->prepare("SELECT subcategory_name FROM expenditure_subcategories WHERE id = ?");
     $subcat_stmt->bind_param("i", $subcategory_id);
     $subcat_stmt->execute();
     $subcategory_result = $subcat_stmt->get_result();
-    $subcategory = $subcategory_result->fetch_assoc()['subcategory_name'];
+    $subcategory_name = $subcategory_result->fetch_assoc()['subcategory_name'];
+    $subcat_stmt->close();
     
     $amount = floatval($_POST['total_amount']);
     $paid = floatval($_POST['paid_amount']);
     $balance = $amount - $paid;
 
-    // Insert into database
+    // Insert into database using both IDs and names
     $stmt = $conn->prepare("
-        INSERT INTO expenditures (date, name, phone, description, category, subcategory, amount, paid, balance) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO expenditures (date, name, phone, description, category_id, subcategory_id, category, subcategory, amount, paid, balance) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
+    $stmt->bind_param("ssssiissddd", $date, $name, $phone, $description, $category_id, $subcategory_id, $category_name, $subcategory_name, $amount, $paid, $balance);
 
     if ($stmt->execute()) {
         // Redirect back to the expenditure page with a success message
@@ -79,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
     body {
@@ -311,11 +314,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="assets/js/responsive.js"></script>
   <script>
     // Initialize Flatpickr for date picker
-    flatpickr('.date-picker', {
-      dateFormat: "d-m-Y"
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize date picker if Flatpickr is available
+      if (typeof flatpickr === 'function') {
+        flatpickr('.date-picker', {
+          dateFormat: "d-m-Y",
+          defaultDate: "today"
+        });
+      } else {
+        console.warn("Flatpickr not loaded. Using fallback date initialization.");
+        // Set today's date as default
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        document.getElementById('date').value = `${day}-${month}-${year}`;
+      }
+      
+      // Set default values if needed
+      if (!document.getElementById('date').value) {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        document.getElementById('date').value = `${day}-${month}-${year}`;
+      }
+      
+      // Check if category is already selected (for page refresh cases)
+      const categorySelect = document.getElementById('category');
+      if (categorySelect.value) {
+        loadSubcategories(categorySelect.value);
+      }
+      
+      // Initialize balance calculation if values are present
+      if (document.getElementById('total_amount').value || document.getElementById('paid_amount').value) {
+        updateBalance();
+      }
     });
 
     // Update balance amount dynamically
@@ -355,36 +393,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
+    // Function to load subcategories
+    function loadSubcategories(categoryId) {
+      if (!categoryId) return;
+      
+      console.log('Loading subcategories for category ID:', categoryId);
+      
+      const subcategorySelect = document.getElementById('subcategory');
+      
+      // Clear current options
+      subcategorySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
+      
+      // Fetch subcategories for selected category
+      fetch(`get_subcategories.php?category_id=${categoryId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Subcategories data received:', data);
+          subcategorySelect.innerHTML = '<option value="" selected disabled>Choose subcategory...</option>';
+          
+          if (!Array.isArray(data)) {
+            console.error('Unexpected data format:', data);
+            subcategorySelect.innerHTML = '<option value="" selected disabled>Error: Invalid data format</option>';
+            return;
+          }
+          
+          if (data.length === 0) {
+            const option = document.createElement('option');
+            option.value = "";
+            option.textContent = "No subcategories found";
+            option.disabled = true;
+            subcategorySelect.appendChild(option);
+          } else {
+            data.forEach(subcategory => {
+              try {
+                const option = document.createElement('option');
+                option.value = subcategory.id;
+                option.textContent = subcategory.subcategory_name;
+                subcategorySelect.appendChild(option);
+              } catch (err) {
+                console.error('Error adding subcategory option:', err, subcategory);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching subcategories:', error);
+          subcategorySelect.innerHTML = '<option value="" selected disabled>Error loading subcategories</option>';
+        });
+    }
+
     // Dynamic subcategory loading
     document.getElementById('category').addEventListener('change', function() {
-        const categoryId = this.value;
-        const subcategorySelect = document.getElementById('subcategory');
-        
-        // Clear current options
-        subcategorySelect.innerHTML = '<option value="" selected disabled>Loading...</option>';
-        
-        // Fetch subcategories for selected category
-        fetch(`get_subcategories.php?category_id=${categoryId}`)
-            .then(response => response.json())
-            .then(data => {
-                subcategorySelect.innerHTML = '<option value="" selected disabled>Choose subcategory...</option>';
-                data.forEach(subcategory => {
-                    const option = document.createElement('option');
-                    option.value = subcategory.id;
-                    option.textContent = subcategory.subcategory_name;
-                    subcategorySelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                subcategorySelect.innerHTML = '<option value="" selected disabled>Error loading subcategories</option>';
-            });
+      loadSubcategories(this.value);
     });
 
     // Add Category Form Handler
     document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const categoryName = document.getElementById('newCategoryName').value;
+      
+      if (!categoryName.trim()) {
+        alert('Please enter a category name');
+        return;
+      }
       
       fetch('add_expenditure_category.php', {
         method: 'POST',
@@ -393,7 +469,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         },
         body: JSON.stringify({ category_name: categoryName })
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.success) {
           // Add new category to the dropdowns
@@ -404,15 +485,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           subcategoryCategorySelect.add(option.cloneNode(true));
           
           // Close modal and reset form
-          bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
+          const modalElement = document.getElementById('addCategoryModal');
+          const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modal.hide();
           document.getElementById('addCategoryForm').reset();
+          
+          // Select the newly added category
+          categorySelect.value = data.id;
+          // Load subcategories (which will be empty for a new category)
+          loadSubcategories(data.id);
         } else {
           alert('Error adding category: ' + data.message);
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error adding category');
+        alert('Error adding category: ' + error.message);
       });
     });
 
@@ -421,6 +509,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       e.preventDefault();
       const categoryId = document.getElementById('subcategoryCategory').value;
       const subcategoryName = document.getElementById('newSubcategoryName').value;
+      
+      if (!categoryId) {
+        alert('Please select a category');
+        return;
+      }
+      
+      if (!subcategoryName.trim()) {
+        alert('Please enter a subcategory name');
+        return;
+      }
       
       fetch('add_expenditure_subcategory.php', {
         method: 'POST',
@@ -432,7 +530,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           subcategory_name: subcategoryName
         })
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.success) {
           // If the parent category is currently selected, add the new subcategory to the dropdown
@@ -440,11 +543,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           if (currentCategoryId === categoryId) {
             const subcategorySelect = document.getElementById('subcategory');
             const option = new Option(subcategoryName, data.id);
-            subcategorySelect.add(option);
+            subcategorySelect.appendChild(option);
+            // Select the newly added subcategory
+            subcategorySelect.value = data.id;
           }
           
           // Close modal and reset form
-          bootstrap.Modal.getInstance(document.getElementById('addSubcategoryModal')).hide();
+          const modalElement = document.getElementById('addSubcategoryModal');
+          const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+          modal.hide();
           document.getElementById('addSubcategoryForm').reset();
         } else {
           alert('Error adding subcategory: ' + data.message);
@@ -452,7 +559,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error adding subcategory');
+        alert('Error adding subcategory: ' + error.message);
       });
     });
   </script>

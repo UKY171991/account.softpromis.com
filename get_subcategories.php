@@ -10,6 +10,22 @@ if (!isset($_GET['category_id'])) {
 
 $category_id = intval($_GET['category_id']);
 
+// Check if the category exists
+$cat_check = $conn->prepare("SELECT id FROM expenditure_categories WHERE id = ?");
+$cat_check->bind_param("i", $category_id);
+$cat_check->execute();
+$cat_result = $cat_check->get_result();
+
+if ($cat_result->num_rows === 0) {
+    // Category doesn't exist
+    echo json_encode([]);
+    $cat_check->close();
+    $conn->close();
+    exit;
+}
+$cat_check->close();
+
+// Category exists, get subcategories
 $stmt = $conn->prepare("SELECT id, subcategory_name FROM expenditure_subcategories WHERE category_id = ?");
 $stmt->bind_param("i", $category_id);
 $stmt->execute();
