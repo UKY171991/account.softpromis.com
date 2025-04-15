@@ -208,18 +208,19 @@ if (!$result) {
       <div class="p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5>Expenditure Records</h5>
-          <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-dash-circle"></i> Add New Expenditure</a>
+          <a href="add-expenditure.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Expenditure</a>
         </div>
 
         <?php
-      if (isset($_GET['message']))  { 
-          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
-      }
-      if (isset($_GET['error'])) {
-          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
-      }
-      ?>
-
+        if (isset($_GET['message'])) { 
+            echo "<div class='alert alert-success alert-dismissible fade show'>" . htmlspecialchars($_GET['message']) . 
+                "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
+        }
+        if (isset($_GET['error'])) {
+            echo "<div class='alert alert-danger alert-dismissible fade show'>" . htmlspecialchars($_GET['error']) . 
+                "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
+        }
+        ?>
 
         <div class="table-responsive">
           <table id="expenditureTable" class="table table-bordered table-hover">
@@ -240,7 +241,7 @@ if (!$result) {
             </thead>
             <tbody>
               <?php
-              if ($result->num_rows > 0) {
+              if ($result && $result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
@@ -283,18 +284,37 @@ if (!$result) {
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
   <script>
+    // Prevent DataTables warning messages from showing in the console
+    $.fn.dataTable.ext.errMode = 'none';
+    
     $(document).ready(function() {
-      $('#expenditureTable').DataTable({
-        responsive: true,
-        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        columnDefs: [
-          { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: 'text-center' }
-        ],
-        language: {
-          emptyTable: "No expenditure records found",
-          zeroRecords: "No matching records found"
+      try {
+        // Destroy the table if it's already initialized
+        if ($.fn.DataTable.isDataTable('#expenditureTable')) {
+          $('#expenditureTable').DataTable().destroy();
         }
-      });
+        
+        // Initialize the table
+        $('#expenditureTable').DataTable({
+          responsive: true,
+          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          columnDefs: [
+            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: 'text-center' }
+          ],
+          language: {
+            emptyTable: "No expenditure records found",
+            zeroRecords: "No matching records found"
+          },
+          destroy: true // Allow the table to be reinitialized
+        });
+      } catch (error) {
+        console.log("DataTable initialization error:", error);
+      }
+      
+      // Auto-hide alerts after 5 seconds
+      setTimeout(function() {
+        $('.alert').alert('close');
+      }, 5000);
     });
   </script>
 </body>
