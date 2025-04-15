@@ -191,11 +191,13 @@ $result = $conn->query($sql);
         </div>
 
         <?php
-        if (isset($_GET['message']))  { 
-            echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+        if (isset($_GET['message'])) { 
+            echo "<div class='alert alert-success alert-dismissible fade show'>" . htmlspecialchars($_GET['message']) . 
+                "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
         }
         if (isset($_GET['error'])) {
-            echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+            echo "<div class='alert alert-danger alert-dismissible fade show'>" . htmlspecialchars($_GET['error']) . 
+                "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
         }
         ?>
 
@@ -220,7 +222,7 @@ $result = $conn->query($sql);
             </thead>
             <tbody>
               <?php
-              if ($result->num_rows > 0) {
+              if ($result && $result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
@@ -266,6 +268,40 @@ $result = $conn->query($sql);
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
+  <script>
+    // Prevent DataTables warning messages from showing in the console
+    $.fn.dataTable.ext.errMode = 'none';
+    
+    $(document).ready(function() {
+      try {
+        // Destroy the table if it's already initialized
+        if ($.fn.DataTable.isDataTable('#incomeTable')) {
+          $('#incomeTable').DataTable().destroy();
+        }
+        
+        // Initialize the table
+        $('#incomeTable').DataTable({
+          responsive: true,
+          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          columnDefs: [
+            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: 'text-center' }
+          ],
+          language: {
+            emptyTable: "No income records found",
+            zeroRecords: "No matching records found"
+          },
+          destroy: true // Allow the table to be reinitialized
+        });
+      } catch (error) {
+        console.log("DataTable initialization error:", error);
+      }
+      
+      // Auto-hide alerts after 5 seconds
+      setTimeout(function() {
+        $('.alert').alert('close');
+      }, 5000);
+    });
+  </script>
 </body>
 </html>
 
