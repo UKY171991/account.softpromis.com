@@ -1,13 +1,12 @@
 <?php
-include 'inc/auth.php';
 include 'inc/config.php';
 
 header('Content-Type: application/json');
 
-// Get POST data
+// Get the raw POST data
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['category_id']) || !isset($data['subcategory_name'])) {
+if (!isset($data['category_id']) || !isset($data['subcategory_name']) || empty($data['subcategory_name'])) {
     echo json_encode(['success' => false, 'message' => 'Category ID and subcategory name are required']);
     exit;
 }
@@ -15,14 +14,14 @@ if (!isset($data['category_id']) || !isset($data['subcategory_name'])) {
 $category_id = intval($data['category_id']);
 $subcategory_name = trim($data['subcategory_name']);
 
-// Verify category exists
-$cat_check = $conn->prepare("SELECT id FROM expenditure_categories WHERE id = ?");
-$cat_check->bind_param("i", $category_id);
-$cat_check->execute();
-$result = $cat_check->get_result();
+// Check if subcategory already exists for this category
+$check_stmt = $conn->prepare("SELECT id FROM expenditure_subcategories WHERE category_id = ? AND subcategory_name = ?");
+$check_stmt->bind_param("is", $category_id, $subcategory_name);
+$check_stmt->execute();
+$result = $check_stmt->get_result();
 
-if ($result->num_rows === 0) {
-    echo json_encode(['success' => false, 'message' => 'Invalid category ID']);
+if ($result->num_rows > 0) {
+    echo json_encode(['success' => false, 'message' => 'Subcategory already exists for this category']);
     exit;
 }
 
@@ -33,7 +32,7 @@ $stmt->bind_param("is", $category_id, $subcategory_name);
 if ($stmt->execute()) {
     echo json_encode([
         'success' => true,
-        'id' => $stmt->insert_id,
+        'id' => $conn->insert_id,
         'message' => 'Subcategory added successfully'
     ]);
 } else {
@@ -42,6 +41,4 @@ if ($stmt->execute()) {
         'message' => 'Error adding subcategory: ' . $stmt->error
     ]);
 }
-
-$stmt->close();
-$conn->close(); 
+?> 

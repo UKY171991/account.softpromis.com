@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         INSERT INTO expenditures (date, name, phone, description, category, subcategory, amount, paid, balance) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category_id, $subcategory_id, $amount, $paid, $balance);
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
 
     if ($stmt->execute()) {
         // Redirect back to the expenditure page with a success message
