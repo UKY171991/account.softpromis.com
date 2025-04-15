@@ -32,6 +32,26 @@ $page_title = $page_titles[$current_page] ?? 'Dashboard';
 
         <!-- Right side: Actions & User Menu -->
         <div class="d-flex align-items-center gap-3">
+            <!-- Financial Year Dropdown (only for Dashboard) -->
+            <?php if ($current_page === 'dashboard' && isset($selectedFinancialYear) && isset($financialYears)): ?>
+            <div class="financial-year-selector me-3">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="financialYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php echo $selectedFinancialYear; ?>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="financialYearDropdown">
+                        <?php foreach ($financialYears as $year): ?>
+                        <li>
+                            <a class="dropdown-item financial-year-option" href="#" data-year="<?php echo $year; ?>">
+                                <?php echo $year; ?>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+            <?php endif; ?>
+            
             <!-- Quick Actions -->
             <?php if (in_array($current_page, ['dashboard', 'income', 'expenditure'])): ?>
             <div class="quick-actions d-none d-md-flex">
