@@ -175,7 +175,7 @@ include 'inc/config.php'; // Include the database connection file
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
           </ul>
         </div>
       </div>
@@ -189,10 +189,12 @@ include 'inc/config.php'; // Include the database connection file
 
       <?php
       if (isset($_GET['message'])) {
-          echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
+          echo "<div class='alert alert-success alert-dismissible fade show'>" . htmlspecialchars($_GET['message']) . 
+              "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
       }
       if (isset($_GET['error'])) {
-          echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
+          echo "<div class='alert alert-danger alert-dismissible fade show'>" . htmlspecialchars($_GET['error']) . 
+              "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
       }
       ?>
 
@@ -256,5 +258,39 @@ include 'inc/config.php'; // Include the database connection file
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="assets/js/responsive.js"></script>
+<script>
+  // Prevent DataTables warning messages from showing in the console
+  $.fn.dataTable.ext.errMode = 'none';
+  
+  $(document).ready(function() {
+    try {
+      // Destroy the table if it's already initialized
+      if ($.fn.DataTable.isDataTable('#userTable')) {
+        $('#userTable').DataTable().destroy();
+      }
+      
+      // Initialize the table
+      $('#userTable').DataTable({
+        responsive: true,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        columnDefs: [
+          { targets: [0, 1, 2, 3, 4, 5, 6], className: 'text-center' }
+        ],
+        language: {
+          emptyTable: "No users found",
+          zeroRecords: "No matching records found"
+        },
+        destroy: true // Allow the table to be reinitialized
+      });
+    } catch (error) {
+      console.log("DataTable initialization error:", error);
+    }
+    
+    // Auto-hide alerts after 5 seconds
+    setTimeout(function() {
+      $('.alert').alert('close');
+    }, 5000);
+  });
+</script>
 </body>
 </html>
