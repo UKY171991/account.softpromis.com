@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .form-container {
             background-color: white;
             border-radius: 0.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             padding: 2rem;
             margin-top: 1rem;
         }
@@ -146,31 +146,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
 
-        .btn-add-category {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-            border-radius: 0.25rem;
-            margin-left: 0.5rem;
+        .input-group .btn-add-item {
+            border: 1px solid #ced4da;
+            background-color: #f8f9fa;
+            color: #0d6efd;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            border-radius: 0 0.375rem 0.375rem 0;
+            transition: all 0.2s;
+        }
+
+        .input-group .btn-add-item:hover {
+            background-color: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+
+        .input-group .form-select {
+            border-radius: 0.375rem 0 0 0.375rem;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            color: #495057;
+        }
+
+        .btn-save {
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-save i {
+            margin-right: 0.5rem;
         }
 
         .modal-content {
-            border-radius: 0.5rem;
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
 
         .modal-header {
+            background-color: #f8f9fa;
             border-bottom: 1px solid #dee2e6;
+            border-radius: 0.5rem 0.5rem 0 0;
             padding: 1rem 1.5rem;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
         }
 
         .modal-footer {
             border-top: 1px solid #dee2e6;
             padding: 1rem 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
         }
 
         .alert {
@@ -197,7 +229,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-container">
                     <?php if (isset($error)): ?>
-                        <div class="alert alert-danger"><?php echo $error; ?></div>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <?php echo $error; ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
                     <?php endif; ?>
 
                     <form id="addLoanForm" method="POST">
@@ -235,8 +270,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <button type="button" class="btn btn-outline-secondary btn-add-category" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                        <i class="bi bi-plus"></i>
+                                    <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                        <i class="bi bi-plus-lg"></i>
                                     </button>
                                 </div>
                             </div>
@@ -246,14 +281,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <select class="form-select" id="subcategory" name="subcategory" required>
                                         <option value="">Select Category First</option>
                                     </select>
-                                    <button type="button" class="btn btn-outline-secondary btn-add-category" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
-                                        <i class="bi bi-plus"></i>
+                                    <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
+                                        <i class="bi bi-plus-lg"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <div class="row mb-4">
                             <div class="col-md-4">
                                 <label for="amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
@@ -278,7 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="text-end">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary btn-save">
                                 <i class="bi bi-save"></i> Save Loan
                             </button>
                         </div>
@@ -299,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="newCategory" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" id="newCategory">
+                        <input type="text" class="form-control" id="newCategory" placeholder="Enter category name">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -332,7 +367,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="mb-3">
                         <label for="newSubcategory" class="form-label">Subcategory Name</label>
-                        <input type="text" class="form-control" id="newSubcategory">
+                        <input type="text" class="form-control" id="newSubcategory" placeholder="Enter subcategory name">
                     </div>
                 </div>
                 <div class="modal-footer">
