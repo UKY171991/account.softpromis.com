@@ -12,89 +12,89 @@ if (isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'manager') {
 
 // Generate financial years (last 5 years including the current financial year)
 $currentYear = date('Y');
-$currentMonth = date('n');
-$startYear = ($currentMonth >= 4) ? $currentYear : $currentYear - 1; // Financial year starts in April
+$currentMonth = date('n'); // Use current calendar month number
+$startYearForDropdown = ($currentMonth >= 4) ? $currentYear : $currentYear - 1; // Financial year starts in April
 $financialYears = [];
 for ($i = 0; $i < 5; $i++) {
-    $endYear = $startYear + 1;
-    $financialYears[] = "$startYear-$endYear";
-    $startYear--;
+    $endYearForDropdown = $startYearForDropdown + 1;
+    $financialYears[] = "$startYearForDropdown-$endYearForDropdown";
+    $startYearForDropdown--;
 }
 
-// Determine the default financial year
+// Determine the default financial year for display if none selected
 $defaultFinancialYear = ($currentMonth >= 4) ? date('Y') . '-' . (date('Y') + 1) : (date('Y') - 1) . '-' . date('Y');
 
 // Get the selected financial year from the query parameter or use the default
 $selectedFinancialYear = $_GET['financial_year'] ?? $defaultFinancialYear;
 list($startYear, $endYear) = explode('-', $selectedFinancialYear);
 
-// Update SQL queries to filter data based on the selected financial year
-
-// Fetch total income for the CURRENT calendar year
+// Fetch total income for the SELECTED financial year
 $totalIncomeQuery = "
   SELECT SUM(amount) AS total_income 
   FROM income 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())";
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $totalIncomeResult = $conn->query($totalIncomeQuery);
 $totalIncome = $totalIncomeResult->fetch_assoc()['total_income'] ?? 0;
 
-// Fetch total expenditure for the CURRENT calendar year
+// Fetch total expenditure for the SELECTED financial year
 $totalExpenditureQuery = "
   SELECT SUM(amount) AS total_expenditure 
   FROM expenditures 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())";
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $totalExpenditureResult = $conn->query($totalExpenditureQuery);
 $totalExpenditure = $totalExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
 
-// Fetch pending payments for the selected financial year (Keeping this as financial year based on previous context, let me know if this should also be current year)
+// Fetch pending payments for the SELECTED financial year
 $pendingPaymentsQuery = "
   SELECT SUM(balance) AS pending_payments 
   FROM expenditures 
   WHERE 
     (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
-    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)"; // This was already using financial year
 $pendingPaymentsResult = $conn->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'] ?? 0;
 
-// Fetch pending income for the current month
+// Fetch pending income for the CURRENT calendar month
 $currentMonthPendingIncomeQuery = "
   SELECT SUM(balance) AS pending_income 
   FROM income 
-  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())"; // Already using current month/year
+  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())"; // Keep this as current month
 $currentMonthPendingIncomeResult = $conn->query($currentMonthPendingIncomeQuery);
 $currentMonthPendingIncome = $currentMonthPendingIncomeResult->fetch_assoc()['pending_income'] ?? 0;
 
-// Fetch pending expenditure for the current month (This query seems unused now as the card was replaced by loans)
-$currentMonthPendingExpenditureQuery = "
-  SELECT SUM(balance) AS pending_expenditure 
-  FROM expenditures 
-  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
-$currentMonthPendingExpenditureResult = $conn->query($currentMonthPendingExpenditureQuery);
-$currentMonthPendingExpenditure = $currentMonthPendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
-
-// Fetch pending income for the CURRENT calendar year
+// Fetch pending income for the SELECTED financial year
 $currentYearPendingIncomeQuery = "
   SELECT SUM(balance) AS pending_income 
   FROM income 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())";
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $currentYearPendingIncomeResult = $conn->query($currentYearPendingIncomeQuery);
 $currentYearPendingIncome = $currentYearPendingIncomeResult->fetch_assoc()['pending_income'] ?? 0;
 
-// Fetch pending expenditure for the CURRENT calendar year
+// Fetch pending expenditure for the SELECTED financial year
 $currentYearPendingExpenditureQuery = "
   SELECT SUM(balance) AS pending_expenditure 
   FROM expenditures 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())";
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $currentYearPendingExpenditureResult = $conn->query($currentYearPendingExpenditureQuery);
 $currentYearPendingExpenditure = $currentYearPendingExpenditureResult->fetch_assoc()['pending_expenditure'] ?? 0;
 
-// Fetch monthly income for the CURRENT calendar year
+// Fetch monthly income for the SELECTED financial year
 $monthlyIncomeQuery = "
   SELECT 
     MONTH(date) AS month, 
     SUM(amount) AS total 
   FROM income 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
   GROUP BY MONTH(date)";
 $monthlyIncomeResult = $conn->query($monthlyIncomeQuery);
 $monthlyIncomeData = [];
@@ -102,13 +102,15 @@ while ($row = $monthlyIncomeResult->fetch_assoc()) {
     $monthlyIncomeData[$row['month']] = $row['total'];
 }
 
-// Fetch monthly expenditure for the CURRENT calendar year
+// Fetch monthly expenditure for the SELECTED financial year
 $monthlyExpenditureQuery = "
   SELECT 
     MONTH(date) AS month, 
     SUM(amount) AS total 
   FROM expenditures 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
   GROUP BY MONTH(date)";
 $monthlyExpenditureResult = $conn->query($monthlyExpenditureQuery);
 $monthlyExpenditureData = [];
@@ -116,17 +118,22 @@ while ($row = $monthlyExpenditureResult->fetch_assoc()) {
     $monthlyExpenditureData[$row['month']] = $row['total'];
 }
 
-// Generate labels for the current calendar year (Jan to Dec)
+// --- Restore Chart Labels to Financial Year (Apr-Mar) ---
 $financialYearLabels = [];
-for ($i = 1; $i <= 12; $i++) {
+for ($i = 4; $i <= 12; $i++) {
+    $financialYearLabels[] = date('F', mktime(0, 0, 0, $i, 1));
+}
+for ($i = 1; $i <= 3; $i++) {
     $financialYearLabels[] = date('F', mktime(0, 0, 0, $i, 1));
 }
 
-// Fetch income distribution for the CURRENT calendar year
+// Fetch income distribution for the SELECTED financial year
 $incomeDistributionQuery = "
   SELECT category, SUM(amount) AS total 
   FROM income 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
   GROUP BY category";
 $incomeDistributionResult = $conn->query($incomeDistributionQuery);
 $incomeDistributionData = [];
@@ -134,11 +141,13 @@ while ($row = $incomeDistributionResult->fetch_assoc()) {
     $incomeDistributionData[] = ['category' => $row['category'], 'total' => $row['total']];
 }
 
-// Fetch expenditure distribution for the CURRENT calendar year
+// Fetch expenditure distribution for the SELECTED financial year
 $expenditureDistributionQuery = "
   SELECT category, SUM(amount) AS total 
   FROM expenditures 
-  WHERE YEAR(date) = YEAR(CURRENT_DATE())
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)
   GROUP BY category";
 $expenditureDistributionResult = $conn->query($expenditureDistributionQuery);
 $expenditureDistributionData = [];
@@ -146,7 +155,7 @@ while ($row = $expenditureDistributionResult->fetch_assoc()) {
     $expenditureDistributionData[] = ['category' => $row['category'], 'total' => $row['total']];
 }
 
-// Prepare data for Income vs Expenditure Distribution
+// Prepare data for Income vs Expenditure Distribution (using financial year data)
 $categories = [];
 $incomeDistribution = [];
 $expenditureDistribution = [];
@@ -170,7 +179,7 @@ foreach ($categories as $category) {
     $expenditureDataForChart[] = $expenditureDistribution[$category] ?? 0;
 }
 
-// Calculate total income and total expenditure for the pie chart
+// Calculate total income and total expenditure for the pie chart (using financial year data)
 $totalIncomeForPie = array_sum(array_column($incomeDistributionData, 'total'));
 $totalExpenditureForPie = array_sum(array_column($expenditureDistributionData, 'total'));
 
@@ -180,15 +189,7 @@ $distributionPieData = [
     'Expenditure' => $totalExpenditureForPie
 ];
 
-// Fetch pending loans for the current month
-$currentMonthPendingLoansQuery = "
-  SELECT SUM(balance) AS pending_loans 
-  FROM loans 
-  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
-$currentMonthPendingLoansResult = $conn->query($currentMonthPendingLoansQuery);
-$currentMonthPendingLoans = $currentMonthPendingLoansResult->fetch_assoc()['pending_loans'] ?? 0;
-
-// Fetch TOTAL pending loans
+// Fetch TOTAL pending loans (This remains total, not tied to financial year)
 $totalPendingLoansQuery = "SELECT SUM(balance) AS total_pending_loans FROM loans";
 $totalPendingLoansResult = $conn->query($totalPendingLoansQuery);
 $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loans'] ?? 0;
@@ -257,7 +258,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
     <!-- Main Content -->
     <div class="main-content w-100">
       <!-- Top Navbar -->
-      <?php include 'topbar.php'; ?>
+      <?php include 'topbar.php'; // This now handles the financial year selection ?>
 
       <div class="p-4">
         <?php if (isset($_GET['error'])): ?>
@@ -267,14 +268,14 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           </div>
         <?php endif; ?>
         
-        <h2>Dashboard (<?php echo date('Y'); ?>)</h2>
-        <h5 class="text-muted mb-4"><?php echo date('F Y'); ?></h5>
+        <h2>Dashboard</h2>
+        <!-- Removed static month/year display -->
 
         <div class="row g-4 mb-4">
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Income (<?php echo date('Y'); ?>)</h5>
+                <h5 class="card-title">Income (This Year)</h5> <!-- Title reverted -->
                 <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
               </div>
             </div>
@@ -282,28 +283,29 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Income (<?php echo date('F'); ?>)</h5>
+                <h5 class="card-title">Income (This Month)</h5> <!-- Title reverted -->
+                <!-- Use current month's income from the financial year data -->
                 <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
               </div>
             </div>
           </div>
           
-          <!-- Pending Income (Current Year) -->
+          <!-- Pending Income (Selected Financial Year) -->
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Income (<?php echo date('Y'); ?>)</h5>
+                <h5 class="card-title">Pending Income (This Year)</h5> <!-- Title reverted -->
                 <h3 class="text-success">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
               </div>
             </div>
           </div>
 
 
-          <!-- Pending Income (Current Month) -->
+          <!-- Pending Income (Current Calendar Month) -->
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Income (<?php echo date('F'); ?>)</h5>
+                <h5 class="card-title">Pending Income (This Month)</h5> <!-- Title reverted -->
                 <h3 class="text-success">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
               </div>
             </div>
@@ -316,7 +318,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Expenditure (<?php echo date('Y'); ?>)</h5>
+                <h5 class="card-title">Expenditure (This Year)</h5> <!-- Title reverted -->
                 <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
               </div>
             </div>
@@ -324,7 +326,8 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Expenditure (<?php echo date('F'); ?>)</h5>
+                <h5 class="card-title">Expenditure (This Month)</h5> <!-- Title reverted -->
+                 <!-- Use current month's expenditure from the financial year data -->
                 <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
               </div>
             </div>
@@ -332,11 +335,11 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
 
           
 
-          <!-- Pending Expenditure (Current Year) -->
+          <!-- Pending Expenditure (Selected Financial Year) -->
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Expenditure (<?php echo date('Y'); ?>)</h5>
+                <h5 class="card-title">Pending Expenditure (This Year)</h5> <!-- Title reverted -->
                 <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
               </div>
             </div>
@@ -347,7 +350,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Loans (Total)</h5>
+                <h5 class="card-title">Pending Loans (Total)</h5> <!-- Title kept as Total -->
                 <h3 class="text-danger">₹<?php echo number_format($totalPendingLoans, 2); ?></h3>
               </div>
             </div>
@@ -355,37 +358,37 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
 
         </div>
 
-        <!-- Graphs Section -->
+        <!-- Graphs Section (using financial year data) -->
         <div class="row g-4">
           <div class="col-md-4">
-            <h5 class="mb-3">Monthly Income Trend</h5>
+            <h5 class="mb-3">Monthly Income Trend (<?php echo $selectedFinancialYear; ?>)</h5>
             <canvas id="incomeChart" height="300"></canvas>
           </div>
 
           <div class="col-md-4">
-            <h5 class="mb-3">Income vs Expenditure (Line Chart)</h5>
+            <h5 class="mb-3">Income vs Expenditure (<?php echo $selectedFinancialYear; ?>)</h5>
             <canvas id="combinedChart" height="300"></canvas>
           </div>
           
           <div class="col-md-4">
-            <h5 class="mb-3">Monthly Expenditure Trend</h5>
+            <h5 class="mb-3">Monthly Expenditure Trend (<?php echo $selectedFinancialYear; ?>)</h5>
             <canvas id="expenditureChart" height="300"></canvas>
           </div>
         </div>
 
         <div class="row g-4 mt-4">
           <div class="col-md-4">
-            <h5 class="mb-3">Income Distribution</h5>
+            <h5 class="mb-3">Income Distribution (<?php echo $selectedFinancialYear; ?>)</h5>
             <canvas id="incomePieChart" height="200" width="200"></canvas>
           </div>
 
           <div class="col-md-4">
-            <h5 class="mb-3 text-center">Income vs Expenditure</h5>
+            <h5 class="mb-3 text-center">Income vs Expenditure (<?php echo $selectedFinancialYear; ?>)</h5>
             <canvas id="distributionPieChart" height="300"></canvas>
           </div>
 
           <div class="col-md-4">
-            <h5 class="mb-3">Expenditure Distribution</h5>
+            <h5 class="mb-3">Expenditure Distribution (<?php echo $selectedFinancialYear; ?>)</h5>
             <canvas id="expenditurePieChart" height="200" width="200"></canvas>
           </div>
           
@@ -401,16 +404,21 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
   <script>
-    // Monthly Income Trend (Now for Current Calendar Year)
+    // --- Restore Chart Data to Financial Year (Apr-Mar) ---
+
+    // Monthly Income Trend
     const incomeChart = new Chart(document.getElementById('incomeChart'), {
       type: 'line',
       data: {
-        labels: <?php echo json_encode($financialYearLabels); ?>, // Now Jan-Dec
+        labels: <?php echo json_encode($financialYearLabels); ?>, // Financial year labels (Apr-Mar)
         datasets: [{
           label: 'Income',
           data: <?php
             $incomeDataForGraph = [];
-            for ($i = 1; $i <= 12; $i++) { // Jan to Dec
+            for ($i = 4; $i <= 12; $i++) { // Apr to Dec
+                $incomeDataForGraph[] = $monthlyIncomeData[$i] ?? 0;
+            }
+            for ($i = 1; $i <= 3; $i++) { // Jan to Mar
                 $incomeDataForGraph[] = $monthlyIncomeData[$i] ?? 0;
             }
             echo json_encode($incomeDataForGraph);
@@ -446,17 +454,20 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
       }
     });
 
-    // Monthly Expenditure Trend (Now for Current Calendar Year)
+    // Monthly Expenditure Trend
     const expenditureChart = new Chart(document.getElementById('expenditureChart'), {
       type: 'line',
       data: {
-        labels: <?php echo json_encode($financialYearLabels); ?>, // Now Jan-Dec
+        labels: <?php echo json_encode($financialYearLabels); ?>, // Financial year labels (Apr-Mar)
         datasets: [{
           label: 'Expenditure',
           data: <?php
-            // Map expenditure data to calendar year order
+            // Map expenditure data to financial year order
             $expenditureDataForGraph = [];
-            for ($i = 1; $i <= 12; $i++) { // Jan to Dec
+            for ($i = 4; $i <= 12; $i++) { // Apr to Dec
+                $expenditureDataForGraph[] = $monthlyExpenditureData[$i] ?? 0;
+            }
+            for ($i = 1; $i <= 3; $i++) { // Jan to Mar
                 $expenditureDataForGraph[] = $monthlyExpenditureData[$i] ?? 0;
             }
             echo json_encode($expenditureDataForGraph);
@@ -492,13 +503,13 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
       }
     });
 
-    // Income Pie Chart
+    // Income Pie Chart (Data already based on selected financial year)
     const incomePieChart = new Chart(document.getElementById('incomePieChart'), {
       type: 'pie',
       data: {
-        labels: <?php echo json_encode(array_column($incomeDistributionData, 'category')); ?>,
+        labels: <?php echo json_encode(array_column($incomeDistributionData, 'category')); ?>, 
         datasets: [{
-          data: <?php echo json_encode(array_column($incomeDistributionData, 'total')); ?>,
+          data: <?php echo json_encode(array_column($incomeDistributionData, 'total')); ?>, 
           backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#e91e63'],
           borderColor: '#ffffff',
           borderWidth: 2,
@@ -529,13 +540,13 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
       }
     });
 
-    // Expenditure Pie Chart
+    // Expenditure Pie Chart (Data already based on selected financial year)
     const expenditurePieChart = new Chart(document.getElementById('expenditurePieChart'), {
       type: 'pie',
       data: {
-        labels: <?php echo json_encode(array_column($expenditureDistributionData, 'category')); ?>,
+        labels: <?php echo json_encode(array_column($expenditureDistributionData, 'category')); ?>, 
         datasets: [{
-          data: <?php echo json_encode(array_column($expenditureDistributionData, 'total')); ?>,
+          data: <?php echo json_encode(array_column($expenditureDistributionData, 'total')); ?>, 
           backgroundColor: ['#e91e63', '#ff5722', '#9c27b0', '#03a9f4', '#8bc34a'],
           borderColor: '#ffffff',
           borderWidth: 2,
@@ -566,15 +577,15 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
       }
     });
 
-    // Combined Income vs Expenditure Graph (Now for Current Calendar Year)
+    // Combined Income vs Expenditure Graph (using financial year data)
     const combinedChart = new Chart(document.getElementById('combinedChart'), {
       type: 'line',
       data: {
-        labels: <?php echo json_encode($financialYearLabels); ?>, // Now Jan-Dec
+        labels: <?php echo json_encode($financialYearLabels); ?>, // Financial year labels (Apr-Mar)
         datasets: [
           {
             label: 'Income',
-            data: <?php echo json_encode($incomeDataForGraph); ?>, // Uses updated Jan-Dec data
+            data: <?php echo json_encode($incomeDataForGraph); ?>, // Uses financial year data
             borderColor: 'green',
             backgroundColor: 'rgba(0, 128, 0, 0.1)',
             tension: 0.3,
@@ -582,7 +593,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           },
           {
             label: 'Expenditure',
-            data: <?php echo json_encode($expenditureDataForGraph); ?>, // Uses updated Jan-Dec data
+            data: <?php echo json_encode($expenditureDataForGraph); ?>, // Uses financial year data
             borderColor: 'red',
             backgroundColor: 'rgba(255, 0, 0, 0.1)',
             tension: 0.3,
@@ -615,61 +626,13 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
       }
     });
 
-    // Income Distribution vs Expenditure Distribution Chart
-    const distributionComparisonChart = new Chart(document.getElementById('distributionComparisonChart'), {
-      type: 'bar',
-      data: {
-        labels: <?php echo json_encode($categories); ?>, // Categories
-        datasets: [
-          {
-            label: 'Income',
-            data: <?php echo json_encode($incomeDataForChart); ?>,
-            backgroundColor: 'rgba(0, 128, 0, 0.7)', // Green for income
-            borderColor: 'rgba(0, 128, 0, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Expenditure',
-            data: <?php echo json_encode($expenditureDataForChart); ?>,
-            backgroundColor: 'rgba(255, 0, 0, 0.7)', // Red for expenditure
-            borderColor: 'rgba(255, 0, 0, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top'
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Categories'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Amount (₹)'
-            },
-            beginAtZero: true
-          }
-        }
-      }
-    });
-
-    // Income Distribution vs Expenditure Distribution Pie Chart
+    // Income vs Expenditure Distribution Pie Chart (Data already based on selected financial year)
     const distributionPieChart = new Chart(document.getElementById('distributionPieChart'), {
       type: 'pie',
       data: {
         labels: <?php echo json_encode(array_keys($distributionPieData)); ?>, // Labels: Income, Expenditure
         datasets: [{
-          data: <?php echo json_encode(array_values($distributionPieData)); ?>, // Data: Total income and expenditure
+          data: <?php echo json_encode(array_values($distributionPieData)); ?>, // Data: Total income and expenditure for selected year
           backgroundColor: ['#4caf50', '#f44336'], // Green for income, red for expenditure
           borderColor: '#ffffff',
           borderWidth: 2,
@@ -700,15 +663,8 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
       }
     });
 
-    // Financial Year Selection
-    document.querySelectorAll('.financial-year-option').forEach(item => {
-      item.addEventListener('click', function (e) {
-        e.preventDefault();
-        const selectedYear = this.getAttribute('data-year');
-        // Reload the page with the selected financial year as a query parameter
-        window.location.href = `dashboard.php?financial_year=${selectedYear}`;
-      });
-    });
+    // Removed Financial Year Selection JS - This should be handled by topbar.php
+    // No need for the distributionComparisonChart as it wasn't in the original file structure shown
   </script>
 </body>
 
