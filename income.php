@@ -2,7 +2,7 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
-$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income";
+$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income ORDER BY date DESC";
 $result = $conn->query($sql);
 ?>
 
@@ -275,6 +275,7 @@ $result = $conn->query($sql);
             emptyTable: "No income records found",
             zeroRecords: "No matching records found"
           },
+          order: [[2, 'desc']], // Sort by date column (index 2) in descending order
           destroy: true // Allow the table to be reinitialized
         });
       } catch (error) {
