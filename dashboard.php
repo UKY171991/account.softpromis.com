@@ -274,7 +274,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Income (Current Year)</h5>
+                <h5 class="card-title">Income (<?php echo date('Y'); ?>)</h5>
                 <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
               </div>
             </div>
@@ -282,7 +282,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Income (Current Month)</h5>
+                <h5 class="card-title">Income (<?php echo date('F'); ?>)</h5>
                 <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
               </div>
             </div>
@@ -292,7 +292,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Income (Current Year)</h5>
+                <h5 class="card-title">Pending Income (<?php echo date('Y'); ?>)</h5>
                 <h3 class="text-success">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
               </div>
             </div>
@@ -303,7 +303,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Income (Current Month)</h5>
+                <h5 class="card-title">Pending Income (<?php echo date('F'); ?>)</h5>
                 <h3 class="text-success">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
               </div>
             </div>
@@ -316,7 +316,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Expenditure (Current Year)</h5>
+                <h5 class="card-title">Expenditure (<?php echo date('Y'); ?>)</h5>
                 <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
               </div>
             </div>
@@ -324,7 +324,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Expenditure (Current Month)</h5>
+                <h5 class="card-title">Expenditure (<?php echo date('F'); ?>)</h5>
                 <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
               </div>
             </div>
@@ -336,7 +336,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Expenditure (Current Year)</h5>
+                <h5 class="card-title">Pending Expenditure (<?php echo date('Y'); ?>)</h5>
                 <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
               </div>
             </div>
