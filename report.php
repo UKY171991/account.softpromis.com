@@ -55,7 +55,7 @@ if (!empty($conditions)) {
 }
 
 // Add ordering
-$query .= " ORDER BY date ASC";
+$query .= " ORDER BY date DESC";
 
 // Execute the query
 $result = $conn->query($query);
@@ -325,7 +325,7 @@ if ($result) {
           zeroRecords: "No matching records found"
         },
         destroy: true, // Allow the table to be reinitialized
-        order: [[1, 'asc']] // Sort by date column by default
+        order: [[1, 'desc']] // Sort by date column in descending order
       });
     } catch (error) {
       console.log("DataTable initialization error:", error);
