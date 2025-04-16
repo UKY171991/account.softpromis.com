@@ -209,134 +209,135 @@ if ($result) {
   </style>
 </head>
 <body>
-<div class="d-flex">
-  <!-- Sidebar -->
-  <?php include 'sidebar.php'; ?>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>
 
-  <!-- Main Content -->
-  <div class="main-content w-100">
-    <!-- Top Navbar -->
-    <?php include 'topbar.php'; ?>
+    <!-- Main Content -->
+    <div class="main-content w-100">
+      <!-- Top Navbar -->
+      <?php include 'topbar.php'; ?>
+      
+      <div class="p-4">
+        <h5 class="mb-4">Generate Report</h5>
+        <?php if (!empty($message)): ?>
+          <div class="alert alert-danger alert-dismissible fade show">
+            <?php echo $message; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <?php endif; ?>
+        <form class="row g-3 mb-4" method="POST">
+          <div class="col-md-3">
+            <label for="from_date" class="form-label">From Date</label>
+            <input type="text" class="form-control date-picker" id="from_date" name="from_date" placeholder="DD-MM-YYYY" value="<?php echo isset($_POST['from_date']) ? htmlspecialchars($_POST['from_date']) : ''; ?>">
+          </div>
+          <div class="col-md-3">
+            <label for="to_date" class="form-label">To Date</label>
+            <input type="text" class="form-control date-picker" id="to_date" name="to_date" placeholder="DD-MM-YYYY" value="<?php echo isset($_POST['to_date']) ? htmlspecialchars($_POST['to_date']) : ''; ?>">
+          </div>
+          <div class="col-md-3">
+            <label for="type" class="form-label">Type</label>
+            <select id="type" name="type" class="form-select">
+              <option value="all" <?php echo ($type === 'all') ? 'selected' : ''; ?>>All</option>
+              <option value="income" <?php echo ($type === 'income') ? 'selected' : ''; ?>>Income</option>
+              <option value="expenditure" <?php echo ($type === 'expenditure') ? 'selected' : ''; ?>>Expenditure</option>
+            </select>
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Generate Report</button>
+          </div>
+        </form>
 
-    <div class="p-4">
-      <?php if (!empty($message)): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
-          <?php echo $message; ?>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <?php endif; ?>
-      <form class="row g-3 mb-4" method="POST">
-        <div class="col-md-3">
-          <label for="from_date" class="form-label">From Date</label>
-          <input type="text" class="form-control date-picker" id="from_date" name="from_date" placeholder="DD-MM-YYYY" value="<?php echo isset($_POST['from_date']) ? htmlspecialchars($_POST['from_date']) : ''; ?>">
-        </div>
-        <div class="col-md-3">
-          <label for="to_date" class="form-label">To Date</label>
-          <input type="text" class="form-control date-picker" id="to_date" name="to_date" placeholder="DD-MM-YYYY" value="<?php echo isset($_POST['to_date']) ? htmlspecialchars($_POST['to_date']) : ''; ?>">
-        </div>
-        <div class="col-md-3">
-          <label for="type" class="form-label">Type</label>
-          <select id="type" name="type" class="form-select">
-            <option value="all" <?php echo ($type === 'all') ? 'selected' : ''; ?>>All</option>
-            <option value="income" <?php echo ($type === 'income') ? 'selected' : ''; ?>>Income</option>
-            <option value="expenditure" <?php echo ($type === 'expenditure') ? 'selected' : ''; ?>>Expenditure</option>
-          </select>
-        </div>
-        <div class="col-md-3 d-flex align-items-end">
-          <button type="submit" class="btn btn-primary w-100">Generate Report</button>
-        </div>
-      </form>
-
-      <div class="table-responsive">
-        <table id="reportTable" class="table table-bordered table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>SL No.</th>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Sub-Category</th>
-              <th>Amount</th>
-              <th>Paid/Received</th>
-              <th>Balance</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (!empty($reports)): ?>
-              <?php $sl_no = 1; ?>
-              <?php foreach ($reports as $report): ?>
-                <tr class="<?php echo strtolower($report['type']) === 'income' ? 'table-success' : 'table-danger'; ?>">
-                  <td><?php echo $sl_no++; ?></td>
-                  <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td>
-                  <td><?php echo $report['type']; ?></td>
-                  <td><?php echo htmlspecialchars($report['name']); ?></td>
-                  <td><?php echo htmlspecialchars($report['category']); ?></td>
-                  <td><?php echo htmlspecialchars($report['subcategory']); ?></td>
-                  <td>₹<?php echo number_format($report['amount'], 2); ?></td>
-                  <td>₹<?php echo number_format($report['paid_received'], 2); ?></td>
-                  <td>₹<?php echo number_format($report['balance'], 2); ?></td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
+        <div class="table-responsive">
+          <table id="reportTable" class="table table-bordered table-hover">
+            <thead class="table-light">
               <tr>
-                <td colspan="9" class="text-center">No records found.</td>
+                <th>SL No.</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Sub-Category</th>
+                <th>Amount</th>
+                <th>Paid/Received</th>
+                <th>Balance</th>
               </tr>
-            <?php endif; ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php if (!empty($reports)): ?>
+                <?php $sl_no = 1; ?>
+                <?php foreach ($reports as $report): ?>
+                  <tr class="<?php echo strtolower($report['type']) === 'income' ? 'table-success' : 'table-danger'; ?>">
+                    <td><?php echo $sl_no++; ?></td>
+                    <td><?php echo date('d-m-Y', strtotime($report['date'])); ?></td>
+                    <td><?php echo $report['type']; ?></td>
+                    <td><?php echo htmlspecialchars($report['name']); ?></td>
+                    <td><?php echo htmlspecialchars($report['category']); ?></td>
+                    <td><?php echo htmlspecialchars($report['subcategory']); ?></td>
+                    <td>₹<?php echo number_format($report['amount'], 2); ?></td>
+                    <td>₹<?php echo number_format($report['paid_received'], 2); ?></td>
+                    <td>₹<?php echo number_format($report['balance'], 2); ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="9" class="text-center">No records found.</td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="assets/js/responsive.js"></script>
-<script>
-  // Prevent DataTables warning messages from showing in the console
-  $.fn.dataTable.ext.errMode = 'none';
-  
-  $(document).ready(function() {
-    // Initialize date pickers
-    flatpickr('.date-picker', {
-      dateFormat: "d-m-Y",
-      allowInput: true
-    });
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="assets/js/responsive.js"></script>
+  <script>
+    // Prevent DataTables warning messages from showing in the console
+    $.fn.dataTable.ext.errMode = 'none';
     
-    try {
-      // Destroy the table if it's already initialized
-      if ($.fn.DataTable.isDataTable('#reportTable')) {
-        $('#reportTable').DataTable().destroy();
+    $(document).ready(function() {
+      // Initialize date pickers
+      flatpickr('.date-picker', {
+        dateFormat: "d-m-Y",
+        allowInput: true
+      });
+      
+      try {
+        // Destroy the table if it's already initialized
+        if ($.fn.DataTable.isDataTable('#reportTable')) {
+          $('#reportTable').DataTable().destroy();
+        }
+        
+        // Initialize the table
+        $('#reportTable').DataTable({
+          responsive: true,
+          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          columnDefs: [
+            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: 'text-center' }
+          ],
+          language: {
+            emptyTable: "No records found",
+            zeroRecords: "No matching records found"
+          },
+          destroy: true, // Allow the table to be reinitialized
+          order: [[1, 'desc']] // Sort by date column in descending order
+        });
+      } catch (error) {
+        console.log("DataTable initialization error:", error);
       }
       
-      // Initialize the table
-      $('#reportTable').DataTable({
-        responsive: true,
-        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        columnDefs: [
-          { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: 'text-center' }
-        ],
-        language: {
-          emptyTable: "No records found",
-          zeroRecords: "No matching records found"
-        },
-        destroy: true, // Allow the table to be reinitialized
-        order: [[1, 'desc']] // Sort by date column in descending order
-      });
-    } catch (error) {
-      console.log("DataTable initialization error:", error);
-    }
-    
-    // Auto-hide alerts after 5 seconds
-    setTimeout(function() {
-      $('.alert').alert('close');
-    }, 5000);
-  });
-</script>
+      // Auto-hide alerts after 5 seconds
+      setTimeout(function() {
+        $('.alert').alert('close');
+      }, 5000);
+    });
+  </script>
 </body>
 </html>
 

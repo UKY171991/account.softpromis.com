@@ -162,25 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <div class="d-flex">
     <!-- Sidebar -->
-    <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
-      <h4 class="text-white">Account Panel</h4>
-      <hr>
-      <ul class="nav nav-pills flex-column mb-auto">
-      <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
-        <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-        <?php endif; ?>
-        <li><a href="income.php" class="nav-link"><i class="bi bi-currency-rupee"></i> Income</a></li>
-        <li><a href="expenditure.php" class="nav-link active"><i class="bi bi-wallet2"></i> Expenditure</a></li>
-
-        <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
-        <li><a href="client.php" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
-        <li><a href="users.php" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
-      </ul>
-    </nav>
+    <?php include 'sidebar.php'; ?>
 
     <!-- Main content -->
     <div class="main-content w-100">
-      
+      <!-- Top Navbar -->
+      <?php include 'topbar.php'; // Assuming topbar should also be included here for consistency ?>
+
       <div class="form-container w-100">
         <h3>Add Expenditure</h3>
         <?php if (!empty($message)): ?>

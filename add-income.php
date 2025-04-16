@@ -154,47 +154,13 @@ $conn->close();
 <body>
   <div class="d-flex w-100">
     <!-- Sidebar -->
-    <nav class="sidebar d-flex flex-column p-3 text-white">
-      <h4 class="text-white mb-3">Account Panel</h4>
-      <hr>
-      <ul class="nav nav-pills flex-column mb-auto">
-      <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
-        <li class="nav-item">
-          <a href="dashboard.php" class="nav-link">
-            <i class="bi bi-speedometer2"></i> Dashboard
-          </a>
-        </li>
-        <?php endif; ?>
-        <li class="nav-item">
-          <a href="income.php" class="nav-link active">
-            <i class="bi bi-currency-rupee"></i> Income
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="expenditure.php" class="nav-link">
-            <i class="bi bi-wallet2"></i> Expenditure
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="report.php" class="nav-link">
-            <i class="bi bi-bar-chart"></i> Reports
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="client.php" class="nav-link">
-            <i class="bi bi-person-lines-fill"></i> Clients
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="users.php" class="nav-link">
-            <i class="bi bi-people"></i> Users
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <?php include 'sidebar.php'; ?>
 
     <!-- Main content -->
     <div class="main-content">
+      <!-- Top Navbar -->
+      <?php include 'topbar.php'; // Add topbar include ?>
+      
       <div class="form-container">
       <h3 class="mb-4">Add New Income</h3>
         <?php echo $message; ?>
