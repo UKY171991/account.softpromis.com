@@ -91,116 +91,181 @@ $conn->close();
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
     body {
       background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
     }
     .sidebar {
-      height: 100vh;
+      width: 250px;
+      min-height: 100vh;
       background-color: #343a40;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 1000;
     }
     .sidebar .nav-link {
       color: #ffffff;
+      padding: 0.5rem 1rem;
+      margin: 0.2rem 0;
     }
-    .sidebar .nav-link.active {
+    .sidebar .nav-link:hover {
       background-color: #495057;
     }
+    .sidebar .nav-link.active {
+      background-color: #0d6efd;
+    }
+    .sidebar .nav-link i {
+      margin-right: 0.5rem;
+    }
     .main-content {
+      flex: 1;
       margin-left: 250px;
       padding: 2rem;
+      width: calc(100% - 250px);
+      min-height: 100vh;
+    }
+    .form-container {
+      background-color: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .input-group .btn {
+      z-index: 0;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        position: relative;
+        min-height: auto;
+      }
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="d-flex">
+  <div class="d-flex w-100">
     <!-- Sidebar -->
-    <nav class="sidebar d-flex flex-column p-3 text-white position-fixed" style="width: 250px;">
-      <h4 class="text-white">Account Panel</h4>
+    <nav class="sidebar d-flex flex-column p-3 text-white">
+      <h4 class="text-white mb-3">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-      <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
-        <li><a href="dashboard.php" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
+        <li class="nav-item">
+          <a href="dashboard.php" class="nav-link">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
         <?php endif; ?>
-        <li><a href="income.php" class="nav-link active"><i class="bi bi-currency-rupee"></i> Income</a></li>
-        <li><a href="expenditure.php" class="nav-link"><i class="bi bi-wallet2"></i> Expenditure</a></li>
-        <li><a href="report.php" class="nav-link"><i class="bi bi-bar-chart"></i> Reports</a></li>
-        <li><a href="client.php" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clients</a></li>
-        <li><a href="users.php" class="nav-link"><i class="bi bi-people"></i> Users</a></li>
+        <li class="nav-item">
+          <a href="income.php" class="nav-link active">
+            <i class="bi bi-currency-rupee"></i> Income
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="expenditure.php" class="nav-link">
+            <i class="bi bi-wallet2"></i> Expenditure
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="report.php" class="nav-link">
+            <i class="bi bi-bar-chart"></i> Reports
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="client.php" class="nav-link">
+            <i class="bi bi-person-lines-fill"></i> Clients
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="users.php" class="nav-link">
+            <i class="bi bi-people"></i> Users
+          </a>
+        </li>
       </ul>
     </nav>
 
     <!-- Main content -->
-    <div class="main-content w-100">
-      <h3 class="mb-4">Add New Income</h3>
+    <div class="main-content">
+      <div class="form-container">
+        <h3 class="mb-4">Add New Income</h3>
+        <?php echo $message; ?>
+        
+        <form action="" method="POST">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="date" class="form-label">Date</label>
+              <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
+            </div>
+            <div class="col-md-4">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="col-md-4">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits">
+            </div>
 
-      <?php echo $message; ?>
-      <form action="" method="POST">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label for="date" class="form-label">Date</label>
-            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
-          </div>
-          <div class="col-md-4">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-          </div>
-          <div class="col-md-4">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits">
-          </div>
+            <div class="col-md-4">
+              <label for="description" class="form-label">Description</label>
+              <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+            <div class="col-md-4">
+              <label for="category" class="form-label">Category</label>
+              <div class="input-group">
+                <select id="category" name="category" class="form-select" required>
+                  <option value="" selected disabled>Choose...</option>
+                  <?php foreach ($categories as $category): ?>
+                    <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                      <?php echo htmlspecialchars($category['category_name']); ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label for="subcategory" class="form-label">Sub-category</label>
+              <div class="input-group">
+                <select id="subcategory" name="subcategory" class="form-select" required>
+                  <option value="" selected disabled>Choose category first</option>
+                </select>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
+            </div>
 
-          <div class="col-md-4">
-            <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control" id="description" name="description" required>
-          </div>
-          <div class="col-md-4">
-            <label for="category" class="form-label">Category</label>
-            <div class="input-group">
-              <select id="category" name="category" class="form-select" required>
-                <option value="" selected disabled>Choose...</option>
-                <?php foreach ($categories as $category): ?>
-                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
-                    <?php echo htmlspecialchars($category['category_name']); ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                <i class="bi bi-plus-lg"></i>
-              </button>
+            <div class="col-md-4">
+              <label for="total_amount" class="form-label">Total Amount (₹)</label>
+              <input type="number" class="form-control" id="total_amount" name="total_amount" required>
+            </div>
+            <div class="col-md-4">
+              <label for="received_amount" class="form-label">Received Amount (₹)</label>
+              <input type="number" class="form-control" id="received_amount" name="received_amount" required>
+            </div>
+            <div class="col-md-4">
+              <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
+              <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
             </div>
           </div>
-          <div class="col-md-4">
-            <label for="subcategory" class="form-label">Sub-category</label>
-            <div class="input-group">
-              <select id="subcategory" name="subcategory" class="form-select" required>
-                <option value="" selected disabled>Choose category first</option>
-              </select>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
-                <i class="bi bi-plus-lg"></i>
-              </button>
-            </div>
-          </div>
 
-          <div class="col-md-4">
-            <label for="total_amount" class="form-label">Total Amount (₹)</label>
-            <input type="number" class="form-control" id="total_amount" name="total_amount" required>
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="income.php" class="btn btn-secondary">Cancel</a>
           </div>
-          <div class="col-md-4">
-            <label for="received_amount" class="form-label">Received Amount (₹)</label>
-            <input type="number" class="form-control" id="received_amount" name="received_amount" required>
-          </div>
-          <div class="col-md-4">
-            <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
-            <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
-          </div>
-        </div>
-
-        <div class="mt-4">
-          <button type="submit" class="btn btn-primary">Submit</button>
-          <a href="income.php" class="btn btn-secondary">Cancel</a>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 
