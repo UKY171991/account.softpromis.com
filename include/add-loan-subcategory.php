@@ -1,62 +1,58 @@
 <?php
-include 'auth.php';
-include 'config.php';
+include '../inc/config.php';
 
 header('Content-Type: application/json');
 
-if (isset($_POST['category']) && isset($_POST['name'])) {
-    $category = $_POST['category'];
-    $name = trim($_POST['name']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $category = trim($_POST['category']);
+    $subcategory = trim($_POST['subcategory']);
     
-    // Get category ID first
-    $cat_sql = "SELECT id FROM loan_categories WHERE name = ?";
-    $cat_stmt = $conn->prepare($cat_sql);
-    $cat_stmt->bind_param("s", $category);
-    $cat_stmt->execute();
-    $cat_result = $cat_stmt->get_result();
+    if (empty($category) || empty($subcategory)) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Category and subcategory names cannot be empty'
+        ]);
+        exit;
+    }
+
+    // Check if subcategory already exists for this category
+    $check_sql = "SELECT subcategory FROM loan_categories WHERE category = ? AND subcategory = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("ss", $category, $subcategory);
+    $check_stmt->execute();
+    $result = $check_stmt->get_result();
     
-    if ($cat_row = $cat_result->fetch_assoc()) {
-        $category_id = $cat_row['id'];
-        
-        // Check if subcategory already exists for this category
-        $check_sql = "SELECT id FROM loan_subcategories WHERE category_id = ? AND name = ?";
-        $check_stmt = $conn->prepare($check_sql);
-        $check_stmt->bind_param("is", $category_id, $name);
-        $check_stmt->execute();
-        $result = $check_stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Subcategory already exists for this category'
-            ]);
-        } else {
-            // Insert new subcategory
-            $sql = "INSERT INTO loan_subcategories (category_id, name) VALUES (?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("is", $category_id, $name);
-            
-            if ($stmt->execute()) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Subcategory added successfully'
-                ]);
-            } else {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Error adding subcategory: ' . $conn->error
-                ]);
-            }
-            $stmt->close();
-        }
-        $check_stmt->close();
+    if ($result->num_rows > 0) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Subcategory already exists for this category'
+        ]);
+        exit;
+    }
+    
+    // Insert new subcategory
+    $sql = "INSERT INTO loan_categories (category, subcategory) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $category, $subcategory);
+    
+    if ($stmt->execute()) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Subcategory added successfully'
+        ]);
     } else {
         echo json_encode([
             'success' => false,
-            'message' => 'Category not found'
+            'message' => 'Error adding subcategory: ' . $conn->error
         ]);
     }
-    $cat_stmt->close();
+    
+    $stmt->close();
+} else {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid request method'
+    ]);
 }
 
 $conn->close();

@@ -21,17 +21,19 @@ if ($result && $result->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = $_POST['date'];
     $name = $_POST['name'];
+    $phone = $_POST['phone'] ?? '';
+    $description = $_POST['description'] ?? '';
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
     $amount = $_POST['amount'];
     $paid = $_POST['paid'];
     $balance = $amount - $paid;
 
-    $sql = "INSERT INTO loans (date, name, category, subcategory, amount, paid, balance) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO loans (date, name, phone, description, category, subcategory, amount, paid, balance) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $paid, $balance);
+    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
     
     if ($stmt->execute()) {
         header("Location: loan.php?message=Loan added successfully");
@@ -169,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="alert alert-danger"><?php echo $error; ?></div>
                     <?php endif; ?>
 
-                    <form id="addLoanForm" action="include/add-loan.php" method="POST">
+                    <form id="addLoanForm" method="POST">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
@@ -332,8 +334,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         url: 'include/get-loan-subcategories.php',
                         type: 'POST',
                         data: { category: category },
+                        dataType: 'json',
                         success: function(response) {
-                            $('#subcategory').html(response);
+                            if (response.success) {
+                                $('#subcategory').html(response.html);
+                            } else {
+                                alert(response.message || 'Error loading subcategories');
+                            }
                         },
                         error: function() {
                             alert('Error loading subcategories');
@@ -352,6 +359,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         url: 'include/add-loan-category.php',
                         type: 'POST',
                         data: { category: category },
+                        dataType: 'json',
                         success: function(response) {
                             if (response.success) {
                                 // Add to category dropdowns
@@ -367,10 +375,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 alert(response.message || 'Error adding category');
                             }
                         },
-                        error: function() {
-                            alert('Error adding category');
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error);
+                            alert('Error adding category. Please try again.');
                         }
                     });
+                } else {
+                    alert('Please enter a category name');
                 }
             });
 
@@ -378,36 +389,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $('#saveSubcategory').click(function() {
                 const category = $('#subcategoryCategory').val();
                 const subcategory = $('#newSubcategory').val().trim();
-                if (category && subcategory) {
-                    $.ajax({
-                        url: 'include/add-loan-subcategory.php',
-                        type: 'POST',
-                        data: { 
-                            category: category,
-                            subcategory: subcategory
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                // If current category matches, add to subcategory dropdown
-                                if ($('#category').val() === category) {
-                                    $('#subcategory').append(
-                                        $('<option></option>').val(subcategory).text(subcategory)
-                                    );
-                                    // Select the new subcategory
-                                    $('#subcategory').val(subcategory);
-                                }
-                                // Close modal and clear input
-                                $('#addSubcategoryModal').modal('hide');
-                                $('#newSubcategory').val('');
-                            } else {
-                                alert(response.message || 'Error adding subcategory');
-                            }
-                        },
-                        error: function() {
-                            alert('Error adding subcategory');
-                        }
-                    });
+                if (!category) {
+                    alert('Please select a category first');
+                    return;
                 }
+                if (!subcategory) {
+                    alert('Please enter a subcategory name');
+                    return;
+                }
+                
+                $.ajax({
+                    url: 'include/add-loan-subcategory.php',
+                    type: 'POST',
+                    data: { 
+                        category: category,
+                        subcategory: subcategory
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            // If current category matches, add to subcategory dropdown
+                            if ($('#category').val() === category) {
+                                $('#subcategory').append(
+                                    $('<option></option>').val(subcategory).text(subcategory)
+                                );
+                                // Select the new subcategory
+                                $('#subcategory').val(subcategory);
+                            }
+                            // Close modal and clear input
+                            $('#addSubcategoryModal').modal('hide');
+                            $('#newSubcategory').val('');
+                        } else {
+                            alert(response.message || 'Error adding subcategory');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        alert('Error adding subcategory. Please try again.');
+                    }
+                });
             });
 
             // Set today's date as default

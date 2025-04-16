@@ -1,36 +1,42 @@
 <?php
-include 'auth.php';
-include 'config.php';
+include '../inc/config.php';
 
-if (isset($_POST['category'])) {
-    $category = $_POST['category'];
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category'])) {
+    $category = trim($_POST['category']);
     
-    // Get category ID first
-    $cat_sql = "SELECT id FROM loan_categories WHERE name = ?";
-    $cat_stmt = $conn->prepare($cat_sql);
-    $cat_stmt->bind_param("s", $category);
-    $cat_stmt->execute();
-    $cat_result = $cat_stmt->get_result();
+    // Get subcategories for the selected category
+    $sql = "SELECT DISTINCT subcategory FROM loan_categories WHERE category = ? AND subcategory IS NOT NULL ORDER BY subcategory";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $category);
+    $stmt->execute();
+    $result = $stmt->get_result();
     
-    if ($cat_row = $cat_result->fetch_assoc()) {
-        $category_id = $cat_row['id'];
-        
-        // Now get subcategories
-        $sub_sql = "SELECT name FROM loan_subcategories WHERE category_id = ? ORDER BY name";
-        $sub_stmt = $conn->prepare($sub_sql);
-        $sub_stmt->bind_param("i", $category_id);
-        $sub_stmt->execute();
-        $sub_result = $sub_stmt->get_result();
-        
-        echo '<option value="">Select Subcategory</option>';
-        while ($row = $sub_result->fetch_assoc()) {
-            echo '<option value="' . htmlspecialchars($row['name']) . '">' . htmlspecialchars($row['name']) . '</option>';
+    $html = '<option value="">Select Subcategory</option>';
+    
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $subcategory = htmlspecialchars($row['subcategory']);
+            $html .= "<option value=\"{$subcategory}\">{$subcategory}</option>";
         }
-        
-        $sub_stmt->close();
+        echo json_encode([
+            'success' => true,
+            'html' => $html
+        ]);
+    } else {
+        echo json_encode([
+            'success' => true,
+            'html' => '<option value="">No subcategories found</option>'
+        ]);
     }
     
-    $cat_stmt->close();
+    $stmt->close();
+} else {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid request'
+    ]);
 }
 
 $conn->close();
