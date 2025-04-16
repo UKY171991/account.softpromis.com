@@ -15,6 +15,7 @@ $page_titles = [
     'edit-client' => 'Edit Client',
     'add-user' => 'Add User',
     'edit-user' => 'Edit User'
+    'loan' => 'Loan'
 ];
 
 $page_title = $page_titles[$current_page] ?? 'Dashboard';
