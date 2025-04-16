@@ -206,6 +206,11 @@ $currentMonthPendingLoansQuery = "
   WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
 $currentMonthPendingLoansResult = $conn->query($currentMonthPendingLoansQuery);
 $currentMonthPendingLoans = $currentMonthPendingLoansResult->fetch_assoc()['pending_loans'] ?? 0;
+
+// Fetch TOTAL pending loans
+$totalPendingLoansQuery = "SELECT SUM(balance) AS total_pending_loans FROM loans";
+$totalPendingLoansResult = $conn->query($totalPendingLoansQuery);
+$totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loans'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -356,12 +361,12 @@ $currentMonthPendingLoans = $currentMonthPendingLoansResult->fetch_assoc()['pend
           </div>
 
 
-          <!-- Pending Loans (Current Month) -->
+          <!-- Pending Loans (Total) -->
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
                 <h5 class="card-title">Pending Loans</h5>
-                <h3 class="text-danger">₹<?php echo number_format($currentMonthPendingLoans, 2); ?></h3>
+                <h3 class="text-danger">₹<?php echo number_format($totalPendingLoans, 2); ?></h3>
               </div>
             </div>
           </div>
