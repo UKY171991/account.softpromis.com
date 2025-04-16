@@ -28,6 +28,9 @@ $defaultFinancialYear = ($currentCalendarMonth >= 4) ? date('Y') . '-' . (date('
 $selectedFinancialYear = $_GET['financial_year'] ?? $defaultFinancialYear;
 list($startYear, $endYear) = explode('-', $selectedFinancialYear); // These determine the data range
 
+// Create the short display format (YYYY-YY)
+$displayFinancialYearShort = $startYear . '-' . substr($endYear, -2);
+
 // --- Fetch Data based on SELECTED Financial Year ($startYear, $endYear) ---
 
 // Fetch total income for the SELECTED financial year
@@ -246,8 +249,8 @@ $distributionPieData = [
           </div>
         <?php endif; ?>
         
-        <!-- Update title to show selected financial year -->
-        <h2>Dashboard (<?php echo $selectedFinancialYear; ?>)</h2> 
+        <!-- Update title to show selected financial year in YYYY-YY format -->
+        <h2>Dashboard (<?php echo $displayFinancialYearShort; ?>)</h2> 
         <!-- Remove static month/year subheading -->
         <!-- <h5 class="text-muted mb-4"><?php echo date('F Y'); ?></h5> -->
 
@@ -256,8 +259,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <!-- Title uses selected financial year -->
-                <h5 class="card-title">Income (<?php echo $selectedFinancialYear; ?>)</h5>
+                <!-- Title uses YYYY-YY format -->
+                <h5 class="card-title">Income (<?php echo $displayFinancialYearShort; ?>)</h5>
                 <!-- Value uses data from selected financial year -->
                 <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
               </div>
@@ -277,8 +280,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses selected financial year -->
-                <h5 class="card-title">Pending Income (<?php echo $selectedFinancialYear; ?>)</h5>
+                 <!-- Title uses YYYY-YY format -->
+                <h5 class="card-title">Pending Income (<?php echo $displayFinancialYearShort; ?>)</h5>
                  <!-- Value uses pending income from selected financial year -->
                 <h3 class="text-success">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
               </div>
@@ -301,8 +304,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses selected financial year -->
-                <h5 class="card-title">Expenditure (<?php echo $selectedFinancialYear; ?>)</h5>
+                 <!-- Title uses YYYY-YY format -->
+                <h5 class="card-title">Expenditure (<?php echo $displayFinancialYearShort; ?>)</h5>
                  <!-- Value uses data from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
               </div>
@@ -322,8 +325,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses selected financial year -->
-                <h5 class="card-title">Pending Exp. (<?php echo $selectedFinancialYear; ?>)</h5>
+                 <!-- Title uses YYYY-YY format -->
+                <h5 class="card-title">Pending Expenditure (<?php echo $displayFinancialYearShort; ?>)</h5>
                  <!-- Value uses pending expenditure from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
               </div>
@@ -333,7 +336,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Loans (<?php echo $selectedFinancialYear; ?>)</h5>
+                 <!-- Title uses YYYY-YY format -->
+                <h5 class="card-title">Pending Loans (<?php echo $displayFinancialYearShort; ?>)</h5>
                  <!-- Value uses pending loans from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($totalPendingLoans, 2); ?></h3>
               </div>
