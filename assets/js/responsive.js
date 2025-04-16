@@ -21,15 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Add mobile toggle button to navbar
-    const navbar = document.querySelector('.top-navbar');
-    if (navbar) {
-        const toggleButton = document.createElement('button');
-        toggleButton.className = 'mobile-toggle btn btn-link d-lg-none';
-        toggleButton.innerHTML = '<i class="bi bi-list fs-4"></i>';
-        navbar.insertBefore(toggleButton, navbar.firstChild);
-    }
-
     // Add overlay div to body
     const overlay = document.createElement('div');
     overlay.className = 'sidebar-overlay';
