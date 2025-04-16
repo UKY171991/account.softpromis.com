@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Top Navbar -->
     <?php include 'topbar.php'; // Add topbar include ?>
 
-    <h3 class="mb-4">Edit Income</h3>
+    <!-- <h3 class="mb-4">Edit Income</h3> -->
     <?php if (isset($error)): ?>
       <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
     <?php endif; ?>
