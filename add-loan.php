@@ -9,12 +9,12 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
 }
 
 // Fetch loan categories
-$sql = "SELECT DISTINCT category FROM loan_categories ORDER BY category";
+$sql = "SELECT id, name FROM loan_categories ORDER BY name";
 $result = $conn->query($sql);
 $categories = [];
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $categories[] = $row['category'];
+        $categories[] = $row;
     }
 }
 
@@ -29,19 +29,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paid = $_POST['paid'];
     $balance = $amount - $paid;
 
-    $sql = "INSERT INTO loans (date, name, phone, description, category, subcategory, amount, paid, balance) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Get category ID
+    $cat_sql = "SELECT id FROM loan_categories WHERE name = ?";
+    $cat_stmt = $conn->prepare($cat_sql);
+    $cat_stmt->bind_param("s", $category);
+    $cat_stmt->execute();
+    $cat_result = $cat_stmt->get_result();
     
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssddd", $date, $name, $phone, $description, $category, $subcategory, $amount, $paid, $balance);
-    
-    if ($stmt->execute()) {
-        header("Location: loan.php?message=Loan added successfully");
-        exit();
+    if ($cat_result->num_rows === 0) {
+        $error = "Selected category not found";
     } else {
-        $error = "Error adding loan: " . $conn->error;
+        $category_id = $cat_result->fetch_assoc()['id'];
+        
+        // Get subcategory ID
+        $sub_sql = "SELECT id FROM loan_subcategories WHERE category_id = ? AND name = ?";
+        $sub_stmt = $conn->prepare($sub_sql);
+        $sub_stmt->bind_param("is", $category_id, $subcategory);
+        $sub_stmt->execute();
+        $sub_result = $sub_stmt->get_result();
+        
+        if ($sub_result->num_rows === 0) {
+            $error = "Selected subcategory not found";
+        } else {
+            $subcategory_id = $sub_result->fetch_assoc()['id'];
+            
+            // Insert the loan
+            $sql = "INSERT INTO loans (date, name, phone, description, category_id, subcategory_id, amount, paid, balance) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssiiiii", $date, $name, $phone, $description, $category_id, $subcategory_id, $amount, $paid, $balance);
+            
+            if ($stmt->execute()) {
+                header("Location: loan.php?message=Loan added successfully");
+                exit();
+            } else {
+                $error = "Error adding loan: " . $conn->error;
+            }
+            $stmt->close();
+        }
+        $sub_stmt->close();
     }
-    $stmt->close();
+    $cat_stmt->close();
 }
 ?>
 
@@ -201,8 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <select class="form-select" id="category" name="category" required>
                                         <option value="">Select Category</option>
                                         <?php foreach ($categories as $category): ?>
-                                            <option value="<?php echo htmlspecialchars($category); ?>">
-                                                <?php echo htmlspecialchars($category); ?>
+                                            <option value="<?php echo htmlspecialchars($category['name']); ?>">
+                                                <?php echo htmlspecialchars($category['name']); ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -295,8 +324,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <select class="form-select" id="subcategoryCategory" required>
                             <option value="">Select Category</option>
                             <?php foreach ($categories as $category): ?>
-                                <option value="<?php echo htmlspecialchars($category); ?>">
-                                    <?php echo htmlspecialchars($category); ?>
+                                <option value="<?php echo htmlspecialchars($category['name']); ?>">
+                                    <?php echo htmlspecialchars($category['name']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -363,7 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         success: function(response) {
                             if (response.success) {
                                 // Add to category dropdowns
-                                $('#category, #subcategoryCategory').append(
+                                $('#category').append(
                                     $('<option></option>').val(category).text(category)
                                 );
                                 // Select the new category
