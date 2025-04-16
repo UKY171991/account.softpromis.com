@@ -232,6 +232,20 @@ $result = $conn->query($sql);
         responsive: true,
         order: [[2, 'desc']], // Sort by date column (index 2) in descending order
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        // Explicitly define the 11 columns 
+        columns: [
+          { data: 0 }, // SL No.
+          { data: 1 }, // Invoice Number
+          { data: 2 }, // Date
+          { data: 3 }, // Name
+          { data: 4 }, // Category
+          { data: 5 }, // Sub-category
+          { data: 6 }, // Total Amount
+          { data: 7 }, // Paid Amount
+          { data: 8 }, // Balance
+          { data: 9 }, // Status
+          { data: 10, orderable: false } // Action (make not orderable)
+        ],
         columnDefs: [
           { targets: '_all', className: 'text-center' }
         ]
