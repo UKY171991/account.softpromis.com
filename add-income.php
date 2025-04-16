@@ -158,7 +158,7 @@ $conn->close();
       <h4 class="text-white mb-3">Account Panel</h4>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
+      <?php if (!isset($_SESSION['role']) || strtolower($_SESSION['role']) !== 'manager'): ?>
         <li class="nav-item">
           <a href="dashboard.php" class="nav-link">
             <i class="bi bi-speedometer2"></i> Dashboard
@@ -196,75 +196,75 @@ $conn->close();
     <!-- Main content -->
     <div class="main-content">
       <div class="form-container">
-        <h3 class="mb-4">Add New Income</h3>
+      <h3 class="mb-4">Add New Income</h3>
         <?php echo $message; ?>
-        
-        <form action="" method="POST">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="date" class="form-label">Date</label>
-              <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
-            </div>
-            <div class="col-md-4">
-              <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="col-md-4">
-              <label for="phone" class="form-label">Phone</label>
-              <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits">
-            </div>
 
-            <div class="col-md-4">
-              <label for="description" class="form-label">Description</label>
-              <input type="text" class="form-control" id="description" name="description" required>
-            </div>
-            <div class="col-md-4">
-              <label for="category" class="form-label">Category</label>
-              <div class="input-group">
-                <select id="category" name="category" class="form-select" required>
-                  <option value="" selected disabled>Choose...</option>
-                  <?php foreach ($categories as $category): ?>
-                    <option value="<?php echo htmlspecialchars($category['id']); ?>">
-                      <?php echo htmlspecialchars($category['category_name']); ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                  <i class="bi bi-plus-lg"></i>
-                </button>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <label for="subcategory" class="form-label">Sub-category</label>
-              <div class="input-group">
-                <select id="subcategory" name="subcategory" class="form-select" required>
-                  <option value="" selected disabled>Choose category first</option>
-                </select>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
-                  <i class="bi bi-plus-lg"></i>
-                </button>
-              </div>
-            </div>
+      <form action="" method="POST">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="date" class="form-label">Date</label>
+            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
+          </div>
+          <div class="col-md-4">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="col-md-4">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits">
+          </div>
 
-            <div class="col-md-4">
-              <label for="total_amount" class="form-label">Total Amount (₹)</label>
-              <input type="number" class="form-control" id="total_amount" name="total_amount" required>
+          <div class="col-md-4">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" required>
+          </div>
+          <div class="col-md-4">
+            <label for="category" class="form-label">Category</label>
+            <div class="input-group">
+              <select id="category" name="category" class="form-select" required>
+                <option value="" selected disabled>Choose...</option>
+                <?php foreach ($categories as $category): ?>
+                  <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                    <?php echo htmlspecialchars($category['category_name']); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                <i class="bi bi-plus-lg"></i>
+              </button>
             </div>
-            <div class="col-md-4">
-              <label for="received_amount" class="form-label">Received Amount (₹)</label>
-              <input type="number" class="form-control" id="received_amount" name="received_amount" required>
-            </div>
-            <div class="col-md-4">
-              <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
-              <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
+          </div>
+          <div class="col-md-4">
+            <label for="subcategory" class="form-label">Sub-category</label>
+            <div class="input-group">
+              <select id="subcategory" name="subcategory" class="form-select" required>
+                <option value="" selected disabled>Choose category first</option>
+              </select>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
+                <i class="bi bi-plus-lg"></i>
+              </button>
             </div>
           </div>
 
-          <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="income.php" class="btn btn-secondary">Cancel</a>
+          <div class="col-md-4">
+            <label for="total_amount" class="form-label">Total Amount (₹)</label>
+            <input type="number" class="form-control" id="total_amount" name="total_amount" required>
           </div>
-        </form>
+          <div class="col-md-4">
+            <label for="received_amount" class="form-label">Received Amount (₹)</label>
+            <input type="number" class="form-control" id="received_amount" name="received_amount" required>
+          </div>
+          <div class="col-md-4">
+            <label for="balance_amount" class="form-label">Balance Amount (₹)</label>
+            <input type="number" class="form-control" id="balance_amount" name="balance_amount" readonly>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <a href="income.php" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
       </div>
     </div>
   </div>
@@ -335,7 +335,7 @@ $conn->close();
   <script>
     $(document).ready(function() {
       // Initialize date picker
-      flatpickr('.date-picker', {
+    flatpickr('.date-picker', {
         dateFormat: "d-m-Y",
         allowInput: true
       });
@@ -351,7 +351,7 @@ $conn->close();
       $('#category').on('change', function() {
         const categoryId = $(this).val();
         if (categoryId) {
-          // Fetch subcategories for selected category
+      // Fetch subcategories for selected category
           $.ajax({
             url: 'include/category-operations.php',
             method: 'POST',
@@ -369,19 +369,19 @@ $conn->close();
               }
             }
           });
-        } else {
+      } else {
           $('#subcategory').empty().append('<option value="" selected disabled>Choose category first</option>');
-        }
-      });
+      }
+    });
 
       // Handle add category form submission
       $('#addCategoryForm').on('submit', function(e) {
-        e.preventDefault();
+      e.preventDefault();
         const categoryName = $('#newCategoryName').val();
-        
+      
         $.ajax({
           url: 'include/category-operations.php',
-          method: 'POST',
+        method: 'POST',
           data: {
             action: 'add_category',
             category_name: categoryName
@@ -398,11 +398,11 @@ $conn->close();
               
               // Select the new category
               $category.val(response.id).trigger('change');
-              
-              // Close modal and reset form
+          
+          // Close modal and reset form
               $('#addCategoryModal').modal('hide');
               $('#newCategoryName').val('');
-            } else {
+        } else {
               alert('Failed to add category. Please try again.');
             }
           }
@@ -411,29 +411,29 @@ $conn->close();
 
       // Handle add subcategory form submission
       $('#addSubcategoryForm').on('submit', function(e) {
-        e.preventDefault();
+      e.preventDefault();
         const categoryId = $('#subcategoryCategory').val();
         const subcategoryName = $('#newSubcategoryName').val();
-        
+      
         $.ajax({
           url: 'include/category-operations.php',
-          method: 'POST',
+        method: 'POST',
           data: {
             action: 'add_subcategory',
-            category_id: categoryId,
-            subcategory_name: subcategoryName
+          category_id: categoryId,
+          subcategory_name: subcategoryName
           },
           success: function(response) {
             if (response.status === 'success') {
-              // If the parent category is currently selected, add the new subcategory to the dropdown
+          // If the parent category is currently selected, add the new subcategory to the dropdown
               if ($('#category').val() === categoryId) {
                 $('#subcategory').append(`<option value="${response.id}">${subcategoryName}</option>`);
-              }
-              
-              // Close modal and reset form
+          }
+          
+          // Close modal and reset form
               $('#addSubcategoryModal').modal('hide');
               $('#newSubcategoryName').val('');
-            } else {
+        } else {
               alert('Failed to add subcategory. Please try again.');
             }
           }
