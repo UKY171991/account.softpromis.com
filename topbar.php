@@ -35,7 +35,7 @@ $page_title = $page_titles[$current_page] ?? 'Dashboard';
         <div class="d-flex align-items-center gap-3">
              <!-- Financial Year Dropdown (only for Dashboard) -->
              <?php if ($current_page === 'dashboard' && isset($selectedFinancialYear) && isset($financialYears)): ?>
-             <div class="financial-year-selector d-none d-lg-block">
+             <div class="financial-year-selector">
                  <div class="dropdown">
                      <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="financialYearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                          <?php echo $selectedFinancialYear; ?>
