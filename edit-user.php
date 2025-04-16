@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $sql = "UPDATE users SET username = ?, name = ?, email = ?, role = ?, status = ?, password = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssii", $username, $fullname, $email, $role, $status, $hashed_password, $id);
+        $stmt->bind_param("ssssssi", $username, $fullname, $email, $role, $status, $hashed_password, $id);
     } else {
         // Update without changing the password
         $sql = "UPDATE users SET username = ?, name = ?, email = ?, role = ?, status = ? WHERE id = ?";
