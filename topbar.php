@@ -86,4 +86,23 @@ $page_title = $page_titles[$current_page] ?? 'Dashboard';
             </div>
         </div>
     </div>
-</div> 
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listener to the financial year options
+  document.querySelectorAll('.financial-year-option').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default anchor behavior
+      const selectedYear = this.getAttribute('data-year');
+      
+      // Construct the new URL
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('financial_year', selectedYear);
+      
+      // Reload the page with the new financial year parameter
+      window.location.href = currentUrl.toString();
+    });
+  });
+});
+</script> 
