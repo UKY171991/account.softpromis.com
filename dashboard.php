@@ -323,7 +323,7 @@ $distributionPieData = [
             <div class="card dashboard-card p-3">
               <div class="card-body">
                  <!-- Title uses selected financial year -->
-                <h5 class="card-title">Pending Expenditure (<?php echo $selectedFinancialYear; ?>)</h5>
+                <h5 class="card-title">Pending Exp. (<?php echo $selectedFinancialYear; ?>)</h5>
                  <!-- Value uses pending expenditure from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
               </div>
