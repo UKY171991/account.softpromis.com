@@ -147,7 +147,7 @@ $conn->close();
           </div>
           <div class="col-md-4">
             <label for="phone" class="form-label">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits" required>
+            <input type="text" class="form-control" id="phone" name="phone" pattern="\d{10}" title="Phone number must be exactly 10 digits">
           </div>
 
           <div class="col-md-4">
