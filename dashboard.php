@@ -112,8 +112,13 @@ while ($row = $monthlyExpenditureResult->fetch_assoc()) {
     $monthlyExpenditureData[$row['month']] = $row['total'];
 }
 
-// Fetch TOTAL pending loans (Remains total, not tied to financial year)
-$totalPendingLoansQuery = "SELECT SUM(balance) AS total_pending_loans FROM loans";
+// Fetch pending loans for the SELECTED financial year
+$totalPendingLoansQuery = "
+  SELECT SUM(balance) AS total_pending_loans 
+  FROM loans 
+  WHERE 
+    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
+    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
 $totalPendingLoansResult = $conn->query($totalPendingLoansQuery);
 $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loans'] ?? 0;
 
@@ -328,8 +333,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Loans (Total)</h5>
-                 <!-- Value uses total pending loans (not tied to year) -->
+                <h5 class="card-title">Pending Loans (<?php echo $selectedFinancialYear; ?>)</h5>
+                 <!-- Value uses pending loans from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($totalPendingLoans, 2); ?></h3>
               </div>
             </div>
