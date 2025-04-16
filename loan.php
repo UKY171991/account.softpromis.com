@@ -9,35 +9,19 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
     exit();
 }
 
-$sql = "
-SELECT 
-    id, 
-    date, 
-    name, 
-    category, 
-    subcategory, 
-    amount, 
-    paid, 
-    balance, 
-    created_at 
-FROM 
-    loans
-ORDER BY date DESC";
+$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, paid, balance, created_at, updated_at FROM loans ORDER BY date DESC";
 $result = $conn->query($sql);
-if (!$result) {
-    die("Error executing query: " . $conn->error);
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loan List</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loan Records</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
   <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
     html, body {
@@ -129,56 +113,9 @@ if (!$result) {
       transition: background-color 0.3s ease;
     }
 
-    .table td .btn {
+    .action-column .btn {
       padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
-      border-radius: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .table td .btn-primary {
-      background-color: #0d6efd;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .table td .btn-primary:hover {
-      background-color: #0b5ed7;
-    }
-
-    .table td .btn-danger {
-      background-color: #dc3545;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .table td .btn-danger:hover {
-      background-color: #bb2d3b;
-    }
-
-    .badge {
-      font-size: 0.75rem;
-      padding: 0.3rem 0.5rem;
-      border-radius: 0.3rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
-    }
-
-    .badge.bg-success {
-      background-color: #198754;
-      color: #ffffff;
-    }
-
-    .badge.bg-danger {
-      background-color: #dc3545;
-      color: #ffffff;
-    }
-
-    .dataTables_wrapper {
-      overflow-x: auto;
     }
   </style>
 </head>
@@ -217,6 +154,8 @@ if (!$result) {
                 <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
+                <th>Phone</th>
+                <th>Description</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
@@ -232,30 +171,34 @@ if (!$result) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
-                      $invoice_number = "LOAN-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT);
-                      $status = ($row['balance'] == 0)
-                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>"
+                      $formatted_created_at = date("d-m-Y H:i:s", strtotime($row['created_at']));
+                      $formatted_updated_at = date("d-m-Y H:i:s", strtotime($row['updated_at']));
+                      $status = ($row['balance'] == 0) 
+                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
-                      echo "<td>" . $sl_no++ . "</td>";
-                      echo "<td>" . htmlspecialchars($invoice_number) . "</td>";
+                      echo "<td>{$sl_no}</td>";
+                      echo "<td>LOAN-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . $status . "</td>";
-                      echo "<td>
-                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'>Delete</a>
+                      echo "<td class='action-column'>
+                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
+                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
                             </td>";
                       echo "</tr>";
+                      $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='11' class='text-center'>No records found</td></tr>";
+                  echo "<tr><td colspan='13' class='text-center'>No records found</td></tr>";
               }
               ?>
             </tbody>
@@ -286,7 +229,7 @@ if (!$result) {
           responsive: true,
           lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
           columnDefs: [
-            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: 'text-center' }
+            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: 'text-center' }
           ],
           language: {
             emptyTable: "No loan records found",
