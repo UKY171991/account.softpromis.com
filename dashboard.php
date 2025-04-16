@@ -267,7 +267,7 @@ $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loan
           </div>
         <?php endif; ?>
         
-        <h2>Dashboard</h2>
+        <h2>Dashboard (<?php echo date('Y'); ?>)</h2>
 
         <div class="row g-4 mb-4">
           <div class="col-md-3">
