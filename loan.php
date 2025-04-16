@@ -227,17 +227,24 @@ $result = $conn->query($sql);
   <script src="assets/js/responsive.js"></script>
   <script>
     $(document).ready(function() {
-      // Initialize DataTable (Simplified)
-      $('#loanTable').DataTable({
-        // responsive: true, // Temporarily disabled
-        order: [[2, 'desc']], // Sort by date column (index 2) in descending order
-        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        // Explicit columns removed for testing
-        columnDefs: [
-          { targets: '_all', className: 'text-center' }, // Center all columns
-          { targets: 10, orderable: false } // Make Action column (index 10) not sortable
-        ]
-      });
+      // Initialize DataTable with a slight delay
+      setTimeout(function() {
+          try {
+            $('#loanTable').DataTable({
+              // responsive: true, // Temporarily disabled
+              order: [[2, 'desc']], // Sort by date column (index 2) in descending order
+              lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+              // Explicit columns removed for testing
+              columnDefs: [
+                { targets: '_all', className: 'text-center' }, // Center all columns
+                { targets: 10, orderable: false } // Make Action column (index 10) not sortable
+              ]
+            });
+          } catch (error) {
+            console.error("DataTable initialization error:", error);
+            // Optionally display a user-friendly message here
+          }
+      }, 100); // Delay initialization slightly (100ms)
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
