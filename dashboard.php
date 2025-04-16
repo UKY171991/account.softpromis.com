@@ -50,11 +50,13 @@ $totalExpenditureQuery = "
 $totalExpenditureResult = $conn->query($totalExpenditureQuery);
 $totalExpenditure = $totalExpenditureResult->fetch_assoc()['total_expenditure'] ?? 0;
 
-// Fetch pending income for the CURRENT calendar month (Used for the 'Month' card)
+// Fetch pending income for the CURRENT calendar month WITHIN the SELECTED financial year
+$currentMonth = date('n'); // Get current calendar month number
 $currentMonthPendingIncomeQuery = "
   SELECT SUM(balance) AS pending_income 
   FROM income 
-  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
+  WHERE MONTH(date) = $currentMonth AND 
+  ( (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR (MONTH(date) < 4 AND YEAR(date) = $endYear) )";
 $currentMonthPendingIncomeResult = $conn->query($currentMonthPendingIncomeQuery);
 $currentMonthPendingIncome = $currentMonthPendingIncomeResult->fetch_assoc()['pending_income'] ?? 0;
 
@@ -239,17 +241,18 @@ $distributionPieData = [
           </div>
         <?php endif; ?>
         
-        <!-- Keep dynamic titles based on current date -->
-        <h2>Dashboard (<?php echo date('Y'); ?>)</h2> 
-        <h5 class="text-muted mb-4"><?php echo date('F Y'); ?></h5>
+        <!-- Update title to show selected financial year -->
+        <h2>Dashboard (<?php echo $selectedFinancialYear; ?>)</h2> 
+        <!-- Remove static month/year subheading -->
+        <!-- <h5 class="text-muted mb-4"><?php echo date('F Y'); ?></h5> -->
 
-        <!-- Cards: Titles show current date period, but VALUES reflect selected financial year -->
+        <!-- Cards: Update titles and ensure values use selected financial year data -->
         <div class="row g-4 mb-4">
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <!-- Title uses current year -->
-                <h5 class="card-title">Income (<?php echo date('Y'); ?>)</h5>
+                <!-- Title uses selected financial year -->
+                <h5 class="card-title">Income (<?php echo $selectedFinancialYear; ?>)</h5>
                 <!-- Value uses data from selected financial year -->
                 <h3 class="text-success">₹<?php echo number_format($totalIncome, 2); ?></h3>
               </div>
@@ -258,7 +261,7 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses current month -->
+                 <!-- Title uses current month name -->
                 <h5 class="card-title">Income (<?php echo date('F'); ?>)</h5>
                  <!-- Value uses current month's income FROM the selected financial year's monthly data -->
                 <h3 class="text-success">₹<?php echo number_format($monthlyIncomeData[date('n')] ?? 0, 2); ?></h3>
@@ -269,8 +272,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses current year -->
-                <h5 class="card-title">Pending Income (<?php echo date('Y'); ?>)</h5>
+                 <!-- Title uses selected financial year -->
+                <h5 class="card-title">Pending Income (<?php echo $selectedFinancialYear; ?>)</h5>
                  <!-- Value uses pending income from selected financial year -->
                 <h3 class="text-success">₹<?php echo number_format($currentYearPendingIncome, 2); ?></h3>
               </div>
@@ -280,9 +283,9 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses current month -->
+                 <!-- Title uses current month name -->
                 <h5 class="card-title">Pending Income (<?php echo date('F'); ?>)</h5>
-                 <!-- Value uses pending income from current calendar month (as calculated above) -->
+                 <!-- Value uses pending income calculated for current month WITHIN selected financial year -->
                 <h3 class="text-success">₹<?php echo number_format($currentMonthPendingIncome, 2); ?></h3>
               </div>
             </div>
@@ -293,8 +296,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses current year -->
-                <h5 class="card-title">Expenditure (<?php echo date('Y'); ?>)</h5>
+                 <!-- Title uses selected financial year -->
+                <h5 class="card-title">Expenditure (<?php echo $selectedFinancialYear; ?>)</h5>
                  <!-- Value uses data from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($totalExpenditure, 2); ?></h3>
               </div>
@@ -303,7 +306,7 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses current month -->
+                 <!-- Title uses current month name -->
                 <h5 class="card-title">Expenditure (<?php echo date('F'); ?>)</h5>
                  <!-- Value uses current month's expenditure FROM the selected financial year's monthly data -->
                 <h3 class="text-danger">₹<?php echo number_format($monthlyExpenditureData[date('n')] ?? 0, 2); ?></h3>
@@ -314,8 +317,8 @@ $distributionPieData = [
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                 <!-- Title uses current year -->
-                <h5 class="card-title">Pending Expenditure (<?php echo date('Y'); ?>)</h5>
+                 <!-- Title uses selected financial year -->
+                <h5 class="card-title">Pending Expenditure (<?php echo $selectedFinancialYear; ?>)</h5>
                  <!-- Value uses pending expenditure from selected financial year -->
                 <h3 class="text-danger">₹<?php echo number_format($currentYearPendingExpenditure, 2); ?></h3>
               </div>
