@@ -9,7 +9,10 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
     exit();
 }
 
-$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, paid, balance, created_at, updated_at FROM loans ORDER BY date DESC";
+// Fetch all loans with proper date formatting
+$sql = "SELECT id, DATE_FORMAT(date, '%d-%m-%Y') as formatted_date, name, category, subcategory, 
+        amount, paid, balance, DATE_FORMAT(created_at, '%d-%m-%Y %H:%i:%s') as created_at 
+        FROM loans ORDER BY date DESC";
 $result = $conn->query($sql);
 ?>
 
@@ -117,6 +120,15 @@ $result = $conn->query($sql);
       padding: 0.3rem 0.6rem;
       font-size: 0.75rem;
     }
+
+    .badge {
+      padding: 0.5em 0.8em;
+      font-weight: 500;
+    }
+
+    .badge i {
+      margin-right: 0.25rem;
+    }
   </style>
 </head>
 <body>
@@ -132,7 +144,9 @@ $result = $conn->query($sql);
       <div class="p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5>Loan Records</h5>
-          <a href="add-loan.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Loan</a>
+          <a href="add-loan.php" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i> Add New Loan
+          </a>
         </div>
 
         <?php
@@ -154,8 +168,6 @@ $result = $conn->query($sql);
                 <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
-                <th>Phone</th>
-                <th>Description</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
@@ -170,9 +182,6 @@ $result = $conn->query($sql);
               if ($result && $result->num_rows > 0) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
-                      $formatted_date = date("d-m-Y", strtotime($row['date']));
-                      $formatted_created_at = date("d-m-Y H:i:s", strtotime($row['created_at']));
-                      $formatted_updated_at = date("d-m-Y H:i:s", strtotime($row['updated_at']));
                       $status = ($row['balance'] == 0) 
                           ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
@@ -180,10 +189,8 @@ $result = $conn->query($sql);
                       echo "<tr>";
                       echo "<td>{$sl_no}</td>";
                       echo "<td>LOAN-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
-                      echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['formatted_date']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
@@ -191,14 +198,19 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . $status . "</td>";
                       echo "<td class='action-column'>
-                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
-                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary' title='Edit'>
+                                <i class='bi bi-pencil'></i>
+                              </a>
+                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-danger' 
+                                 onclick='return confirm(\"Are you sure you want to delete this loan record?\")' title='Delete'>
+                                <i class='bi bi-trash'></i>
+                              </a>
                             </td>";
                       echo "</tr>";
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='13' class='text-center'>No records found</td></tr>";
+                  echo "<tr><td colspan='11' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
@@ -208,40 +220,23 @@ $result = $conn->query($sql);
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
   <script>
-    // Prevent DataTables warning messages from showing in the console
-    $.fn.dataTable.ext.errMode = 'none';
-    
     $(document).ready(function() {
-      try {
-        // Destroy the table if it's already initialized
-        if ($.fn.DataTable.isDataTable('#loanTable')) {
-          $('#loanTable').DataTable().destroy();
-        }
-        
-        // Initialize the table
-        $('#loanTable').DataTable({
-          responsive: true,
-          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-          columnDefs: [
-            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: 'text-center' }
-          ],
-          language: {
-            emptyTable: "No loan records found",
-            zeroRecords: "No matching records found"
-          },
-          order: [[2, 'desc']], // Sort by date column (index 2) in descending order
-          destroy: true // Allow the table to be reinitialized
-        });
-      } catch (error) {
-        console.log("DataTable initialization error:", error);
-      }
-      
+      // Initialize DataTable
+      $('#loanTable').DataTable({
+        responsive: true,
+        order: [[2, 'desc']], // Sort by date column (index 2) in descending order
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        columnDefs: [
+          { targets: '_all', className: 'text-center' }
+        ]
+      });
+
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
         $('.alert').alert('close');
