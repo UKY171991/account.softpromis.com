@@ -21,7 +21,8 @@ SELECT
     balance, 
     created_at 
 FROM 
-    expenditures";
+    expenditures
+ORDER BY date DESC";
 $result = $conn->query($sql);
 if (!$result) {
     die("Error executing query: " . $conn->error);
@@ -291,6 +292,7 @@ if (!$result) {
             emptyTable: "No expenditure records found",
             zeroRecords: "No matching records found"
           },
+          order: [[2, 'desc']], // Sort by date column (index 2) in descending order
           destroy: true // Allow the table to be reinitialized
         });
       } catch (error) {
