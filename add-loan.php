@@ -19,8 +19,8 @@ if ($result && $result->num_rows > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Format date to match MySQL date format
-    $date = date('Y-m-d', strtotime($_POST['date']));
+    // Use the MySQL formatted date from the hidden input
+    $date = $_POST['mysql_date'] ?? date('Y-m-d', strtotime($_POST['date']));
     $name = $_POST['name'];
     $phone = $_POST['phone'] ?? '';
     $description = $_POST['description'] ?? '';
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paid = $_POST['paid'];
     $balance = $amount - $paid;
 
-    // Insert the loan with direct category and subcategory names
+    // Insert the loan
     $sql = "INSERT INTO loans (date, name, category, subcategory, amount, paid, balance) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
     
@@ -58,6 +58,7 @@ $today = date('Y-m-d');
     <title>Add New Loan</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <style>
         html, body {
@@ -185,6 +186,21 @@ $today = date('Y-m-d');
             margin-bottom: 1rem;
             border-radius: 0.375rem;
         }
+
+        /* Flatpickr custom styles */
+        .flatpickr-input {
+            background-color: #fff !important;
+        }
+        
+        .flatpickr-calendar {
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .input-group .flatpickr-input {
+            border-start-start-radius: 0;
+            border-end-start-radius: 0;
+        }
     </style>
 </head>
 <body>
@@ -217,7 +233,7 @@ $today = date('Y-m-d');
                                 <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                                    <input type="date" class="form-control" id="date" name="date" value="<?php echo $today; ?>" required>
+                                    <input type="text" class="form-control" id="date" name="date" placeholder="Select date" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -368,9 +384,35 @@ $today = date('Y-m-d');
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="assets/js/responsive.js"></script>
     <script>
         $(document).ready(function() {
+            // Initialize Flatpickr
+            const dateInput = flatpickr("#date", {
+                dateFormat: "d-m-Y",
+                defaultDate: new Date(),
+                allowInput: true,
+                disableMobile: true,
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Convert the date to MySQL format (YYYY-MM-DD) when submitting the form
+                    const mysqlDate = selectedDates[0].toISOString().split('T')[0];
+                    instance._input.setAttribute('data-mysql-date', mysqlDate);
+                }
+            });
+
+            // Update form submission to use MySQL date format
+            $('#addLoanForm').on('submit', function(e) {
+                const mysqlDate = $('#date').attr('data-mysql-date');
+                if (mysqlDate) {
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'mysql_date',
+                        value: mysqlDate
+                    }).appendTo($(this));
+                }
+            });
+
             // Calculate balance automatically
             $('#amount, #paid').on('input', function() {
                 const amount = parseFloat($('#amount').val()) || 0;
@@ -481,10 +523,6 @@ $today = date('Y-m-d');
                     }
                 });
             });
-
-            // Format date input to match other pages
-            const today = new Date().toISOString().split('T')[0];
-            $('#date').val(today);
         });
     </script>
 </body>
