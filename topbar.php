@@ -14,7 +14,7 @@ $page_titles = [
     'add-client' => 'Add Client',
     'edit-client' => 'Edit Client',
     'add-user' => 'Add User',
-    'edit-user' => 'Edit User'
+    'edit-user' => 'Edit User',
     'loan' => 'Loan'
 ];
 
