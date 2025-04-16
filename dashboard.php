@@ -198,6 +198,14 @@ $distributionPieData = [
     'Income' => $totalIncomeForPie,
     'Expenditure' => $totalExpenditureForPie
 ];
+
+// Fetch pending loans for the current month
+$currentMonthPendingLoansQuery = "
+  SELECT SUM(balance) AS pending_loans 
+  FROM loans 
+  WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
+$currentMonthPendingLoansResult = $conn->query($currentMonthPendingLoansQuery);
+$currentMonthPendingLoans = $currentMonthPendingLoansResult->fetch_assoc()['pending_loans'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -348,16 +356,15 @@ $distributionPieData = [
           </div>
 
 
-          <!-- Pending Expenditure (Current Month) -->
+          <!-- Pending Loans (Current Month) -->
           <div class="col-md-3">
             <div class="card dashboard-card p-3">
               <div class="card-body">
-                <h5 class="card-title">Pending Expenditure (This Month)</h5>
-                <h3 class="text-danger">₹<?php echo number_format($currentMonthPendingExpenditure, 2); ?></h3>
+                <h5 class="card-title">Pending Loans</h5>
+                <h3 class="text-danger">₹<?php echo number_format($currentMonthPendingLoans, 2); ?></h3>
               </div>
             </div>
           </div>
-
 
         </div>
 
