@@ -259,13 +259,6 @@ $today = date('Y-m-d');
                                     <input type="tel" class="form-control" id="phone" name="phone">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="description" class="form-label">Description</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-text-paragraph"></i></span>
-                                    <input type="text" class="form-control" id="description" name="description">
-                                </div>
-                            </div>
                         </div>
 
                         <div class="row mb-3">
