@@ -46,18 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Use the MySQL formatted date from the hidden input
     $date = $_POST['mysql_date'] ?? date('Y-m-d', strtotime($_POST['date']));
     $name = $_POST['name'];
+    $phone = $_POST['phone'] ?? '';
     $category = $_POST['category'];
-    //$subcategory = $_POST['subcategory'];
     $amount = $_POST['amount'];
     $paid = $_POST['paid'];
     $balance = $amount - $paid;
 
     // Update the loan
-    $sql = "UPDATE loans SET date = ?, name = ?, category = ?, subcategory = ?, 
+    $sql = "UPDATE loans SET date = ?, name = ?, phone = ?, category = ?, 
             amount = ?, paid = ?, balance = ? WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssdddi", $date, $name, $category, $subcategory, $amount, $paid, $balance, $loan_id);
+    $stmt->bind_param("ssssdddi", $date, $name, $phone, $category, $amount, $paid, $balance, $loan_id);
     
     if ($stmt->execute()) {
         header("Location: loan.php?message=Loan updated successfully");
@@ -272,29 +272,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="input-group">
                                     <select class="form-select" id="category" name="category" required>
                                         <option value="">Select Category</option>
-                                        <?php foreach ($categories as $category): ?>
-                                            <option value="<?php echo htmlspecialchars($category); ?>"
-                                                <?php echo ($category === $loan['category']) ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($category); ?>
+                                        <?php foreach ($categories as $cat): ?>
+                                            <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo ($cat === $loan['category']) ? 'selected' : ''; ?>>
+                                                <?php echo htmlspecialchars($cat); ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                     <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                        <i class="bi bi-plus-lg"></i>
+                                        <i class="bi bi-plus"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="subcategory" class="form-label">Sub-category <span class="text-danger">*</span></label>
+                                <label for="phone" class="form-label">Phone Number</label>
                                 <div class="input-group">
-                                    <select class="form-select" id="subcategory" name="subcategory" required>
-                                        <option value="<?php echo htmlspecialchars($loan['subcategory']); ?>">
-                                            <?php echo htmlspecialchars($loan['subcategory']); ?>
-                                        </option>
-                                    </select>
-                                    <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
-                                        <i class="bi bi-plus-lg"></i>
-                                    </button>
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($loan['phone'] ?? ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -372,9 +365,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="subcategoryCategory" class="form-label">Category</label>
                         <select class="form-select" id="subcategoryCategory" required>
                             <option value="">Select Category</option>
-                            <?php foreach ($categories as $category): ?>
-                                <option value="<?php echo htmlspecialchars($category); ?>">
-                                    <?php echo htmlspecialchars($category); ?>
+                            <?php foreach ($categories as $cat): ?>
+                                <option value="<?php echo htmlspecialchars($cat); ?>">
+                                    <?php echo htmlspecialchars($cat); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -401,58 +394,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Initialize Flatpickr
             const dateInput = flatpickr("#date", {
                 dateFormat: "d-m-Y",
-                defaultDate: "<?php echo date('Y-m-d', strtotime($loan['date'])); ?>",
+                defaultDate: new Date("<?php echo $loan['date']; ?>"),
                 allowInput: true,
-                disableMobile: true,
-                onChange: function(selectedDates, dateStr, instance) {
-                    // Convert the date to MySQL format (YYYY-MM-DD) when submitting the form
+                onChange: function(selectedDates, dateStr) {
+                    // Convert to MySQL format (YYYY-MM-DD) and store in hidden input
                     const mysqlDate = selectedDates[0].toISOString().split('T')[0];
-                    instance._input.setAttribute('data-mysql-date', mysqlDate);
+                    document.getElementById('mysql_date').value = mysqlDate;
                 }
             });
 
-            // Update form submission to use MySQL date format
-            $('#editLoanForm').on('submit', function(e) {
-                const mysqlDate = $('#date').attr('data-mysql-date');
-                if (mysqlDate) {
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'mysql_date',
-                        value: mysqlDate
-                    }).appendTo($(this));
-                }
-            });
+            // Set initial MySQL date
+            document.getElementById('mysql_date').value = "<?php echo $loan['date']; ?>";
 
             // Calculate balance automatically
             $('#amount, #paid').on('input', function() {
                 const amount = parseFloat($('#amount').val()) || 0;
                 const paid = parseFloat($('#paid').val()) || 0;
                 $('#balance').val((amount - paid).toFixed(2));
-            });
-
-            // Load subcategories when category changes
-            $('#category').change(function() {
-                const category = $(this).val();
-                if (category) {
-                    $.ajax({
-                        url: 'include/get-loan-subcategories.php',
-                        type: 'POST',
-                        data: { category: category },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                $('#subcategory').html(response.html);
-                            } else {
-                                alert(response.message || 'Error loading subcategories');
-                            }
-                        },
-                        error: function() {
-                            alert('Error loading subcategories');
-                        }
-                    });
-                } else {
-                    $('#subcategory').html('<option value="">Select Category First</option>');
-                }
             });
 
             // Add new category
@@ -471,7 +429,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $('<option></option>').val(category).text(category)
                                 );
                                 // Select the new category
-                                $('#category').val(category).trigger('change');
+                                $('#category').val(category);
                                 // Close modal and clear input
                                 $('#addCategoryModal').modal('hide');
                                 $('#newCategory').val('');
@@ -479,57 +437,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 alert(response.message || 'Error adding category');
                             }
                         },
-                        error: function() {
-                            alert('Error adding category');
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error);
+                            alert('Error adding category. Please try again.');
                         }
                     });
                 } else {
                     alert('Please enter a category name');
                 }
-            });
-
-            // Add new subcategory
-            $('#saveSubcategory').click(function() {
-                const category = $('#subcategoryCategory').val();
-                const subcategory = $('#newSubcategory').val().trim();
-                if (!category) {
-                    alert('Please select a category first');
-                    return;
-                }
-                if (!subcategory) {
-                    alert('Please enter a subcategory name');
-                    return;
-                }
-                
-                $.ajax({
-                    url: 'include/add-loan-subcategory.php',
-                    type: 'POST',
-                    data: { 
-                        category: category,
-                        subcategory: subcategory
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            // If current category matches, add to subcategory dropdown
-                            if ($('#category').val() === category) {
-                                $('#subcategory').append(
-                                    $('<option></option>').val(subcategory).text(subcategory)
-                                );
-                                // Select the new subcategory
-                                $('#subcategory').val(subcategory);
-                            }
-                            // Close modal and clear input
-                            $('#addSubcategoryModal').modal('hide');
-                            $('#newSubcategory').val('');
-                        } else {
-                            alert(response.message || 'Error adding subcategory');
-                        }
-                    },
-                    error: function() {
-                        alert('Error adding subcategory');
-                    }
-                });
             });
         });
     </script>

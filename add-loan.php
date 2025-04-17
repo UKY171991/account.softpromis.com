@@ -30,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $balance = $amount - $paid;
 
     // Insert the loan
-    $sql = "INSERT INTO loans (date, name, category, amount, paid, balance) 
-            VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO loans (date, name, phone, category, amount, paid, balance) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
     
     if ($stmt) {
-        $stmt->bind_param("sssddd", $date, $name, $category, $amount, $paid, $balance);
+        $stmt->bind_param("ssssddd", $date, $name, $phone, $category, $amount, $paid, $balance);
         
         if ($stmt->execute()) {
             header("Location: loan.php?message=Loan added successfully");
@@ -285,20 +285,6 @@ $today = date('Y-m-d');
                                     </button>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
-                                <label for="subcategory" class="form-label">Sub-category <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <select class="form-select" id="subcategory" name="subcategory" required>
-                                        <option value="">Select Category First</option>
-                                    </select>
-                                    <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
-                                </div>
-                            </div> -->
-                        <!-- </div>
-
-                        <div class="row mb-4"> -->
                             <div class="col-md-6">
                                 <label for="amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
@@ -306,6 +292,9 @@ $today = date('Y-m-d');
                                     <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="paid" class="form-label">Paid Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
@@ -417,31 +406,6 @@ $today = date('Y-m-d');
                 $('#balance').val((amount - paid).toFixed(2));
             });
 
-            // Load subcategories when category changes
-            $('#category').change(function() {
-                const category = $(this).val();
-                if (category) {
-                    $.ajax({
-                        url: 'include/get-loan-subcategories.php',
-                        type: 'POST',
-                        data: { category: category },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                $('#subcategory').html(response.html);
-                            } else {
-                                alert(response.message || 'Error loading subcategories');
-                            }
-                        },
-                        error: function() {
-                            alert('Error loading subcategories');
-                        }
-                    });
-                } else {
-                    $('#subcategory').html('<option value="">Select Category First</option>');
-                }
-            });
-
             // Add new category
             $('#saveCategory').click(function() {
                 const category = $('#newCategory').val().trim();
@@ -458,7 +422,7 @@ $today = date('Y-m-d');
                                     $('<option></option>').val(category).text(category)
                                 );
                                 // Select the new category
-                                $('#category').val(category).trigger('change');
+                                $('#category').val(category);
                                 // Close modal and clear input
                                 $('#addCategoryModal').modal('hide');
                                 $('#newCategory').val('');
@@ -474,51 +438,6 @@ $today = date('Y-m-d');
                 } else {
                     alert('Please enter a category name');
                 }
-            });
-
-            // Add new subcategory
-            $('#saveSubcategory').click(function() {
-                const category = $('#subcategoryCategory').val();
-                const subcategory = $('#newSubcategory').val().trim();
-                if (!category) {
-                    alert('Please select a category first');
-                    return;
-                }
-                if (!subcategory) {
-                    alert('Please enter a subcategory name');
-                    return;
-                }
-                
-                $.ajax({
-                    url: 'include/add-loan-subcategory.php',
-                    type: 'POST',
-                    data: { 
-                        category: category,
-                        subcategory: subcategory
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            // If current category matches, add to subcategory dropdown
-                            if ($('#category').val() === category) {
-                                $('#subcategory').append(
-                                    $('<option></option>').val(subcategory).text(subcategory)
-                                );
-                                // Select the new subcategory
-                                $('#subcategory').val(subcategory);
-                            }
-                            // Close modal and clear input
-                            $('#addSubcategoryModal').modal('hide');
-                            $('#newSubcategory').val('');
-                        } else {
-                            alert(response.message || 'Error adding subcategory');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        alert('Error adding subcategory. Please try again.');
-                    }
-                });
             });
         });
     </script>
