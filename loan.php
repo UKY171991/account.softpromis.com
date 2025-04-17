@@ -249,9 +249,9 @@ if (!$result) {
               <div class="empty-state">
                 <i class="bi bi-inbox"></i>
                 <div class="message">No loan records found</div>
-                <a href="add-loan.php" class="btn btn-primary">
+                <!-- <a href="add-loan.php" class="btn btn-primary">
                   <i class="bi bi-plus-circle me-1"></i>Add New Loan
-                </a>
+                </a> -->
               </div>
             <?php endif; ?>
           </div>
