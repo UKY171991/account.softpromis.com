@@ -385,60 +385,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         $(document).ready(function() {
             // Initialize Flatpickr
-            const dateInput = flatpickr("#date", {
+            flatpickr("#date", {
                 dateFormat: "d-m-Y",
                 defaultDate: new Date("<?php echo $loan['date']; ?>"),
-                allowInput: true,
-                onChange: function(selectedDates, dateStr) {
-                    // Convert to MySQL format (YYYY-MM-DD) and store in hidden input
-                    const mysqlDate = selectedDates[0].toISOString().split('T')[0];
-                    document.getElementById('mysql_date').value = mysqlDate;
-                }
+                allowInput: true
             });
 
-            // Set initial MySQL date
-            document.getElementById('mysql_date').value = "<?php echo $loan['date']; ?>";
+            // Calculate balance automatically when amount or paid changes
+            function calculateBalance() {
+                var amount = parseFloat($('#amount').val()) || 0;
+                var paid = parseFloat($('#paid').val()) || 0;
+                var balance = amount - paid;
+                $('#balance').val(balance.toFixed(2));
+            }
 
-            // Calculate balance automatically
-            $('#amount, #paid').on('input', function() {
-                const amount = parseFloat($('#amount').val()) || 0;
-                const paid = parseFloat($('#paid').val()) || 0;
-                $('#balance').val((amount - paid).toFixed(2));
-            });
+            // Bind calculation to both amount and paid inputs
+            $('#amount, #paid').on('input', calculateBalance);
 
-            // Add new category
-            $('#saveCategory').click(function() {
-                const category = $('#newCategory').val().trim();
-                if (category) {
-                    $.ajax({
-                        url: 'include/add-loan-category.php',
-                        type: 'POST',
-                        data: { category: category },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                // Add to category dropdowns
-                                $('#category, #subcategoryCategory').append(
-                                    $('<option></option>').val(category).text(category)
-                                );
-                                // Select the new category
-                                $('#category').val(category);
-                                // Close modal and clear input
-                                $('#addCategoryModal').modal('hide');
-                                $('#newCategory').val('');
-                            } else {
-                                alert(response.message || 'Error adding category');
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('AJAX Error:', error);
-                            alert('Error adding category. Please try again.');
-                        }
-                    });
-                } else {
-                    alert('Please enter a category name');
-                }
-            });
+            // Form validation
+            var form = document.getElementById('editLoanForm');
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                });
+            }
+
+            // Initial calculation in case of pre-filled values
+            calculateBalance();
+
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
         });
     </script>
 </body>
