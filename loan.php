@@ -246,14 +246,17 @@ if (!$result) {
       
       // Initialize DataTable
       $('#loanTable').DataTable({
+        processing: true,
         order: [[1, 'desc']], // Sort by date column (index 1) in descending order
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
         columnDefs: [
           { targets: '_all', className: 'text-center' },
-          { targets: 11, orderable: false } // Action column not sortable
+          { targets: 10, orderable: false } // Action column not sortable
         ],
-        destroy: true,
-        pageLength: 10,
+        language: {
+          emptyTable: "No loan records found",
+          zeroRecords: "No matching records found"
+        },
         responsive: true
       });
 
