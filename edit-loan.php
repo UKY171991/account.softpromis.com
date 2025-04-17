@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = $_POST['mysql_date'] ?? date('Y-m-d', strtotime($_POST['date']));
     $name = $_POST['name'];
     $category = $_POST['category'];
-    $subcategory = $_POST['subcategory'];
+    //$subcategory = $_POST['subcategory'];
     $amount = $_POST['amount'];
     $paid = $_POST['paid'];
     $balance = $amount - $paid;

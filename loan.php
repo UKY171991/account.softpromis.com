@@ -14,6 +14,7 @@ $sql = "SELECT
         id,
         date,
         name,
+        phone,
         category,
         subcategory,
         amount,
@@ -183,13 +184,14 @@ if (!$result) {
                 <th>SL No.</th>
                 <th>Date</th>
                 <th>Name</th>
+                <th>Phone</th>
                 <th>Category</th>
-                <!-- <th>Subcategory</th> -->
+                <th>Subcategory</th>
                 <th>Amount</th>
                 <th>Paid</th>
                 <th>Balance</th>
                 <th>Created At</th>
-                <!-- <th>Updated At</th> -->
+                <th>Updated At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -202,13 +204,14 @@ if (!$result) {
                       echo "<td>{$sl_no}</td>";
                       echo "<td>" . date('d-m-Y', strtotime($row['date'])) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                     // echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . date('d-m-Y H:i:s', strtotime($row['created_at'])) . "</td>";
-                     // echo "<td>" . date('d-m-Y H:i:s', strtotime($row['updated_at'])) . "</td>";
+                      echo "<td>" . date('d-m-Y H:i:s', strtotime($row['updated_at'])) . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
                                 <i class='bi bi-pencil'></i>
@@ -222,7 +225,7 @@ if (!$result) {
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='11' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='12' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
@@ -243,38 +246,25 @@ if (!$result) {
       if ($.fn.DataTable.isDataTable('#loanTable')) {
         $('#loanTable').DataTable().destroy();
       }
-      // Explicitly empty the tbody before initialization
-     // $('#loanTable tbody').empty(); 
-
-
-      /*
-      // Initialize DataTable with a slight delay
-      setTimeout(function() {
-          try {
-            $('#loanTable').DataTable({
-              order: [[1, 'desc']], // Sort by date column (index 1) in descending order
-              lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-              columnDefs: [
-                { targets: '_all', className: 'text-center' },
-                { targets: 10, orderable: false } // Action column not sortable
-              ],
-              destroy: true,
-              pageLength: 10
-            });
-          } catch (error) {
-            console.error("DataTable initialization error:", error);
-          }
-      }, 100); // Delay initialization slightly (100ms)
+      
+      // Initialize DataTable
+      $('#loanTable').DataTable({
+        order: [[1, 'desc']], // Sort by date column (index 1) in descending order
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        columnDefs: [
+          { targets: '_all', className: 'text-center' },
+          { targets: 11, orderable: false } // Action column not sortable
+        ],
+        destroy: true,
+        pageLength: 10,
+        responsive: true
+      });
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
         $('.alert').alert('close');
       }, 5000);
-
-      */
     });
-
-
   </script>
 </body>
 </html>
