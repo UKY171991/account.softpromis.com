@@ -245,7 +245,9 @@ if (!$result) {
       }
       // Explicitly empty the tbody before initialization
       $('#loanTable tbody').empty(); 
-      
+
+
+      /*
       // Initialize DataTable with a slight delay
       setTimeout(function() {
           try {
@@ -268,7 +270,11 @@ if (!$result) {
       setTimeout(function() {
         $('.alert').alert('close');
       }, 5000);
+
+      */
     });
+
+
   </script>
 </body>
 </html>
