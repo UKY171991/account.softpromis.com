@@ -20,14 +20,14 @@ if ($result && $result->num_rows > 0) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Use the MySQL formatted date from the hidden input
-    $date = $_POST['mysql_date'] ?? date('Y-m-d', strtotime($_POST['date']));
+    $date = isset($_POST['mysql_date']) ? $_POST['mysql_date'] : date('Y-m-d');
     $name = $_POST['name'];
     $phone = $_POST['phone'] ?? '';
     $description = $_POST['description'] ?? '';
     $category = $_POST['category'];
     $subcategory = $_POST['subcategory'];
-    $amount = $_POST['amount'];
-    $paid = $_POST['paid'];
+    $amount = floatval($_POST['amount']);
+    $paid = floatval($_POST['paid']);
     $balance = $amount - $paid;
 
     // Insert the loan
@@ -35,15 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $paid, $balance);
     
-    if ($stmt->execute()) {
-        header("Location: loan.php?message=Loan added successfully");
-        exit();
+    if ($stmt) {
+        $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $paid, $balance);
+        
+        if ($stmt->execute()) {
+            header("Location: loan.php?message=Loan added successfully");
+            exit();
+        } else {
+            $error = "Error adding loan: " . $stmt->error;
+        }
+        $stmt->close();
     } else {
-        $error = "Error adding loan: " . $conn->error;
+        $error = "Error preparing statement: " . $conn->error;
     }
-    $stmt->close();
 }
 
 // Get today's date in the format YYYY-MM-DD
@@ -227,13 +232,15 @@ $today = date('Y-m-d');
                         </div>
                     <?php endif; ?>
 
-                    <form id="addLoanForm" method="POST">
+                    <form id="addLoanForm" method="POST" class="needs-validation" novalidate>
+                        <input type="hidden" name="mysql_date" id="mysql_date">
+                        
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                                    <input type="text" class="form-control" id="date" name="date" placeholder="Select date" required>
+                                    <input type="text" class="form-control" id="date" name="date" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -275,7 +282,7 @@ $today = date('Y-m-d');
                                         <?php endforeach; ?>
                                     </select>
                                     <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                        <i class="bi bi-plus-lg"></i>
+                                        <i class="bi bi-plus"></i>
                                     </button>
                                 </div>
                             </div>
@@ -286,7 +293,7 @@ $today = date('Y-m-d');
                                         <option value="">Select Category First</option>
                                     </select>
                                     <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addSubcategoryModal">
-                                        <i class="bi bi-plus-lg"></i>
+                                        <i class="bi bi-plus"></i>
                                     </button>
                                 </div>
                             </div>
@@ -318,7 +325,7 @@ $today = date('Y-m-d');
 
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary btn-save">
-                                <i class="bi bi-save"></i> Save Loan
+                                <i class="bi bi-check-circle"></i> Save Loan
                             </button>
                         </div>
                     </form>
@@ -391,27 +398,18 @@ $today = date('Y-m-d');
             // Initialize Flatpickr
             const dateInput = flatpickr("#date", {
                 dateFormat: "d-m-Y",
-                defaultDate: new Date(),
+                defaultDate: "today",
                 allowInput: true,
-                disableMobile: true,
-                onChange: function(selectedDates, dateStr, instance) {
-                    // Convert the date to MySQL format (YYYY-MM-DD) when submitting the form
+                onChange: function(selectedDates, dateStr) {
+                    // Convert to MySQL format (YYYY-MM-DD) and store in hidden input
                     const mysqlDate = selectedDates[0].toISOString().split('T')[0];
-                    instance._input.setAttribute('data-mysql-date', mysqlDate);
+                    document.getElementById('mysql_date').value = mysqlDate;
                 }
             });
 
-            // Update form submission to use MySQL date format
-            $('#addLoanForm').on('submit', function(e) {
-                const mysqlDate = $('#date').attr('data-mysql-date');
-                if (mysqlDate) {
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'mysql_date',
-                        value: mysqlDate
-                    }).appendTo($(this));
-                }
-            });
+            // Set initial MySQL date
+            const today = new Date();
+            document.getElementById('mysql_date').value = today.toISOString().split('T')[0];
 
             // Calculate balance automatically
             $('#amount, #paid').on('input', function() {
