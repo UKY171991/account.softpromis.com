@@ -286,7 +286,7 @@ $today = date('Y-m-d');
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <label for="subcategory" class="form-label">Sub-category <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <select class="form-select" id="subcategory" name="subcategory" required>
@@ -296,25 +296,25 @@ $today = date('Y-m-d');
                                         <i class="bi bi-plus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
                                     <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="paid" class="form-label">Paid Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
                                     <input type="number" class="form-control" id="paid" name="paid" step="0.01" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="balance" class="form-label">Balance</label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
