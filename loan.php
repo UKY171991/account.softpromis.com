@@ -11,24 +11,15 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
 
 // Fetch all loans with proper date formatting
 $sql = "SELECT 
-        id,
-        DATE_FORMAT(date, '%d-%m-%Y') as formatted_date,
-        name,
-        category,
-        subcategory,
-        amount,
-        paid,
-        balance,
-        created_at,
-        updated_at
-        FROM loans 
-        ORDER BY date DESC";
-$result = $conn->query($sql);
+        l.*,
+        DATE_FORMAT(l.date, '%d-%m-%Y') as formatted_date
+        FROM loans l 
+        ORDER BY l.date DESC";
 
-if (!$result) {
+if (!$result = $conn->query($sql)) {
     // Log the error for debugging
-    error_log("SQL Error: " . $conn->error);
-    echo "<div class='alert alert-danger'>Error fetching loan records. Please try again.</div>";
+    error_log("SQL Error in loan.php: " . $conn->error);
+    die("Error fetching loan records. Please try again.");
 }
 ?>
 
@@ -180,8 +171,8 @@ if (!$result) {
           <table id="loanTable" class="table table-bordered table-hover">
             <thead class="table-light">
               <tr>
-                <th>SL No.</th>
-                <th>Invoice Number</th>
+                <th>#</th>
+                <th>ID</th>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -191,22 +182,17 @@ if (!$result) {
                 <th>Balance</th>
                 <th>Created At</th>
                 <th>Updated At</th>
-                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <?php
-              if ($result && $result->num_rows > 0) {
-                  $sl_no = 1;
+              if ($result->num_rows > 0) {
+                  $counter = 1;
                   while ($row = $result->fetch_assoc()) {
-                      $status = ($row['balance'] == 0) 
-                          ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
-                          : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
-
                       echo "<tr>";
-                      echo "<td>{$sl_no}</td>";
-                      echo "<td>LOAN-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
+                      echo "<td>" . $counter . "</td>";
+                      echo "<td>" . htmlspecialchars($row['id']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['formatted_date']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
@@ -216,21 +202,20 @@ if (!$result) {
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['updated_at']) . "</td>";
-                      echo "<td>" . $status . "</td>";
                       echo "<td class='action-column'>
-                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary' title='Edit'>
+                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
                                 <i class='bi bi-pencil'></i>
                               </a>
-                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-danger' 
+                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' 
                                  onclick='return confirm(\"Are you sure you want to delete this loan record?\")' title='Delete'>
                                 <i class='bi bi-trash'></i>
                               </a>
                             </td>";
                       echo "</tr>";
-                      $sl_no++;
+                      $counter++;
                   }
               } else {
-                  echo "<tr><td colspan='13' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='12' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
@@ -261,12 +246,12 @@ if (!$result) {
               order: [[2, 'desc']], // Sort by date column (index 2) in descending order
               lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
               columnDefs: [
-                { targets: '_all', className: 'text-center' }, // Center all columns
-                { targets: 12, orderable: false } // Make Action column not sortable (now at index 12)
+                { targets: '_all', className: 'text-center' },
+                { targets: 11, orderable: false } // Action column not sortable
               ],
-              destroy: true, // Ensure proper cleanup on reinitialize
-              pageLength: 10, // Show 10 entries by default
-              responsive: true // Make table responsive
+              destroy: true,
+              pageLength: 10,
+              responsive: true
             });
           } catch (error) {
             console.error("DataTable initialization error:", error);
