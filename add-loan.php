@@ -19,35 +19,24 @@ if ($result && $result->num_rows > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Use the MySQL formatted date from the hidden input
-    $date = isset($_POST['mysql_date']) ? $_POST['mysql_date'] : date('Y-m-d');
+    $date = date('Y-m-d', strtotime($_POST['date']));
     $name = $_POST['name'];
     $phone = $_POST['phone'] ?? '';
     $description = $_POST['description'] ?? '';
-    $category = $_POST['category'];
-    $amount = floatval($_POST['amount']);
-    $paid = floatval($_POST['paid']);
+    $amount = $_POST['amount'];
+    $paid = $_POST['paid'];
     $balance = $amount - $paid;
 
-    // Insert the loan
-    $sql = "INSERT INTO loans (date, name, phone, category, amount, paid, balance) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($sql);
-    
-    if ($stmt) {
-        $stmt->bind_param("ssssddd", $date, $name, $phone, $category, $amount, $paid, $balance);
-        
-        if ($stmt->execute()) {
-            header("Location: loan.php?message=Loan added successfully");
-            exit();
-        } else {
-            $error = "Error adding loan: " . $stmt->error;
-        }
-        $stmt->close();
+    $stmt = $conn->prepare("INSERT INTO loans (date, name, phone, description, amount, paid, balance) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssddd", $date, $name, $phone, $description, $amount, $paid, $balance);
+
+    if ($stmt->execute()) {
+        header("Location: loan.php?message=Loan added successfully");
+        exit();
     } else {
-        $error = "Error preparing statement: " . $conn->error;
+        $error = "Error adding loan: " . $conn->error;
     }
+    $stmt->close();
 }
 
 // Get today's date in the format YYYY-MM-DD
@@ -232,9 +221,7 @@ $today = date('Y-m-d');
                     <?php endif; ?>
 
                     <form id="addLoanForm" method="POST" class="needs-validation" novalidate>
-                        <input type="hidden" name="mysql_date" id="mysql_date">
-                        
-                        <div class="row mb-3">
+                        <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                                 <div class="input-group">
@@ -249,59 +236,47 @@ $today = date('Y-m-d');
                                     <input type="text" class="form-control" id="name" name="name" required>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="phone" class="form-label">Phone Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                    <input type="text" class="form-control" id="phone" name="phone">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <label for="description" class="form-label">Description</label>
                                 <div class="input-group">
-                                    <select class="form-select" id="category" name="category" required>
-                                        <option value="">Select Category</option>
-                                        <?php foreach ($categories as $category): ?>
-                                            <option value="<?php echo htmlspecialchars($category); ?>">
-                                                <?php echo htmlspecialchars($category); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
+                                    <span class="input-group-text"><i class="bi bi-text-paragraph"></i></span>
+                                    <input type="text" class="form-control" id="description" name="description">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <label for="amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
-                                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                                    <input type="number" class="form-control" id="amount" name="amount" required step="0.01">
                                 </div>
                             </div>
-                        
                             <div class="col-md-4">
                                 <label for="paid" class="form-label">Paid Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
-                                    <input type="number" class="form-control" id="paid" name="paid" step="0.01" required>
+                                    <input type="number" class="form-control" id="paid" name="paid" required step="0.01">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <label for="balance" class="form-label">Balance</label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
-                                    <input type="number" class="form-control" id="balance" name="balance" step="0.01" readonly>
+                                    <input type="number" class="form-control" id="balance" name="balance" readonly>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary btn-save">
-                                <i class="bi bi-check-circle"></i> Save Loan
+                        <div class="mt-4 text-end">
+                            <a href="loan.php" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>Save Loan
                             </button>
                         </div>
                     </form>

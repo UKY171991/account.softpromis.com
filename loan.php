@@ -15,7 +15,7 @@ $sql = "SELECT
         date,
         name,
         phone,
-        category,
+        description,
         amount,
         paid,
         balance,
@@ -184,7 +184,7 @@ if (!$result) {
                 <th>Date</th>
                 <th>Name</th>
                 <th>Phone</th>
-                <th>Category</th>
+                <th>Description</th>
                 <th>Amount</th>
                 <th>Paid</th>
                 <th>Balance</th>
@@ -202,7 +202,7 @@ if (!$result) {
                       echo "<td>" . date('d-m-Y', strtotime($row['date'])) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['phone'] ?? '') . "</td>";
-                      echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['description'] ?? '') . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";

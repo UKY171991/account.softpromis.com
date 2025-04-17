@@ -47,17 +47,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = $_POST['mysql_date'] ?? date('Y-m-d', strtotime($_POST['date']));
     $name = $_POST['name'];
     $phone = $_POST['phone'] ?? '';
-    $category = $_POST['category'];
+    $description = $_POST['description'] ?? '';
     $amount = $_POST['amount'];
     $paid = $_POST['paid'];
     $balance = $amount - $paid;
 
     // Update the loan
-    $sql = "UPDATE loans SET date = ?, name = ?, phone = ?, category = ?, 
+    $sql = "UPDATE loans SET date = ?, name = ?, phone = ?, description = ?, 
             amount = ?, paid = ?, balance = ? WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssdddi", $date, $name, $phone, $category, $amount, $paid, $balance, $loan_id);
+    $stmt->bind_param("ssssdddi", $date, $name, $phone, $description, $amount, $paid, $balance, $loan_id);
     
     if ($stmt->execute()) {
         header("Location: loan.php?message=Loan updated successfully");
@@ -267,8 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="row mb-3">
-
-                        <div class="col-md-6">
+                            <div class="col-md-6">
                                 <label for="phone" class="form-label">Phone Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
@@ -277,22 +276,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             
                             <div class="col-md-6">
-                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <label for="description" class="form-label">Description</label>
                                 <div class="input-group">
-                                    <select class="form-select" id="category" name="category" required>
-                                        <option value="">Select Category</option>
-                                        <?php foreach ($categories as $cat): ?>
-                                            <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo ($cat === $loan['category']) ? 'selected' : ''; ?>>
-                                                <?php echo htmlspecialchars($cat); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button type="button" class="btn btn-add-item" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
+                                    <span class="input-group-text"><i class="bi bi-text-paragraph"></i></span>
+                                    <input type="text" class="form-control" id="description" name="description" 
+                                           value="<?php echo htmlspecialchars($loan['description'] ?? ''); ?>">
                                 </div>
                             </div>
-                            
                         </div>
 
                         <div class="row mb-4">
