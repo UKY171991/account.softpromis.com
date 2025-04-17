@@ -16,7 +16,6 @@ $sql = "SELECT
         name,
         phone,
         category,
-        subcategory,
         amount,
         paid,
         balance,
@@ -186,7 +185,6 @@ if (!$result) {
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Category</th>
-                <th>Subcategory</th>
                 <th>Amount</th>
                 <th>Paid</th>
                 <th>Balance</th>
@@ -206,7 +204,6 @@ if (!$result) {
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
@@ -225,7 +222,7 @@ if (!$result) {
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='12' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='11' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
