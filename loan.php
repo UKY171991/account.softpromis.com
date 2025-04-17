@@ -40,6 +40,7 @@ if (!$result) {
   <title>Loan Records</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
   <link rel="stylesheet" href="assets/css/responsive.css">
   <style>
@@ -202,7 +203,7 @@ if (!$result) {
                       echo "<td>{$sl_no}</td>";
                       echo "<td>" . date('d-m-Y', strtotime($row['date'])) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['phone'] ?? '') . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
@@ -236,6 +237,8 @@ if (!$result) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
   <script src="assets/js/responsive.js"></script>
   <script>
     $(document).ready(function() {
@@ -244,21 +247,31 @@ if (!$result) {
         $('#loanTable').DataTable().destroy();
       }
       
-      // Initialize DataTable
-      $('#loanTable').DataTable({
-        processing: true,
-        order: [[1, 'desc']], // Sort by date column (index 1) in descending order
-        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        columnDefs: [
-          { targets: '_all', className: 'text-center' },
-          { targets: 10, orderable: false } // Action column not sortable
-        ],
-        language: {
-          emptyTable: "No loan records found",
-          zeroRecords: "No matching records found"
-        },
-        responsive: true
-      });
+      // Wait for DOM to be fully loaded
+      setTimeout(function() {
+        try {
+          // Initialize DataTable with simplified settings
+          var table = $('#loanTable').DataTable({
+            processing: true,
+            responsive: true,
+            order: [[1, 'desc']], // Sort by date column (index 1) in descending order
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            columnDefs: [
+              { targets: '_all', className: 'text-center' },
+              { targets: 10, orderable: false } // Action column not sortable
+            ],
+            language: {
+              emptyTable: "No loan records found",
+              zeroRecords: "No matching records found"
+            }
+          });
+          
+          // Log success message
+          console.log("DataTable initialized successfully");
+        } catch (error) {
+          console.error("DataTable initialization error:", error);
+        }
+      }, 500); // Add a small delay to ensure full DOM loading
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
