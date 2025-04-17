@@ -266,6 +266,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+
                         <div class="col-md-6">
                                 <label for="phone" class="form-label">Phone Number</label>
                                 <div class="input-group">
@@ -273,8 +275,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($loan['phone'] ?? ''); ?>">
                                 </div>
                             </div>
-
-                        <div class="row mb-3">
+                            
                             <div class="col-md-6">
                                 <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
                                 <div class="input-group">
