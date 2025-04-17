@@ -148,16 +148,19 @@ if (!$result) {
 
     .empty-state {
       text-align: center;
-      padding: 40px 0;
+      padding: 2rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin: 2rem 0;
     }
     .empty-state i {
-      font-size: 48px;
+      font-size: 3rem;
       color: #6c757d;
-      margin-bottom: 16px;
+      margin-bottom: 1rem;
     }
     .empty-state .message {
       color: #6c757d;
-      margin-bottom: 16px;
+      margin-bottom: 1rem;
     }
     .table-responsive {
       min-height: 400px;
@@ -178,7 +181,7 @@ if (!$result) {
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5>Loan Records</h5>
           <a href="add-loan.php" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle"></i> Add New Loan
+            <i class="bi bi-plus-circle me-1"></i>Add New Loan
           </a>
         </div>
 
@@ -197,7 +200,7 @@ if (!$result) {
           <div class="card-body">
             <?php if ($result && $result->num_rows > 0): ?>
               <div class="table-responsive">
-                <table id="loanTable" class="table table-bordered table-hover">
+                <table id="loanTable" class="table table-striped table-bordered">
                   <thead>
                     <tr>
                       <th>SL No.</th>
@@ -268,24 +271,25 @@ if (!$result) {
     $(document).ready(function() {
       <?php if ($result && $result->num_rows > 0): ?>
       $('#loanTable').DataTable({
-        responsive: true,
-        order: [[1, 'desc']], // Sort by date column
-        columnDefs: [
-          { orderable: false, targets: 9 } // Action column not sortable
+        "processing": true,
+        "order": [[1, 'desc']],
+        "columnDefs": [
+          { "orderable": false, "targets": 9 }
         ],
-        pageLength: 10,
-        language: {
-          search: "Search:",
-          lengthMenu: "Show _MENU_ entries",
-          info: "Showing _START_ to _END_ of _TOTAL_ entries",
-          infoEmpty: "Showing 0 to 0 of 0 entries",
-          infoFiltered: "(filtered from _MAX_ total entries)",
-          zeroRecords: "No matching records found",
-          paginate: {
-            first: "First",
-            last: "Last",
-            next: "Next",
-            previous: "Previous"
+        "pageLength": 10,
+        "dom": '<"top"lf>rt<"bottom"ip><"clear">',
+        "language": {
+          "lengthMenu": "_MENU_ records per page",
+          "zeroRecords": "No matching records found",
+          "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+          "infoEmpty": "No records available",
+          "infoFiltered": "(filtered from _MAX_ total records)",
+          "search": "Search:",
+          "paginate": {
+            "first": "First",
+            "last": "Last",
+            "next": "Next",
+            "previous": "Previous"
           }
         }
       });
