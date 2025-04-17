@@ -244,7 +244,7 @@ if (!$result) {
         $('#loanTable').DataTable().destroy();
       }
       // Explicitly empty the tbody before initialization
-      $('#loanTable tbody').empty(); 
+     // $('#loanTable tbody').empty(); 
 
 
       /*
