@@ -19,8 +19,7 @@ $sql = "SELECT
         amount,
         paid,
         balance,
-        created_at,
-        updated_at
+        created_at
         FROM loans 
         ORDER BY date DESC";
 
@@ -190,7 +189,6 @@ if (!$result) {
                 <th>Paid</th>
                 <th>Balance</th>
                 <th>Created At</th>
-                <th>Updated At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -208,8 +206,7 @@ if (!$result) {
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . date('d-m-Y H:i:s', strtotime($row['created_at'])) . "</td>";
-                      echo "<td>" . date('d-m-Y H:i:s', strtotime($row['updated_at'])) . "</td>";
+                      echo "<td>" . date('d-m-Y', strtotime($row['created_at'])) . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
                                 <i class='bi bi-pencil'></i>
@@ -223,7 +220,7 @@ if (!$result) {
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='11' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='10' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
@@ -258,7 +255,7 @@ if (!$result) {
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
             columnDefs: [
               { targets: '_all', className: 'text-center' },
-              { targets: 10, orderable: false } // Action column not sortable
+              { targets: 9, orderable: false } // Action column not sortable (now at index 9)
             ],
             language: {
               emptyTable: "No loan records found",
