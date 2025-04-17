@@ -259,7 +259,7 @@ $today = date('Y-m-d');
                                     <input type="tel" class="form-control" id="phone" name="phone">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <select class="form-select" id="category" name="category" required>
@@ -275,17 +275,15 @@ $today = date('Y-m-d');
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
                                     <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
+                        
+                            <div class="col-md-4">
                                 <label for="paid" class="form-label">Paid Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">₹</span>
