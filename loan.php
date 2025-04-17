@@ -167,11 +167,11 @@ if (!$result) {
 
         <?php
         if (isset($_GET['message'])) { 
-            echo "<div class='alert alert-success alert-dismissible fade show'>" . htmlspecialchars($_GET['message']) . 
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>" . htmlspecialchars($_GET['message']) . 
                 "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
         }
         if (isset($_GET['error'])) {
-            echo "<div class='alert alert-danger alert-dismissible fade show'>" . htmlspecialchars($_GET['error']) . 
+            echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>" . htmlspecialchars($_GET['error']) . 
                 "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
         }
         ?>
@@ -239,36 +239,18 @@ if (!$result) {
   <script src="assets/js/responsive.js"></script>
   <script>
     $(document).ready(function() {
-      // Ensure table is destroyed if already initialized
-      if ($.fn.DataTable.isDataTable('#loanTable')) {
-        $('#loanTable').DataTable().destroy();
-      }
-      
-      // Wait for DOM to be fully loaded
-      setTimeout(function() {
-        try {
-          // Initialize DataTable with simplified settings
-          var table = $('#loanTable').DataTable({
-            processing: true,
-            responsive: true,
-            order: [[1, 'desc']], // Sort by date column (index 1) in descending order
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            columnDefs: [
-              { targets: '_all', className: 'text-center' },
-              { targets: 9, orderable: false } // Action column not sortable (now at index 9)
-            ],
-            language: {
-              emptyTable: "No loan records found",
-              zeroRecords: "No matching records found"
-            }
-          });
-          
-          // Log success message
-          console.log("DataTable initialized successfully");
-        } catch (error) {
-          console.error("DataTable initialization error:", error);
+      // Initialize DataTable
+      $('#loanTable').DataTable({
+        responsive: true,
+        order: [[1, 'desc']], // Sort by date column
+        columnDefs: [
+          { targets: 9, orderable: false } // Action column not sortable
+        ],
+        language: {
+          emptyTable: "No loan records found",
+          zeroRecords: "No matching records found"
         }
-      }, 500); // Add a small delay to ensure full DOM loading
+      });
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
