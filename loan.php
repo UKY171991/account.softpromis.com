@@ -220,7 +220,15 @@ if (!$result) {
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='10' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='10' class='text-center py-4'>
+                          <div class='text-muted'>
+                            <i class='bi bi-inbox fs-2 d-block mb-2'></i>
+                            No loan records found
+                          </div>
+                          <a href='add-loan.php' class='btn btn-primary btn-sm mt-2'>
+                            <i class='bi bi-plus-circle me-1'></i>Add New Loan
+                          </a>
+                        </td></tr>";
               }
               ?>
             </tbody>
@@ -239,18 +247,20 @@ if (!$result) {
   <script src="assets/js/responsive.js"></script>
   <script>
     $(document).ready(function() {
-      // Initialize DataTable
-      $('#loanTable').DataTable({
-        responsive: true,
-        order: [[1, 'desc']], // Sort by date column
-        columnDefs: [
-          { targets: 9, orderable: false } // Action column not sortable
-        ],
-        language: {
-          emptyTable: "No loan records found",
-          zeroRecords: "No matching records found"
-        }
-      });
+      // Initialize DataTable only if there are records
+      if ($('#loanTable tbody tr').length > 0 && !$('#loanTable tbody tr td').hasClass('dataTables_empty')) {
+        $('#loanTable').DataTable({
+          responsive: true,
+          order: [[1, 'desc']], // Sort by date column
+          columnDefs: [
+            { targets: 9, orderable: false } // Action column not sortable
+          ],
+          language: {
+            emptyTable: "<div class='text-center py-4'><div class='text-muted'><i class='bi bi-inbox fs-2 d-block mb-2'></i>No loan records found</div><a href='add-loan.php' class='btn btn-primary btn-sm mt-2'><i class='bi bi-plus-circle me-1'></i>Add New Loan</a></div>",
+            zeroRecords: "<div class='text-center py-4'><div class='text-muted'><i class='bi bi-search fs-2 d-block mb-2'></i>No matching records found</div></div>"
+          }
+        });
+      }
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
