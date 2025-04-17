@@ -259,9 +259,6 @@ $today = date('Y-m-d');
                                     <input type="tel" class="form-control" id="phone" name="phone">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
                                 <div class="input-group">
