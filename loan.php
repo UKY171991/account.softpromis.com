@@ -197,7 +197,7 @@ if (!$result = $conn->query($sql)) {
                       echo "<tr>";
                       echo "<td>" . $counter . "</td>";
                       echo "<td>" . htmlspecialchars($row['id']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['formatted_date']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['date']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
