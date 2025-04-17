@@ -145,6 +145,23 @@ if (!$result) {
     .badge i {
       margin-right: 0.25rem;
     }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 0;
+    }
+    .empty-state i {
+      font-size: 48px;
+      color: #6c757d;
+      margin-bottom: 16px;
+    }
+    .empty-state .message {
+      color: #6c757d;
+      margin-bottom: 16px;
+    }
+    .table-responsive {
+      min-height: 400px;
+    }
   </style>
 </head>
 <body>
@@ -176,63 +193,65 @@ if (!$result) {
         }
         ?>
 
-        <div class="table-responsive">
-          <table id="loanTable" class="table table-bordered table-hover">
-            <thead class="table-light">
-              <tr>
-                <th>SL No.</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Paid</th>
-                <th>Balance</th>
-                <th>Created At</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              if ($result && $result->num_rows > 0) {
-                  $sl_no = 1;
-                  while ($row = $result->fetch_assoc()) {
-                      echo "<tr>";
-                      echo "<td>{$sl_no}</td>";
-                      echo "<td>" . date('d-m-Y', strtotime($row['date'])) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['phone'] ?? '') . "</td>";
-                      echo "<td>" . htmlspecialchars($row['description'] ?? '') . "</td>";
-                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
-                      echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
-                      echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . date('d-m-Y', strtotime($row['created_at'])) . "</td>";
-                      echo "<td class='action-column'>
-                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
-                                <i class='bi bi-pencil'></i>
-                              </a>
-                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' 
-                                 onclick='return confirm(\"Are you sure you want to delete this loan record?\")' title='Delete'>
-                                <i class='bi bi-trash'></i>
-                              </a>
-                            </td>";
-                      echo "</tr>";
-                      $sl_no++;
-                  }
-              } else {
-                  echo "<tr><td colspan='10' class='text-center py-4'>
-                          <div class='text-muted'>
-                            <i class='bi bi-inbox fs-2 d-block mb-2'></i>
-                            No loan records found
-                          </div>
-                          <a href='add-loan.php' class='btn btn-primary btn-sm mt-2'>
-                            <i class='bi bi-plus-circle me-1'></i>Add New Loan
+        <div class="card">
+          <div class="card-body">
+            <?php if ($result && $result->num_rows > 0): ?>
+              <div class="table-responsive">
+                <table id="loanTable" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>SL No.</th>
+                      <th>Date</th>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Description</th>
+                      <th>Amount</th>
+                      <th>Paid</th>
+                      <th>Balance</th>
+                      <th>Created At</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php 
+                    $sl_no = 1;
+                    while ($row = $result->fetch_assoc()): 
+                    ?>
+                      <tr>
+                        <td><?php echo $sl_no++; ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($row['date'])); ?></td>
+                        <td><?php echo htmlspecialchars($row['name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['phone'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($row['description'] ?? ''); ?></td>
+                        <td>₹<?php echo number_format($row['amount'], 2); ?></td>
+                        <td>₹<?php echo number_format($row['paid'], 2); ?></td>
+                        <td>₹<?php echo number_format($row['balance'], 2); ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($row['created_at'])); ?></td>
+                        <td>
+                          <a href="edit-loan.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil"></i>
                           </a>
-                        </td></tr>";
-              }
-              ?>
-            </tbody>
-          </table>
+                          <a href="include/delete-loan.php?id=<?php echo $row['id']; ?>" 
+                             class="btn btn-danger btn-sm"
+                             onclick="return confirm('Are you sure you want to delete this loan record?')">
+                            <i class="bi bi-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    <?php endwhile; ?>
+                  </tbody>
+                </table>
+              </div>
+            <?php else: ?>
+              <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <div class="message">No loan records found</div>
+                <a href="add-loan.php" class="btn btn-primary">
+                  <i class="bi bi-plus-circle me-1"></i>Add New Loan
+                </a>
+              </div>
+            <?php endif; ?>
+          </div>
         </div>
       </div>
     </div>
@@ -247,20 +266,30 @@ if (!$result) {
   <script src="assets/js/responsive.js"></script>
   <script>
     $(document).ready(function() {
-      // Initialize DataTable only if there are records
-      if ($('#loanTable tbody tr').length > 0 && !$('#loanTable tbody tr td').hasClass('dataTables_empty')) {
-        $('#loanTable').DataTable({
-          responsive: true,
-          order: [[1, 'desc']], // Sort by date column
-          columnDefs: [
-            { targets: 9, orderable: false } // Action column not sortable
-          ],
-          language: {
-            emptyTable: "<div class='text-center py-4'><div class='text-muted'><i class='bi bi-inbox fs-2 d-block mb-2'></i>No loan records found</div><a href='add-loan.php' class='btn btn-primary btn-sm mt-2'><i class='bi bi-plus-circle me-1'></i>Add New Loan</a></div>",
-            zeroRecords: "<div class='text-center py-4'><div class='text-muted'><i class='bi bi-search fs-2 d-block mb-2'></i>No matching records found</div></div>"
+      <?php if ($result && $result->num_rows > 0): ?>
+      $('#loanTable').DataTable({
+        responsive: true,
+        order: [[1, 'desc']], // Sort by date column
+        columnDefs: [
+          { orderable: false, targets: 9 } // Action column not sortable
+        ],
+        pageLength: 10,
+        language: {
+          search: "Search:",
+          lengthMenu: "Show _MENU_ entries",
+          info: "Showing _START_ to _END_ of _TOTAL_ entries",
+          infoEmpty: "Showing 0 to 0 of 0 entries",
+          infoFiltered: "(filtered from _MAX_ total entries)",
+          zeroRecords: "No matching records found",
+          paginate: {
+            first: "First",
+            last: "Last",
+            next: "Next",
+            previous: "Previous"
           }
-        });
-      }
+        }
+      });
+      <?php endif; ?>
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
