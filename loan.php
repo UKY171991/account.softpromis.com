@@ -184,12 +184,12 @@ if (!$result) {
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Subcategory</th>
+                <!-- <th>Subcategory</th> -->
                 <th>Amount</th>
                 <th>Paid</th>
                 <th>Balance</th>
                 <th>Created At</th>
-                <th>Updated At</th>
+                <!-- <th>Updated At</th> -->
                 <th>Action</th>
               </tr>
             </thead>
@@ -203,12 +203,12 @@ if (!$result) {
                       echo "<td>" . date('d-m-Y', strtotime($row['date'])) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                     // echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
                       echo "<td>" . date('d-m-Y H:i:s', strtotime($row['created_at'])) . "</td>";
-                      echo "<td>" . date('d-m-Y H:i:s', strtotime($row['updated_at'])) . "</td>";
+                     // echo "<td>" . date('d-m-Y H:i:s', strtotime($row['updated_at'])) . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
                                 <i class='bi bi-pencil'></i>
