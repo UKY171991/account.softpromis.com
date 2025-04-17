@@ -196,17 +196,17 @@ if (!$result = $conn->query($sql)) {
                     echo "</pre>";
                       echo "<tr>";
                       echo "<td>" . $counter . "</td>";
-                      echo "<td>" . htmlspecialchars($row['id']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['date']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
-                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
-                      echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
-                      echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['updated_at']) . "</td>";
-                      echo "<td class='action-column'>
+                     // echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                     // echo "<td>" . htmlspecialchars($row['formatted_date']) . "</td>";
+                      // echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                      // echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                      // echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
+                      // echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+                      // echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
+                      // echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      // echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                      // echo "<td>" . htmlspecialchars($row['updated_at']) . "</td>";
+                       echo "<td class='action-column'>
                               <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
                                 <i class='bi bi-pencil'></i>
                               </a>
