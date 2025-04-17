@@ -10,10 +10,26 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
 }
 
 // Fetch all loans with proper date formatting
-$sql = "SELECT id, DATE_FORMAT(date, '%d-%m-%Y') as formatted_date, name, category, subcategory, 
-        amount, paid, balance, DATE_FORMAT(created_at, '%d-%m-%Y %H:%i:%s') as created_at 
-        FROM loans ORDER BY date DESC";
+$sql = "SELECT 
+        id,
+        DATE_FORMAT(date, '%d-%m-%Y') as formatted_date,
+        name,
+        category,
+        subcategory,
+        amount,
+        paid,
+        balance,
+        created_at,
+        updated_at
+        FROM loans 
+        ORDER BY date DESC";
 $result = $conn->query($sql);
+
+if (!$result) {
+    // Log the error for debugging
+    error_log("SQL Error: " . $conn->error);
+    echo "<div class='alert alert-danger'>Error fetching loan records. Please try again.</div>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -169,10 +185,12 @@ $result = $conn->query($sql);
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Sub-category</th>
-                <th>Total Amount</th>
-                <th>Paid Amount</th>
+                <th>Subcategory</th>
+                <th>Amount</th>
+                <th>Paid</th>
                 <th>Balance</th>
+                <th>Created At</th>
+                <th>Updated At</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -196,6 +214,8 @@ $result = $conn->query($sql);
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                      echo "<td>" . htmlspecialchars($row['updated_at']) . "</td>";
                       echo "<td>" . $status . "</td>";
                       echo "<td class='action-column'>
                               <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary' title='Edit'>
@@ -210,7 +230,7 @@ $result = $conn->query($sql);
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='11' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='13' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
@@ -242,9 +262,11 @@ $result = $conn->query($sql);
               lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
               columnDefs: [
                 { targets: '_all', className: 'text-center' }, // Center all columns
-                { targets: 10, orderable: false } // Make Action column not sortable (now at index 10)
+                { targets: 12, orderable: false } // Make Action column not sortable (now at index 12)
               ],
-              destroy: true // Ensure proper cleanup on reinitialize
+              destroy: true, // Ensure proper cleanup on reinitialize
+              pageLength: 10, // Show 10 entries by default
+              responsive: true // Make table responsive
             });
           } catch (error) {
             console.error("DataTable initialization error:", error);
