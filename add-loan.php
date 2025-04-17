@@ -25,19 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = $_POST['phone'] ?? '';
     $description = $_POST['description'] ?? '';
     $category = $_POST['category'];
-    $subcategory = $_POST['subcategory'];
     $amount = floatval($_POST['amount']);
     $paid = floatval($_POST['paid']);
     $balance = $amount - $paid;
 
     // Insert the loan
-    $sql = "INSERT INTO loans (date, name, category, subcategory, amount, paid, balance) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO loans (date, name, category, amount, paid, balance) 
+            VALUES (?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
     
     if ($stmt) {
-        $stmt->bind_param("ssssddd", $date, $name, $category, $subcategory, $amount, $paid, $balance);
+        $stmt->bind_param("sssddd", $date, $name, $category, $amount, $paid, $balance);
         
         if ($stmt->execute()) {
             header("Location: loan.php?message=Loan added successfully");
