@@ -297,9 +297,9 @@ $today = date('Y-m-d');
                                     </button>
                                 </div>
                             </div> -->
-                        </div>
+                        <!-- </div>
 
-                        <div class="row mb-4">
+                        <div class="row mb-4"> -->
                             <div class="col-md-6">
                                 <label for="amount" class="form-label">Total Amount <span class="text-danger">*</span></label>
                                 <div class="input-group">
