@@ -190,6 +190,8 @@ if (!$result = $conn->query($sql)) {
               if ($result->num_rows > 0) {
                   $counter = 1;
                   while ($row = $result->fetch_assoc()) {
+
+                    print_r($row);
                       echo "<tr>";
                       echo "<td>" . $counter . "</td>";
                       echo "<td>" . htmlspecialchars($row['id']) . "</td>";
