@@ -10,9 +10,8 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
 }
 
 // Fetch all loans with proper date formatting
-$sql = "SELECT id, DATE_FORMAT(date, '%d-%m-%Y') as formatted_date, name, phone, description, 
-        category, subcategory, amount, paid, balance, 
-        DATE_FORMAT(created_at, '%d-%m-%Y %H:%i:%s') as created_at 
+$sql = "SELECT id, DATE_FORMAT(date, '%d-%m-%Y') as formatted_date, name, category, subcategory, 
+        amount, paid, balance, DATE_FORMAT(created_at, '%d-%m-%Y %H:%i:%s') as created_at 
         FROM loans ORDER BY date DESC";
 $result = $conn->query($sql);
 ?>
@@ -169,8 +168,6 @@ $result = $conn->query($sql);
                 <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
-                <th>Phone</th>
-                <th>Description</th>
                 <th>Category</th>
                 <th>Sub-category</th>
                 <th>Total Amount</th>
@@ -194,8 +191,6 @@ $result = $conn->query($sql);
                       echo "<td>LOAN-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
                       echo "<td>" . htmlspecialchars($row['formatted_date']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
                       echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
@@ -215,7 +210,7 @@ $result = $conn->query($sql);
                       $sl_no++;
                   }
               } else {
-                  echo "<tr><td colspan='13' class='text-center'>No loan records found</td></tr>";
+                  echo "<tr><td colspan='11' class='text-center'>No loan records found</td></tr>";
               }
               ?>
             </tbody>
@@ -247,7 +242,7 @@ $result = $conn->query($sql);
               lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
               columnDefs: [
                 { targets: '_all', className: 'text-center' }, // Center all columns
-                { targets: 12, orderable: false } // Make Action column not sortable (now at index 12)
+                { targets: 10, orderable: false } // Make Action column not sortable (now at index 10)
               ],
               destroy: true // Ensure proper cleanup on reinitialize
             });
