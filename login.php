@@ -118,7 +118,7 @@ $conn->close();
         <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
       </div>
-      <button type="submit" class="btn btn-primary">Login yyy</button>
+      <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
 
