@@ -314,32 +314,62 @@ $conn->close();
         $('#balance_amount').val(total - received);
       });
 
-      // Handle category change
+      // Debug log for troubleshooting
+      console.log('Category dropdown initialized');
+      
+      // Handle category change with improved error handling
       $('#category').on('change', function() {
         const categoryId = $(this).val();
+        console.log('Category changed to:', categoryId);
+        
         if (categoryId) {
-      // Fetch subcategories for selected category
+          // Clear and disable subcategory dropdown while loading
+          const $subcategory = $('#subcategory');
+          $subcategory.empty().append('<option value="" selected disabled>Loading subcategories...</option>');
+          $subcategory.prop('disabled', true);
+          
+          // Fetch subcategories for selected category
           $.ajax({
             url: 'include/category-operations.php',
             method: 'POST',
+            dataType: 'json',
             data: {
               action: 'get_subcategories',
               category_id: categoryId
             },
             success: function(response) {
+              console.log('Subcategory response:', response);
+              
+              // Re-enable the dropdown
+              $subcategory.prop('disabled', false);
+              
               if (response.status === 'success') {
-                const $subcategory = $('#subcategory');
-                $subcategory.empty().append('<option value="" selected disabled>Choose subcategory...</option>');
-                response.subcategories.forEach(function(subcategory) {
-                  $subcategory.append(`<option value="${subcategory.id}">${subcategory.subcategory_name}</option>`);
-                });
+                $subcategory.empty();
+                
+                if (response.subcategories.length === 0) {
+                  $subcategory.append('<option value="" selected disabled>No subcategories available</option>');
+                } else {
+                  $subcategory.append('<option value="" selected disabled>Choose subcategory...</option>');
+                  response.subcategories.forEach(function(subcategory) {
+                    $subcategory.append(`<option value="${subcategory.id}">${subcategory.subcategory_name}</option>`);
+                  });
+                }
+              } else {
+                $subcategory.empty().append('<option value="" selected disabled>Error loading subcategories</option>');
+                console.error('Error loading subcategories:', response.message);
               }
+            },
+            error: function(xhr, status, error) {
+              $subcategory.prop('disabled', false);
+              $subcategory.empty().append('<option value="" selected disabled>Error loading subcategories</option>');
+              console.error('AJAX error:', status, error);
+              console.log('Response text:', xhr.responseText);
             }
           });
-      } else {
+        } else {
           $('#subcategory').empty().append('<option value="" selected disabled>Choose category first</option>');
-      }
-    });
+        }
+      });
 
       // Handle add category form submission
       $('#addCategoryForm').on('submit', function(e) {
