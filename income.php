@@ -2,59 +2,8 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
-$sql = "SELECT 
-    'income' as record_type,
-    i.id,
-    i.date,
-    i.name,
-    i.phone,
-    i.description,
-    i.category,
-    i.subcategory,
-    i.amount as total_amount,
-    i.received,
-    i.balance,
-    i.created_at,
-    i.updated_at,
-    NULL as enrollmentid,
-    NULL as candidate_id,
-    NULL as discount,
-    NULL as total_fee
-FROM income i
-
-UNION ALL
-
-SELECT 
-    'payment' as record_type,
-    p.id,
-    p.created_at as date,
-    COALESCE(s.name, CONCAT('Enrollment ID: ', p.enrollmentid)) as name,
-    COALESCE(s.phone, '') as phone,
-    CASE 
-        WHEN p.status = 'Paid' THEN 'Full Payment'
-        WHEN p.status = 'Pending' THEN 'Partial Payment'
-        ELSE 'Unpaid'
-    END as description,
-    'Student Payment' as category,
-    p.status as subcategory,
-    p.total_fee as total_amount,
-    p.paid as received,
-    p.balance,
-    p.created_at,
-    p.created_at as updated_at,
-    p.enrollmentid,
-    p.candidate_id,
-    p.discount,
-    p.total_fee
-FROM payment p
-LEFT JOIN students s ON p.candidate_id = s.id
-ORDER BY date DESC";
+$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income ORDER BY date DESC";
 $result = $conn->query($sql);
-
-// Add error reporting for debugging
-if (!$result) {
-    echo "Error executing query: " . $conn->error;
-}
 ?>
 
 <!DOCTYPE html>
@@ -242,10 +191,9 @@ if (!$result) {
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
-                <th>Type</th>
                 <th>Invoice Number</th>
                 <th>Date</th>
-                <th>Name/ID</th>
+                <th>Name</th>
                 <th>Phone</th>
                 <th>Description</th>
                 <th>Category</th>
@@ -253,7 +201,6 @@ if (!$result) {
                 <th>Total Amount</th>
                 <th>Received</th>
                 <th>Balance</th>
-                <th>Discount</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -270,34 +217,23 @@ if (!$result) {
                           ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>" 
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
-                      $record_type_badge = ($row['record_type'] == 'income') 
-                          ? "<span class='badge bg-primary'>Income</span>" 
-                          : "<span class='badge bg-info'>Payment</span>";
-
                       echo "<tr>";
                       echo "<td>{$sl_no}</td>";
-                      echo "<td>{$record_type_badge}</td>";
-                      echo "<td>" . ($row['record_type'] == 'income' ? 'INV-' : 'PMT-') . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
+                      echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['subcategory']) . "</td>";
-                      echo "<td>₹" . number_format($row['total_amount'], 2) . "</td>";
+                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['received'], 2) . "</td>";
                       echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . ($row['discount'] ? '₹' . number_format($row['discount'], 2) : '-') . "</td>";
                       echo "<td>" . $status . "</td>";
-                      echo "<td class='action-column'>";
-                      if ($row['record_type'] == 'income') {
-                          echo "<a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a> ";
-                          echo "<a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>";
-                      } else {
-                          echo "<a href='edit-payment.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a> ";
-                          echo "<a href='view-payment.php?id=" . $row['id'] . "' class='btn btn-sm btn-info'><i class='bi bi-eye'></i></a>";
-                      }
-                      echo "</td>";
+                      echo "<td class='action-column'>
+                              <a href='edit-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'><i class='bi bi-pencil'></i></a>
+                              <a href='include/delete-income.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this record?\")'><i class='bi bi-trash'></i></a>
+                            </td>";
                       echo "</tr>";
                       $sl_no++;
                   }
