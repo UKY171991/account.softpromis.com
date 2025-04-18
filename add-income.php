@@ -300,10 +300,11 @@ $conn->close();
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
     $(document).ready(function() {
-      // Initialize date picker
-    flatpickr('.date-picker', {
+      // Initialize date picker with dd-mm-yyyy format
+      flatpickr('#date', {
         dateFormat: "d-m-Y",
-        allowInput: true
+        allowInput: true,
+        defaultDate: "today"
       });
 
       // Calculate balance amount
