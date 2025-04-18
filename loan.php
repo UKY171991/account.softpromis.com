@@ -15,7 +15,7 @@ $sql = "SELECT
         date,
         name,
         phone,
-        category,
+        description,
         amount,
         paid,
         balance,
@@ -145,6 +145,26 @@ if (!$result) {
     .badge i {
       margin-right: 0.25rem;
     }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    .empty-state i {
+      font-size: 3rem;
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+    .empty-state .message {
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+    .table-responsive {
+      min-height: 400px;
+    }
   </style>
 </head>
 <body>
@@ -161,70 +181,80 @@ if (!$result) {
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5>Loan Records</h5>
           <a href="add-loan.php" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle"></i> Add New Loan
+            <i class="bi bi-plus-circle me-1"></i>Add New Loan
           </a>
         </div>
 
         <?php
         if (isset($_GET['message'])) { 
-            echo "<div class='alert alert-success alert-dismissible fade show'>" . htmlspecialchars($_GET['message']) . 
+            echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>" . htmlspecialchars($_GET['message']) . 
                 "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
         }
         if (isset($_GET['error'])) {
-            echo "<div class='alert alert-danger alert-dismissible fade show'>" . htmlspecialchars($_GET['error']) . 
+            echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>" . htmlspecialchars($_GET['error']) . 
                 "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
         }
         ?>
 
-        <div class="table-responsive">
-          <table id="loanTable" class="table table-bordered table-hover">
-            <thead class="table-light">
-              <tr>
-                <th>SL No.</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Paid</th>
-                <th>Balance</th>
-                <th>Created At</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              if ($result && $result->num_rows > 0) {
-                  $sl_no = 1;
-                  while ($row = $result->fetch_assoc()) {
-                      echo "<tr>";
-                      echo "<td>{$sl_no}</td>";
-                      echo "<td>" . date('d-m-Y', strtotime($row['date'])) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                      echo "<td>" . htmlspecialchars($row['phone'] ?? '') . "</td>";
-                      echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                      echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
-                      echo "<td>₹" . number_format($row['paid'], 2) . "</td>";
-                      echo "<td>₹" . number_format($row['balance'], 2) . "</td>";
-                      echo "<td>" . date('d-m-Y', strtotime($row['created_at'])) . "</td>";
-                      echo "<td class='action-column'>
-                              <a href='edit-loan.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
-                                <i class='bi bi-pencil'></i>
-                              </a>
-                              <a href='include/delete-loan.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' 
-                                 onclick='return confirm(\"Are you sure you want to delete this loan record?\")' title='Delete'>
-                                <i class='bi bi-trash'></i>
-                              </a>
-                            </td>";
-                      echo "</tr>";
-                      $sl_no++;
-                  }
-              } else {
-                  echo "<tr><td colspan='10' class='text-center'>No loan records found</td></tr>";
-              }
-              ?>
-            </tbody>
-          </table>
+        <div class="card">
+          <div class="card-body">
+            <?php if ($result && $result->num_rows > 0): ?>
+              <div class="table-responsive">
+                <table id="loanTable" class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>SL No.</th>
+                      <th>Date</th>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Description</th>
+                      <th>Amount</th>
+                      <th>Paid</th>
+                      <th>Balance</th>
+                      <th>Created At</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php 
+                    $sl_no = 1;
+                    while ($row = $result->fetch_assoc()): 
+                    ?>
+                      <tr>
+                        <td><?php echo $sl_no++; ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($row['date'])); ?></td>
+                        <td><?php echo htmlspecialchars($row['name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['phone'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($row['description'] ?? ''); ?></td>
+                        <td>₹<?php echo number_format($row['amount'], 2); ?></td>
+                        <td>₹<?php echo number_format($row['paid'], 2); ?></td>
+                        <td>₹<?php echo number_format($row['balance'], 2); ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($row['created_at'])); ?></td>
+                        <td>
+                          <a href="edit-loan.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                            <i class="bi bi-pencil"></i>
+                          </a>
+                          <a href="include/delete-loan.php?id=<?php echo $row['id']; ?>" 
+                             class="btn btn-danger btn-sm"
+                             onclick="return confirm('Are you sure you want to delete this loan record?')">
+                            <i class="bi bi-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    <?php endwhile; ?>
+                  </tbody>
+                </table>
+              </div>
+            <?php else: ?>
+              <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <div class="message">No loan records found</div>
+                <!-- <a href="add-loan.php" class="btn btn-primary">
+                  <i class="bi bi-plus-circle me-1"></i>Add New Loan
+                </a> -->
+              </div>
+            <?php endif; ?>
+          </div>
         </div>
       </div>
     </div>
@@ -239,36 +269,31 @@ if (!$result) {
   <script src="assets/js/responsive.js"></script>
   <script>
     $(document).ready(function() {
-      // Ensure table is destroyed if already initialized
-      if ($.fn.DataTable.isDataTable('#loanTable')) {
-        $('#loanTable').DataTable().destroy();
-      }
-      
-      // Wait for DOM to be fully loaded
-      setTimeout(function() {
-        try {
-          // Initialize DataTable with simplified settings
-          var table = $('#loanTable').DataTable({
-            processing: true,
-            responsive: true,
-            order: [[1, 'desc']], // Sort by date column (index 1) in descending order
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            columnDefs: [
-              { targets: '_all', className: 'text-center' },
-              { targets: 9, orderable: false } // Action column not sortable (now at index 9)
-            ],
-            language: {
-              emptyTable: "No loan records found",
-              zeroRecords: "No matching records found"
-            }
-          });
-          
-          // Log success message
-          console.log("DataTable initialized successfully");
-        } catch (error) {
-          console.error("DataTable initialization error:", error);
+      <?php if ($result && $result->num_rows > 0): ?>
+      $('#loanTable').DataTable({
+        "processing": true,
+        "order": [[1, 'desc']],
+        "columnDefs": [
+          { "orderable": false, "targets": 9 }
+        ],
+        "pageLength": 10,
+        "dom": '<"top"lf>rt<"bottom"ip><"clear">',
+        "language": {
+          "lengthMenu": "_MENU_ records per page",
+          "zeroRecords": "No matching records found",
+          "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+          "infoEmpty": "No records available",
+          "infoFiltered": "(filtered from _MAX_ total records)",
+          "search": "Search:",
+          "paginate": {
+            "first": "First",
+            "last": "Last",
+            "next": "Next",
+            "previous": "Previous"
+          }
         }
-      }, 500); // Add a small delay to ensure full DOM loading
+      });
+      <?php endif; ?>
 
       // Auto-hide alerts after 5 seconds
       setTimeout(function() {
