@@ -21,13 +21,15 @@ $sql = "SELECT
     NULL as discount,
     NULL as total_fee
 FROM income i
+
 UNION ALL
+
 SELECT 
     'payment' as record_type,
     p.id,
     p.created_at as date,
-    CONCAT('Enrollment ID: ', p.enrollmentid) as name,
-    '' as phone,
+    COALESCE(s.name, CONCAT('Enrollment ID: ', p.enrollmentid)) as name,
+    COALESCE(s.phone, '') as phone,
     CASE 
         WHEN p.status = 'Paid' THEN 'Full Payment'
         WHEN p.status = 'Pending' THEN 'Partial Payment'
@@ -44,8 +46,15 @@ SELECT
     p.candidate_id,
     p.discount,
     p.total_fee
+FROM payment p
+LEFT JOIN students s ON p.candidate_id = s.id
 ORDER BY date DESC";
 $result = $conn->query($sql);
+
+// Add error reporting for debugging
+if (!$result) {
+    echo "Error executing query: " . $conn->error;
+}
 ?>
 
 <!DOCTYPE html>
