@@ -1,9 +1,9 @@
 <?php
 // Database connection
 $host = "localhost";
-$username = "u820431346_smis";
-$password = "Metx@123";
-$database = "u820431346_smis";
+$username = "u820431346_new_account";
+$password = "otRkXMf]5;Ny";
+$database = "u820431346_new_account";
 
 $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) {
