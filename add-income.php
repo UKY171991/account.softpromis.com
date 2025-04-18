@@ -169,7 +169,7 @@ $conn->close();
         <div class="row g-3">
           <div class="col-md-4">
             <label for="date" class="form-label">Date</label>
-            <input type="text" class="form-control date-picker" id="date" name="date" placeholder="DD-MM-YYYY" required>
+            <input type="date" class="form-control" id="date" name="date" required>
           </div>
           <div class="col-md-4">
             <label for="name" class="form-label">Name</label>
@@ -300,10 +300,11 @@ $conn->close();
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
     $(document).ready(function() {
-      // Initialize date picker
-    flatpickr('.date-picker', {
+      // Initialize date picker with dd-mm-yyyy format
+      flatpickr('#date', {
         dateFormat: "d-m-Y",
-        allowInput: true
+        allowInput: true,
+        defaultDate: "today"
       });
 
       // Calculate balance amount
