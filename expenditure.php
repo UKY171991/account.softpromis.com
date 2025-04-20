@@ -214,7 +214,6 @@ if (!$result) {
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
-                <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -232,14 +231,12 @@ if (!$result) {
                   $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
-                      $invoice_number = "EXP-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT);
                       $status = ($row['balance'] == 0)
                           ? "<span class='badge bg-success'><i class='bi bi-check-circle'></i> Paid</span>"
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
                       echo "<td>" . $sl_no++ . "</td>";
-                      echo "<td>" . htmlspecialchars($invoice_number) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['category']) . "</td>";
