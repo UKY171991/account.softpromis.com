@@ -191,7 +191,6 @@ $result = $conn->query($sql);
             <thead class="table-light">
               <tr>
                 <th>SL No.</th>
-                <th>Invoice Number</th>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Phone</th>
@@ -219,7 +218,6 @@ $result = $conn->query($sql);
 
                       echo "<tr>";
                       echo "<td>{$sl_no}</td>";
-                      echo "<td>INV-" . str_pad($row['id'], 5, "0", STR_PAD_LEFT) . "</td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
