@@ -267,14 +267,28 @@ $result = $conn->query($sql);
           responsive: true,
           lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
           columnDefs: [
-            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: 'text-center' }
+            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: 'text-center' }
           ],
           language: {
             emptyTable: "No income records found",
-            zeroRecords: "No matching records found"
+            zeroRecords: "No matching records found",
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            infoEmpty: "Showing 0 to 0 of 0 entries",
+            infoFiltered: "(filtered from _MAX_ total entries)",
+            paginate: {
+              first: "First",
+              last: "Last",
+              next: "Next",
+              previous: "Previous"
+            }
           },
-          order: [[2, 'desc']], // Sort by date column (index 2) in descending order
-          destroy: true // Allow the table to be reinitialized
+          order: [[1, 'desc']], // Sort by date column (index 1) in descending order
+          destroy: true, // Allow the table to be reinitialized
+          dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+               '<"row"<"col-sm-12"tr>>' +
+               '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
         });
       } catch (error) {
         console.log("DataTable initialization error:", error);
