@@ -267,6 +267,7 @@ $result = $conn->query($sql);
           responsive: true,
           lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
           columnDefs: [
+            { targets: [0], orderable: false, searchable: false }, // Make SL No. column non-sortable and non-searchable
             { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: 'text-center' }
           ],
           language: {
@@ -284,11 +285,18 @@ $result = $conn->query($sql);
               previous: "Previous"
             }
           },
-          order: [[1, 'desc']], // Sort by date column (index 1) in descending order
+          order: [[1, 'desc']], // Sort by date column (index 1) in descending order by default
           destroy: true, // Allow the table to be reinitialized
           dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
                '<"row"<"col-sm-12"tr>>' +
-               '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+               '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+          drawCallback: function() {
+            // Update serial numbers after each draw
+            var api = this.api();
+            api.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell, i) {
+              cell.innerHTML = i + 1;
+            });
+          }
         });
       } catch (error) {
         console.log("DataTable initialization error:", error);
