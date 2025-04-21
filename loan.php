@@ -270,17 +270,14 @@ if (!$result) {
   <script>
     $(document).ready(function() {
       <?php if ($result && $result->num_rows > 0): ?>
-      $('#loanTable').DataTable({
+      var table = $('#loanTable').DataTable({
         "processing": true,
         "order": [],
         "columnDefs": [
           { 
             "targets": 0,
             "searchable": false,
-            "orderable": false,
-            "render": function (data, type, row, meta) {
-              return meta.row + 1;
-            }
+            "orderable": false
           },
           { "orderable": false, "targets": 9 }
         ],
@@ -300,6 +297,13 @@ if (!$result) {
             "previous": "Previous"
           }
         }
+      });
+
+      // Update serial numbers on draw
+      table.on('draw', function() {
+        table.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell, i) {
+          cell.innerHTML = i + 1;
+        });
       });
       <?php endif; ?>
 
