@@ -119,9 +119,7 @@ while ($row = $monthlyExpenditureResult->fetch_assoc()) {
 $totalPendingLoansQuery = "
   SELECT SUM(balance) AS total_pending_loans 
   FROM loans 
-  WHERE 
-    (MONTH(date) >= 4 AND YEAR(date) = $startYear) OR 
-    (MONTH(date) < 4 AND YEAR(date) = $endYear)";
+  WHERE balance > 0";
 $totalPendingLoansResult = $conn->query($totalPendingLoansQuery);
 $totalPendingLoans = $totalPendingLoansResult->fetch_assoc()['total_pending_loans'] ?? 0;
 
