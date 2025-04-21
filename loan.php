@@ -21,7 +21,7 @@ $sql = "SELECT
         balance,
         created_at
         FROM loans 
-        ORDER BY date DESC";
+        ORDER BY date DESC, id DESC";
 
 $result = $conn->query($sql);
 
@@ -272,8 +272,16 @@ if (!$result) {
       <?php if ($result && $result->num_rows > 0): ?>
       $('#loanTable').DataTable({
         "processing": true,
-        "order": [[1, 'desc']],
+        "order": [],
         "columnDefs": [
+          { 
+            "targets": 0,
+            "searchable": false,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+              return meta.row + 1;
+            }
+          },
           { "orderable": false, "targets": 9 }
         ],
         "pageLength": 10,
