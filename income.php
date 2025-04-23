@@ -2,7 +2,7 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
-$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income ORDER BY date DESC";
+$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income ORDER BY id DESC";
 $result = $conn->query($sql);
 ?>
 
