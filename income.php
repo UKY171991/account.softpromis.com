@@ -290,7 +290,13 @@ if (!$result) {
             { 
               "targets": 0,
               "searchable": false,
-              "orderable": false
+              "orderable": false,
+              "render": function (data, type, row, meta) {
+                if (type === 'display') {
+                  return meta.row + 1;
+                }
+                return data;
+              }
             },
             { "orderable": false, "targets": 11 } // Action column
           ],
@@ -310,13 +316,6 @@ if (!$result) {
               "previous": "Previous"
             }
           }
-        });
-
-        // Update serial numbers on draw
-        table.on('draw', function() {
-          table.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell, i) {
-            cell.innerHTML = i + 1;
-          });
         });
       } catch (error) {
         console.log("DataTable initialization error:", error);
