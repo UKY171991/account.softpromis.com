@@ -237,7 +237,7 @@ if (!$result) {
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
-                      echo "<td>{$sl_no}</td>";
+                      echo "<td></td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
