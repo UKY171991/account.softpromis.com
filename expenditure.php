@@ -230,7 +230,6 @@ if (!$result) {
             <tbody>
               <?php
               if ($result && $result->num_rows > 0) {
-                  $sl_no = 1;
                   while ($row = $result->fetch_assoc()) {
                       $formatted_date = date("d-m-Y", strtotime($row['date']));
                       $status = ($row['balance'] == 0)
@@ -238,7 +237,7 @@ if (!$result) {
                           : "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> Pending</span>";
 
                       echo "<tr>";
-                      echo "<td>" . $sl_no++ . "</td>";
+                      echo "<td></td>";
                       echo "<td>" . htmlspecialchars($formatted_date) . "</td>";
                       echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                       echo "<td>" . htmlspecialchars($row['description']) . "</td>";
@@ -286,7 +285,17 @@ if (!$result) {
           responsive: true,
           lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
           columnDefs: [
-            { targets: [0], orderable: false, searchable: false }, // Make SL No. column non-sortable and non-searchable
+            { 
+              targets: 0, 
+              orderable: false, 
+              searchable: false,
+              render: function (data, type, row, meta) {
+                if (type === 'display') {
+                  return meta.row + meta.settings._iDisplayStart + 1;
+                }
+                return data;
+              }
+            },
             { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: 'text-center' }
           ],
           language: {
@@ -308,14 +317,7 @@ if (!$result) {
           destroy: true, // Allow the table to be reinitialized
           dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
                '<"row"<"col-sm-12"tr>>' +
-               '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-          drawCallback: function() {
-            // Update serial numbers after each draw
-            var api = this.api();
-            api.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell, i) {
-              cell.innerHTML = i + 1;
-            });
-          }
+               '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
         });
       } catch (error) {
         console.log("DataTable initialization error:", error);
