@@ -23,7 +23,7 @@ SELECT
     created_at 
 FROM 
     expenditures
-ORDER BY date DESC";
+ORDER BY date DESC, id DESC";
 $result = $conn->query($sql);
 if (!$result) {
     die("Error executing query: " . $conn->error);
