@@ -2,8 +2,28 @@
 include 'inc/auth.php'; // Include the authentication file
 include 'inc/config.php'; // Include the database connection file
 
-$sql = "SELECT id, date, name, phone, description, category, subcategory, amount, received, balance, created_at, updated_at FROM income ORDER BY id DESC";
+$sql = "SELECT 
+        id,
+        date,
+        name,
+        phone,
+        description,
+        category,
+        subcategory,
+        amount,
+        received,
+        balance,
+        created_at,
+        updated_at
+        FROM income 
+        ORDER BY date DESC, id DESC";
+
 $result = $conn->query($sql);
+
+if (!$result) {
+    error_log("SQL Error in income.php: " . $conn->error);
+    echo "<div class='alert alert-danger'>Error fetching income records: " . $conn->error . "</div>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -263,40 +283,40 @@ $result = $conn->query($sql);
         }
         
         // Initialize the table
-        $('#incomeTable').DataTable({
-          responsive: true,
-          lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-          columnDefs: [
-            { targets: [0], orderable: false, searchable: false }, // Make SL No. column non-sortable and non-searchable
-            { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: 'text-center' }
+        var table = $('#incomeTable').DataTable({
+          "processing": true,
+          "order": [[1, 'desc']], // Order by date column (index 1) in descending order
+          "columnDefs": [
+            { 
+              "targets": 0,
+              "searchable": false,
+              "orderable": false
+            },
+            { "orderable": false, "targets": 11 } // Action column
           ],
-          language: {
-            emptyTable: "No income records found",
-            zeroRecords: "No matching records found",
-            search: "Search:",
-            lengthMenu: "Show _MENU_ entries",
-            info: "Showing _START_ to _END_ of _TOTAL_ entries",
-            infoEmpty: "Showing 0 to 0 of 0 entries",
-            infoFiltered: "(filtered from _MAX_ total entries)",
-            paginate: {
-              first: "First",
-              last: "Last",
-              next: "Next",
-              previous: "Previous"
+          "pageLength": 10,
+          "dom": '<"top"lf>rt<"bottom"ip><"clear">',
+          "language": {
+            "lengthMenu": "_MENU_ records per page",
+            "zeroRecords": "No matching records found",
+            "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)",
+            "search": "Search:",
+            "paginate": {
+              "first": "First",
+              "last": "Last",
+              "next": "Next",
+              "previous": "Previous"
             }
-          },
-          order: [[1, 'desc']], // Sort by date column (index 1) in descending order by default
-          destroy: true, // Allow the table to be reinitialized
-          dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
-               '<"row"<"col-sm-12"tr>>' +
-               '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-          drawCallback: function() {
-            // Update serial numbers after each draw
-            var api = this.api();
-            api.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell, i) {
-              cell.innerHTML = i + 1;
-            });
           }
+        });
+
+        // Update serial numbers on draw
+        table.on('draw', function() {
+          table.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+          });
         });
       } catch (error) {
         console.log("DataTable initialization error:", error);
