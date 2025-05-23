@@ -293,7 +293,7 @@ if (!$result) {
               "orderable": false,
               "render": function (data, type, row, meta) {
                 if (type === 'display') {
-                  return meta.row + 1;
+                  return meta.row + meta.settings._iDisplayStart + 1;
                 }
                 return data;
               }
