@@ -31,7 +31,7 @@ if (!$result) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Income Records 1</title>
+  <title>Income Records </title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"/>
@@ -191,7 +191,7 @@ if (!$result) {
 
       <div class="p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h5>Income Records</h5>
+          <h5>Income Records 1</h5>
           <a href="add-income.php" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Add New Income</a>
         </div>
 
