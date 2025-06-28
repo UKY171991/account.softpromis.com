@@ -9,6 +9,8 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'manager') {
     exit();
 }
 
+// Query to fetch expenditure records ordered by most recent first
+// Order by: created_at DESC (newest entries first), date DESC (recent dates first), id DESC (newest IDs first)
 $sql = "
 SELECT 
     id, 
@@ -23,7 +25,7 @@ SELECT
     created_at 
 FROM 
     expenditures
-ORDER BY date DESC, id DESC";
+ORDER BY created_at DESC, date DESC, id DESC";
 $result = $conn->query($sql);
 if (!$result) {
     die("Error executing query: " . $conn->error);
